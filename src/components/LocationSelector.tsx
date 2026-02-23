@@ -2,105 +2,110 @@
 
 import { motion } from 'framer-motion';
 import { Location } from '@/lib/types';
-import { LOCATION_LABELS, LOCATION_DESCRIPTIONS } from '@/lib/booking-rules';
+import { LOCATION_DESCRIPTIONS } from '@/lib/booking-rules';
 
 interface LocationSelectorProps {
     onSelect: (location: Location) => void;
-    preselect?: 'presencial' | 'online' | 'sin_preferencia';
 }
 
-const locationConfig: {
+const locationCards: {
     id: Location;
-    icon: string; // Material icon name
+    icon: string;
     color: string;
+    title: string;
+    subtitle: string;
+    note?: string;
 }[] = [
         {
             id: 'valencia',
             icon: 'apartment',
-            color: 'var(--color-primary)',
-        },
-        {
-            id: 'motilla',
-            icon: 'location_on',
-            color: '#F59E0B',
+            color: '#0A2833',
+            title: 'Presencial — Picanya (Valencia)',
+            subtitle: 'C/ Torrent, 30, puerta 4',
         },
         {
             id: 'online',
             icon: 'videocam',
-            color: '#8B5CF6',
+            color: '#39DCA8',
+            title: 'Online — Videollamada',
+            subtitle: 'Google Meet',
+            note: 'No tienes que instalar nada. Te enviaré un enlace directo, solo tendrás que pulsar y entraremos a la sala.',
+        },
+        {
+            id: 'motilla',
+            icon: 'location_on',
+            color: '#7C3AED',
+            title: 'Presencial — Motilla del Palancar',
+            subtitle: 'C/ San Isidro, 18',
         },
     ];
 
-export function LocationSelector({ onSelect, preselect }: LocationSelectorProps) {
-    // Filter locations based on preselection
-    const filteredLocations =
-        preselect === 'online'
-            ? locationConfig.filter((l) => l.id === 'online')
-            : preselect === 'presencial'
-                ? locationConfig.filter((l) => l.id !== 'online')
-                : locationConfig;
-
+export function LocationSelector({ onSelect }: LocationSelectorProps) {
     return (
-        <div className="space-y-6">
+        <div className="space-y-5">
             <div className="text-center space-y-2">
-                <h3 className="text-xl md:text-2xl font-bold text-[var(--color-secondary)]">
+                <h3 className="text-lg font-bold text-[var(--color-secondary)]">
                     ¿Dónde prefieres tu sesión?
                 </h3>
                 <p className="text-sm text-[var(--color-text-muted)]">
-                    Selecciona la modalidad que mejor se adapte a ti
+                    Elige la modalidad que mejor se ajuste a ti
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {filteredLocations.map(({ id, icon, color }, index) => (
+            <div className="grid gap-4">
+                {locationCards.map((card, idx) => (
                     <motion.button
-                        key={id}
+                        key={card.id}
+                        onClick={() => onSelect(card.id)}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1, duration: 0.4, ease: 'easeOut' }}
-                        onClick={() => onSelect(id)}
-                        className="group cursor-pointer"
+                        transition={{ delay: idx * 0.1, duration: 0.3 }}
+                        className="group relative text-left p-5 rounded-xl border-2 border-[var(--color-border)]
+                            hover:border-[var(--color-primary)] hover:shadow-lg transition-all duration-200
+                            bg-[var(--color-bg-card)]"
+                        whileHover={{ y: -2 }}
                     >
-                        <div className="h-full bg-[var(--color-bg-card)] rounded-xl p-6 border-2 border-transparent
-                            hover:border-[var(--color-primary)] hover:border-opacity-30
-                            shadow-lg transition-all duration-300 flex flex-col items-center text-center
-                            transform hover:-translate-y-1">
+                        <div className="flex items-start gap-4">
                             {/* Icon circle */}
                             <div
-                                className="w-16 h-16 rounded-full flex items-center justify-center mb-4
-                                    group-hover:text-white transition-colors duration-300"
-                                style={{
-                                    backgroundColor: `color-mix(in srgb, ${color} 10%, transparent)`,
-                                    color: color,
-                                }}
+                                className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                                style={{ backgroundColor: card.color + '18' }}
                             >
                                 <span
-                                    className="material-icons-outlined text-3xl group-hover:text-white transition-colors"
-                                    style={{ fontSize: '2rem' }}
+                                    className="material-icons-outlined text-2xl"
+                                    style={{ color: card.color }}
                                 >
-                                    {icon}
+                                    {card.icon}
                                 </span>
                             </div>
-                            <h4 className="text-lg font-bold text-[var(--color-secondary)] mb-1">
-                                {LOCATION_LABELS[id]}
-                            </h4>
-                            <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
-                                {LOCATION_DESCRIPTIONS[id]}
-                            </p>
-                            {/* Check circle (hidden by default, shown on hover) */}
-                            <div className="mt-4 opacity-0 group-hover:opacity-100 text-[var(--color-primary)] transition-opacity duration-300">
-                                <span className="material-icons-outlined">arrow_forward</span>
+                            {/* Info */}
+                            <div className="flex-1 min-w-0">
+                                <p className="font-semibold text-[var(--color-secondary)]">
+                                    {card.title}
+                                </p>
+                                <p className="text-sm text-[var(--color-text-muted)] mt-0.5">
+                                    {card.subtitle}
+                                </p>
+                                {/* Google Meet note */}
+                                {card.note && (
+                                    <div className="mt-3 flex items-start gap-2 p-3 rounded-lg bg-[var(--color-primary-soft)] border border-[var(--color-primary)] border-opacity-20">
+                                        <span className="material-icons-outlined text-[var(--color-primary)] text-[16px] mt-0.5 flex-shrink-0">
+                                            info
+                                        </span>
+                                        <p className="text-xs text-[var(--color-secondary)] leading-relaxed">
+                                            {card.note}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
+                            {/* Arrow */}
+                            <span className="material-icons-outlined text-[var(--color-text-muted)] opacity-0 group-hover:opacity-100 transition-opacity self-center">
+                                arrow_forward
+                            </span>
                         </div>
                     </motion.button>
                 ))}
             </div>
-
-            {preselect && preselect !== 'sin_preferencia' && (
-                <p className="text-xs text-center text-[var(--color-text-muted)]">
-                    Pre-seleccionado según tu preferencia del triaje
-                </p>
-            )}
         </div>
     );
 }

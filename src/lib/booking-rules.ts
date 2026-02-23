@@ -9,28 +9,34 @@ export const SESSION_DURATION_MINUTES = 45;
 
 /**
  * Horarios disponibles por ubicación.
- * Solo los martes tienen restricciones cruzadas.
+ * 
+ * Valencia + Online comparten los mismos horarios.
+ * Motilla tiene horarios exclusivos solo los martes.
+ *
+ * Día 0=Dom, 1=Lun, 2=Mar, 3=Mié, 4=Jue, 5=Vie, 6=Sáb
  */
 export const SCHEDULE: Record<Location, Record<number, string[]>> = {
-    // day 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
     valencia: {
-        2: ['11:00', '18:00'], // Martes
-    },
-    motilla: {
-        2: ['13:00', '16:00'], // Martes
+        2: ['11:00', '18:00'],                                          // Martes
+        3: ['11:00', '12:00', '13:00', '16:00', '17:00', '18:00'],     // Miércoles
+        4: ['11:00', '12:00', '13:00', '16:00', '17:00', '18:00', '19:00'], // Jueves
+        5: ['11:00', '12:00', '13:00', '16:00', '17:00', '18:00', '19:00'], // Viernes
     },
     online: {
-        1: ['10:00', '12:00', '16:00', '18:00'], // Lunes
-        2: ['10:00', '12:00', '16:00', '18:00'], // Martes
-        3: ['10:00', '12:00', '16:00', '18:00'], // Miércoles
-        4: ['10:00', '12:00', '16:00', '18:00'], // Jueves
-        5: ['10:00', '12:00', '16:00', '18:00'], // Viernes
+        2: ['11:00', '18:00'],                                          // Martes
+        3: ['11:00', '12:00', '13:00', '16:00', '17:00', '18:00'],     // Miércoles
+        4: ['11:00', '12:00', '13:00', '16:00', '17:00', '18:00', '19:00'], // Jueves
+        5: ['11:00', '12:00', '13:00', '16:00', '17:00', '18:00', '19:00'], // Viernes
+    },
+    motilla: {
+        2: ['13:00', '16:00'], // Martes exclusivo
     },
 };
 
 /**
- * Restricción cruzada martes:
- * Si uno se ocupa, el otro se bloquea.
+ * Restricción cruzada martes (Valencia ↔ Motilla):
+ * Si uno se reserva, el otro se bloquea.
+ * NO aplica a Online.
  * [valenciaSlot, motillaSlot]
  */
 export const CROSS_BLOCK_PAIRS: [string, string][] = [
@@ -60,8 +66,6 @@ export function isDayAvailable(
 
 /**
  * Aplica la restricción cruzada Valencia ↔ Motilla en martes.
- * Recibe los slots ya ocupados en ambas ubicaciones y devuelve
- * los slots disponibles para la ubicación solicitada.
  */
 export function getAvailableSlots(
     location: Location,
@@ -74,24 +78,24 @@ export function getAvailableSlots(
     return rawSlots.map((time) => {
         let available = true;
 
-        // Comprobar si el slot está directamente ocupado
         if (location === 'valencia' && occupiedValencia.includes(time)) {
             available = false;
         } else if (location === 'motilla' && occupiedMotilla.includes(time)) {
             available = false;
+        } else if (location === 'online' && occupiedValencia.includes(time)) {
+            // Online comparte horarios con Valencia
+            available = false;
         }
 
-        // Restricción cruzada (solo martes)
-        if (available && dayOfWeek === 2) {
+        // Restricción cruzada (solo martes, solo Valencia ↔ Motilla)
+        if (available && dayOfWeek === 2 && location !== 'online') {
             for (const [valSlot, motSlot] of CROSS_BLOCK_PAIRS) {
                 if (location === 'valencia' && time === valSlot) {
-                    // Si Motilla tiene ocupado su slot correspondiente
                     if (occupiedMotilla.includes(motSlot)) {
                         available = false;
                     }
                 }
                 if (location === 'motilla' && time === motSlot) {
-                    // Si Valencia tiene ocupado su slot correspondiente
                     if (occupiedValencia.includes(valSlot)) {
                         available = false;
                     }
@@ -107,13 +111,13 @@ export function getAvailableSlots(
  * Nombres legibles de las ubicaciones
  */
 export const LOCATION_LABELS: Record<Location, string> = {
-    valencia: 'Valencia (Picanya)',
-    motilla: 'Motilla del Palancar',
-    online: 'Online',
+    valencia: 'Presencial — Picanya (Valencia)',
+    motilla: 'Presencial — Motilla del Palancar',
+    online: 'Online — Videollamada',
 };
 
 export const LOCATION_DESCRIPTIONS: Record<Location, string> = {
-    valencia: 'Centro principal — Presencial',
-    motilla: 'Cuenca — Presencial',
-    online: 'Videollamada desde cualquier lugar',
+    valencia: 'C/ Torrent, 30, puerta 4',
+    motilla: 'C/ San Isidro, 18',
+    online: 'Google Meet — No necesitas instalar nada',
 };

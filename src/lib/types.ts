@@ -4,31 +4,8 @@
 
 export type Location = 'valencia' | 'motilla' | 'online';
 
-export type QuestionType = 'select' | 'radio' | 'multiselect' | 'text' | 'slider';
-
-export interface QuestionOption {
-  value: string;
-  label: string;
-}
-
-export interface TriageQuestion {
-  id: string;
-  question: string;
-  type: QuestionType;
-  options?: QuestionOption[];
-  placeholder?: string;
-  min?: number;
-  max?: number;
-  required: boolean;
-  /** Show this question only when the condition is met */
-  showWhen?: {
-    questionId: string;
-    answer: string | string[];
-  };
-}
-
 export interface TriageAnswers {
-  [questionId: string]: string | string[] | number;
+  [questionId: string]: string;
 }
 
 export interface TimeSlot {

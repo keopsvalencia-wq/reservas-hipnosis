@@ -1,331 +1,336 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { BookingData, Location } from '@/lib/types';
-import { LOCATION_LABELS } from '@/lib/booking-rules';
-import { format, parse } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { LOCATION_LABELS, LOCATION_DESCRIPTIONS } from '@/lib/booking-rules';
 
 interface ConfirmationStepProps {
-    bookingData: Partial<BookingData>;
-    onSubmit: (data: BookingData) => void;
-    onBack: () => void;
+    data: Partial<BookingData>;
+    onSubmit: (info: { name: string; email: string; phone: string; acceptPrivacy: boolean }) => void;
 }
 
-export function ConfirmationStep({ bookingData, onSubmit, onBack }: ConfirmationStepProps) {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [acceptPrivacy, setAcceptPrivacy] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+export function ConfirmationStep({ data, onSubmit }: ConfirmationStepProps) {
+    const [form, setForm] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        acceptPrivacy: false,
+    });
+    const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    const dateFormatted = bookingData.date
-        ? format(parse(bookingData.date!, 'yyyy-MM-dd', new Date()), "EEEE d 'de' MMMM 'de' yyyy", { locale: es })
-        : '';
+    const formatDate = (dateStr?: string) => {
+        if (!dateStr) return '—';
+        const date = new Date(dateStr + 'T00:00:00');
+        return date.toLocaleDateString('es-ES', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        });
+    };
 
     const handleSubmit = async () => {
-        if (!name || !email || !phone || !acceptPrivacy) return;
-
-        setIsSubmitting(true);
-        setError(null);
+        if (!form.name || !form.email || !form.phone || !form.acceptPrivacy) return;
+        setLoading(true);
+        setError('');
 
         try {
-            const fullData: BookingData = {
-                ...(bookingData as BookingData),
-                name,
-                email,
-                phone,
-                acceptPrivacy,
-            };
-
             const res = await fetch('/api/booking', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(fullData),
+                body: JSON.stringify({
+                    ...data,
+                    name: form.name,
+                    email: form.email,
+                    phone: form.phone,
+                }),
             });
-
             const result = await res.json();
-
             if (result.success) {
-                setIsSuccess(true);
-                onSubmit(fullData);
+                setSubmitted(true);
             } else {
-                setError(result.message || 'Error al procesar la reserva');
+                setError(result.message || 'Error al crear la reserva');
             }
         } catch {
             setError('Error de conexión. Inténtalo de nuevo.');
         } finally {
-            setIsSubmitting(false);
+            setLoading(false);
         }
     };
 
-    // ─── Success State ─────────────────────────────────
-    if (isSuccess) {
+    if (submitted) {
         return (
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center space-y-6 py-8"
+                className="text-center py-10 space-y-6"
             >
-                <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                    className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mx-auto"
-                >
-                    <span className="material-icons-outlined text-[var(--color-success)] text-5xl">check_circle</span>
-                </motion.div>
-                <div className="space-y-2">
-                    <h3 className="text-2xl font-bold text-[var(--color-secondary)]">¡Reserva confirmada!</h3>
-                    <p className="text-sm text-[var(--color-text-muted)]">
-                        Hemos enviado un email de confirmación a{' '}
-                        <strong className="text-[var(--color-text)]">{email}</strong>
+                <div className="w-20 h-20 rounded-full bg-[var(--color-primary-soft)] flex items-center justify-center mx-auto">
+                    <span className="material-icons-outlined text-[var(--color-primary)] text-4xl">
+                        check_circle
+                    </span>
+                </div>
+                <div className="space-y-3 max-w-md mx-auto">
+                    <h3 className="text-2xl font-bold text-[var(--color-secondary)]">
+                        ¡Reserva Confirmada!
+                    </h3>
+                    <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
+                        Te he enviado un email de confirmación a <strong>{form.email}</strong> con todos los detalles.
+                        Recibirás recordatorios 24h y 1h antes de tu sesión.
                     </p>
                 </div>
-                <div className="bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl p-5 text-left space-y-3 max-w-sm mx-auto shadow-sm">
-                    <div className="flex items-center gap-3 text-sm">
-                        <span className="material-icons-outlined text-[var(--color-primary)] text-lg">calendar_today</span>
-                        <span className="capitalize">{dateFormatted}</span>
+                <div className="bg-[var(--color-bg)] rounded-xl border border-[var(--color-border)] p-5 max-w-sm mx-auto text-left space-y-3">
+                    <div className="flex items-center gap-2 text-sm">
+                        <span className="material-icons-outlined text-[var(--color-primary)] text-lg">event</span>
+                        <span className="text-[var(--color-secondary)] font-medium">{formatDate(data.date)} — {data.time}h</span>
                     </div>
-                    <div className="flex items-center gap-3 text-sm">
-                        <span className="material-icons-outlined text-[var(--color-primary)] text-lg">schedule</span>
-                        <span>{bookingData.time}h (45 min)</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-sm">
+                    <div className="flex items-center gap-2 text-sm">
                         <span className="material-icons-outlined text-[var(--color-primary)] text-lg">location_on</span>
-                        <span>{LOCATION_LABELS[bookingData.location as Location]}</span>
+                        <span className="text-[var(--color-text-muted)]">{data.location ? LOCATION_LABELS[data.location] : '—'}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                        <span className="material-icons-outlined text-[var(--color-primary)] text-lg">timer</span>
+                        <span className="text-[var(--color-text-muted)]">45 minutos — Evaluación Diagnóstica</span>
                     </div>
                 </div>
-                <p className="text-xs text-[var(--color-text-muted)]">
-                    Si necesitas cancelar o modificar, contacta por{' '}
-                    <a
-                        href="https://wa.me/34600000000"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[var(--color-primary)] hover:underline font-medium"
-                    >
-                        WhatsApp
-                    </a>
-                </p>
             </motion.div>
         );
     }
 
-    // ─── Stitch 2-Column Layout ──────────────────────────
     return (
-        <div className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* ─── Left sidebar: Booking Summary ─── */}
-                <div className="lg:col-span-1">
-                    <div className="bg-[var(--color-bg-card)] rounded-xl shadow-lg border-t-4 border-[var(--color-primary)] p-6 lg:sticky lg:top-24">
-                        <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-4 flex items-center gap-2">
-                            <span className="material-icons-outlined text-[var(--color-primary)]">receipt_long</span>
-                            Resumen
-                        </h3>
-                        <div className="space-y-4">
-                            <div className="pb-4 border-b border-[var(--color-border)]">
-                                <p className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">Servicio</p>
-                                <p className="text-[var(--color-text)] font-medium mt-1">Valoración Diagnóstica</p>
-                                <span className="inline-block mt-1 text-xs px-2 py-0.5 bg-[var(--color-primary-soft)] text-[var(--color-primary)] rounded-full font-medium">
-                                    45 min
+        <div className="grid lg:grid-cols-5 gap-6">
+            {/* ── Sidebar: resumen de reserva ── */}
+            <div className="lg:col-span-2 order-2 lg:order-1">
+                <div className="sticky top-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] overflow-hidden">
+                    {/* Accent bar */}
+                    <div className="h-1.5 bg-[var(--color-primary)]" />
+                    <div className="p-5 space-y-5">
+                        <h4 className="font-bold text-[var(--color-secondary)] text-sm uppercase tracking-wider">
+                            Tu Reserva
+                        </h4>
+
+                        {/* Service */}
+                        <div className="space-y-1">
+                            <span className="text-xs text-[var(--color-text-muted)]">Servicio</span>
+                            <div className="flex items-center gap-2">
+                                <span className="material-icons-outlined text-[var(--color-primary)] text-lg">psychology</span>
+                                <p className="text-sm font-medium text-[var(--color-secondary)]">
+                                    Evaluación Diagnóstica
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Duration */}
+                        <div className="space-y-1">
+                            <span className="text-xs text-[var(--color-text-muted)]">Duración</span>
+                            <div className="flex items-center gap-2">
+                                <span className="material-icons-outlined text-[var(--color-primary)] text-lg">timer</span>
+                                <span className="text-sm font-medium text-[var(--color-secondary)]">45 minutos</span>
+                            </div>
+                        </div>
+
+                        {/* Professional */}
+                        <div className="space-y-1">
+                            <span className="text-xs text-[var(--color-text-muted)]">Profesional</span>
+                            <div className="flex items-center gap-2">
+                                <span className="material-icons-outlined text-[var(--color-primary)] text-lg">person</span>
+                                <span className="text-sm font-medium text-[var(--color-secondary)]">Salva Vera</span>
+                            </div>
+                        </div>
+
+                        <hr className="border-[var(--color-border)]" />
+
+                        {/* Date */}
+                        <div className="space-y-1">
+                            <span className="text-xs text-[var(--color-text-muted)]">Fecha y hora</span>
+                            <div className="flex items-center gap-2">
+                                <span className="material-icons-outlined text-[var(--color-primary)] text-lg">calendar_today</span>
+                                <div>
+                                    <p className="text-sm font-medium text-[var(--color-secondary)]">{formatDate(data.date)}</p>
+                                    <p className="text-xs text-[var(--color-text-muted)]">{data.time}h</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Location */}
+                        <div className="space-y-1">
+                            <span className="text-xs text-[var(--color-text-muted)]">Ubicación</span>
+                            <div className="flex items-center gap-2">
+                                <span className="material-icons-outlined text-[var(--color-primary)] text-lg">
+                                    {data.location === 'online' ? 'videocam' : 'location_on'}
                                 </span>
-                            </div>
-                            <div className="pb-4 border-b border-[var(--color-border)]">
-                                <p className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">Profesional</p>
-                                <p className="text-[var(--color-text)] font-medium mt-1">Salva Vera</p>
-                                <p className="text-xs text-[var(--color-text-muted)]">Hipnoterapeuta Clínico</p>
-                            </div>
-                            <div className="pb-4 border-b border-[var(--color-border)]">
-                                <p className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">Fecha y Hora</p>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <span className="material-icons-outlined text-[var(--color-primary)] text-sm">calendar_today</span>
-                                    <p className="text-[var(--color-text)] font-medium capitalize">{dateFormatted}</p>
-                                </div>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <span className="material-icons-outlined text-[var(--color-primary)] text-sm">schedule</span>
-                                    <p className="text-[var(--color-text)] font-medium">{bookingData.time}h</p>
-                                </div>
-                            </div>
-                            <div>
-                                <p className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">Ubicación</p>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <span className="material-icons-outlined text-[var(--color-primary)] text-sm">location_on</span>
-                                    <p className="text-[var(--color-text)] font-medium">
-                                        {LOCATION_LABELS[bookingData.location as Location]}
+                                <div>
+                                    <p className="text-sm font-medium text-[var(--color-secondary)]">
+                                        {data.location ? LOCATION_LABELS[data.location] : '—'}
+                                    </p>
+                                    <p className="text-xs text-[var(--color-text-muted)]">
+                                        {data.location ? LOCATION_DESCRIPTIONS[data.location] : ''}
                                     </p>
                                 </div>
                             </div>
                         </div>
+
+                        {/* Shield badge */}
+                        <div className="bg-[var(--color-primary-soft)] rounded-lg p-3 flex items-start gap-2">
+                            <span className="material-icons-outlined text-[var(--color-primary)] text-lg flex-shrink-0">
+                                shield
+                            </span>
+                            <p className="text-xs text-[var(--color-secondary)] leading-relaxed">
+                                Si no te puedo garantizar resultados, el coste de la visita será <strong>0€</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* ── Form: datos de contacto ── */}
+            <div className="lg:col-span-3 order-1 lg:order-2 space-y-5">
+                <div>
+                    <h3 className="text-lg font-bold text-[var(--color-secondary)]">
+                        Datos de contacto
+                    </h3>
+                    <p className="text-sm text-[var(--color-text-muted)] mt-1">
+                        Completa tus datos para confirmar la reserva
+                    </p>
+                </div>
+
+                {/* Name */}
+                <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[var(--color-secondary)]">
+                        Nombre y Apellidos *
+                    </label>
+                    <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-[var(--color-text-muted)] text-lg">
+                            person
+                        </span>
+                        <input
+                            type="text"
+                            value={form.name}
+                            onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+                            placeholder="Tu nombre completo"
+                            className="w-full pl-10 pr-4 py-3 text-sm border-2 border-[var(--color-border)] rounded-xl
+                                bg-[var(--color-bg-card)] text-[var(--color-text)] placeholder-gray-400
+                                focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]
+                                transition-colors"
+                        />
                     </div>
                 </div>
 
-                {/* ─── Right: Form ─── */}
-                <div className="lg:col-span-2">
-                    <div className="bg-[var(--color-bg-card)] rounded-xl shadow-lg p-6 md:p-8">
-                        <div className="mb-6">
-                            <h3 className="text-xl md:text-2xl font-bold text-[var(--color-secondary)] mb-2">
-                                Finalizar Reserva
-                            </h3>
-                            <p className="text-[var(--color-text-muted)] text-sm">
-                                Completa tus datos para confirmar la cita. Tu información es confidencial.
-                            </p>
-                        </div>
+                {/* Email */}
+                <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[var(--color-secondary)]">
+                        Email *
+                    </label>
+                    <p className="text-xs text-[var(--color-text-muted)]">
+                        Para enviarte la confirmación y el enlace si es online
+                    </p>
+                    <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-[var(--color-text-muted)] text-lg">
+                            email
+                        </span>
+                        <input
+                            type="email"
+                            value={form.email}
+                            onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+                            placeholder="tu@email.com"
+                            className="w-full pl-10 pr-4 py-3 text-sm border-2 border-[var(--color-border)] rounded-xl
+                                bg-[var(--color-bg-card)] text-[var(--color-text)] placeholder-gray-400
+                                focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]
+                                transition-colors"
+                        />
+                    </div>
+                </div>
 
-                        <div className="space-y-5">
-                            {/* Name + Phone Row */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div className="space-y-1">
-                                    <label className="block text-sm font-medium text-[var(--color-text)]" htmlFor="name">
-                                        Nombre Completo
-                                    </label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <span className="material-icons-outlined text-gray-400 text-lg">person</span>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            id="name"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            placeholder="Ej. Juan Pérez"
-                                            className="block w-full pl-10 pr-3 py-3 text-sm border border-[var(--color-border)]
-                                                rounded-lg bg-[var(--color-bg)] text-[var(--color-text)]
-                                                placeholder-gray-400
-                                                focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]
-                                                transition-colors"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-1">
-                                    <label className="block text-sm font-medium text-[var(--color-text)]" htmlFor="phone">
-                                        Teléfono
-                                    </label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <span className="material-icons-outlined text-gray-400 text-lg">phone</span>
-                                        </div>
-                                        <input
-                                            type="tel"
-                                            id="phone"
-                                            value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}
-                                            placeholder="+34 600 000 000"
-                                            className="block w-full pl-10 pr-3 py-3 text-sm border border-[var(--color-border)]
-                                                rounded-lg bg-[var(--color-bg)] text-[var(--color-text)]
-                                                placeholder-gray-400
-                                                focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]
-                                                transition-colors"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                {/* Phone */}
+                <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[var(--color-secondary)]">
+                        Teléfono (WhatsApp) *
+                    </label>
+                    <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-[var(--color-text-muted)] text-lg">
+                            phone
+                        </span>
+                        <input
+                            type="tel"
+                            value={form.phone}
+                            onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))}
+                            placeholder="+34 600 000 000"
+                            className="w-full pl-10 pr-4 py-3 text-sm border-2 border-[var(--color-border)] rounded-xl
+                                bg-[var(--color-bg-card)] text-[var(--color-text)] placeholder-gray-400
+                                focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]
+                                transition-colors"
+                        />
+                    </div>
+                </div>
 
-                            {/* Email */}
-                            <div className="space-y-1">
-                                <label className="block text-sm font-medium text-[var(--color-text)]" htmlFor="email">
-                                    Correo Electrónico
-                                </label>
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span className="material-icons-outlined text-gray-400 text-lg">email</span>
-                                    </div>
-                                    <input
-                                        type="email"
-                                        id="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="ejemplo@correo.com"
-                                        className="block w-full pl-10 pr-3 py-3 text-sm border border-[var(--color-border)]
-                                            rounded-lg bg-[var(--color-bg)] text-[var(--color-text)]
-                                            placeholder-gray-400
-                                            focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]
-                                            transition-colors"
-                                    />
-                                </div>
-                                <p className="text-xs text-[var(--color-text-muted)] mt-1">
-                                    Te enviaremos la confirmación a este correo.
-                                </p>
-                            </div>
-
-                            {/* Privacy Checkbox */}
-                            <div className="flex items-start gap-3">
-                                <input
-                                    type="checkbox"
-                                    id="privacy"
-                                    checked={acceptPrivacy}
-                                    onChange={(e) => setAcceptPrivacy(e.target.checked)}
-                                    className="mt-1 h-4 w-4 text-[var(--color-primary)] border-gray-300 rounded cursor-pointer
-                                        focus:ring-[var(--color-primary)]"
-                                />
-                                <label htmlFor="privacy" className="text-sm text-[var(--color-text-muted)] cursor-pointer">
-                                    <span className="font-medium text-[var(--color-text)]">Acepto la política de privacidad</span>
-                                    <br />
-                                    <span className="text-xs">
-                                        Tus datos serán tratados con estricta confidencialidad según nuestra política de protección de datos.
-                                    </span>
-                                </label>
-                            </div>
-
-                            {/* Error */}
-                            {error && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -5 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-[var(--color-error)]"
-                                >
-                                    {error}
-                                </motion.div>
+                {/* Privacy */}
+                <label className="flex items-start gap-3 cursor-pointer group">
+                    <div className="relative flex-shrink-0 mt-0.5">
+                        <input
+                            type="checkbox"
+                            checked={form.acceptPrivacy}
+                            onChange={(e) => setForm((prev) => ({ ...prev, acceptPrivacy: e.target.checked }))}
+                            className="sr-only peer"
+                        />
+                        <div className="w-5 h-5 rounded border-2 border-[var(--color-border)]
+                            peer-checked:bg-[var(--color-primary)] peer-checked:border-[var(--color-primary)]
+                            flex items-center justify-center transition-colors">
+                            {form.acceptPrivacy && (
+                                <span className="material-icons-outlined text-white text-[14px]">check</span>
                             )}
-
-                            {/* Navigation */}
-                            <div className="pt-4 flex flex-col-reverse sm:flex-row justify-between items-center gap-4 border-t border-[var(--color-border)]">
-                                <button
-                                    onClick={onBack}
-                                    disabled={isSubmitting}
-                                    className="flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] font-medium transition-colors disabled:opacity-30"
-                                >
-                                    <span className="material-icons-outlined text-sm mr-1">arrow_back</span>
-                                    Volver atrás
-                                </button>
-                                <button
-                                    onClick={handleSubmit}
-                                    disabled={!name || !email || !phone || !acceptPrivacy || isSubmitting}
-                                    className="btn-primary w-full sm:w-auto text-base"
-                                >
-                                    {isSubmitting ? (
-                                        <>
-                                            <span className="material-icons-outlined animate-spin text-lg">refresh</span>
-                                            Procesando...
-                                        </>
-                                    ) : (
-                                        <>
-                                            Confirmar Reserva
-                                            <span className="material-icons-outlined text-lg">check_circle</span>
-                                        </>
-                                    )}
-                                </button>
-                            </div>
                         </div>
                     </div>
+                    <span className="text-xs text-[var(--color-text-muted)] leading-relaxed">
+                        Acepto la <a href="#" className="text-[var(--color-primary)] hover:underline">Política de Privacidad</a> y
+                        consiento el tratamiento de mis datos para gestionar mi reserva.*
+                    </span>
+                </label>
 
-                    {/* Trust Badges (Stitch style) */}
-                    <div className="mt-6 grid grid-cols-3 gap-4 text-center">
-                        <div className="flex flex-col items-center gap-2">
-                            <span className="material-icons-outlined text-gray-400 text-3xl">lock</span>
-                            <span className="text-xs text-[var(--color-text-muted)] font-medium">Datos Seguros 100%</span>
-                        </div>
-                        <div className="flex flex-col items-center gap-2">
-                            <span className="material-icons-outlined text-gray-400 text-3xl">verified</span>
-                            <span className="text-xs text-[var(--color-text-muted)] font-medium">Profesional Certificado</span>
-                        </div>
-                        <div className="flex flex-col items-center gap-2">
-                            <span className="material-icons-outlined text-gray-400 text-3xl">thumb_up</span>
-                            <span className="text-xs text-[var(--color-text-muted)] font-medium">Satisfacción Garantizada</span>
-                        </div>
+                {/* Error */}
+                {error && (
+                    <div className="flex items-center gap-2 text-sm text-[var(--color-error)] bg-red-50 border border-red-200 rounded-xl p-3">
+                        <span className="material-icons-outlined text-lg">error</span>
+                        {error}
                     </div>
+                )}
+
+                {/* Submit */}
+                <motion.button
+                    onClick={handleSubmit}
+                    disabled={!form.name || !form.email || !form.phone || !form.acceptPrivacy || loading}
+                    className="btn-primary w-full text-base py-4 justify-center"
+                    whileTap={{ scale: 0.98 }}
+                >
+                    {loading ? (
+                        <>
+                            <span className="material-icons-outlined animate-spin text-lg">hourglass_empty</span>
+                            Confirmando...
+                        </>
+                    ) : (
+                        <>
+                            <span className="material-icons-outlined text-lg">lock</span>
+                            Confirmar Reserva
+                        </>
+                    )}
+                </motion.button>
+
+                {/* Trust badges */}
+                <div className="flex items-center justify-center gap-6 pt-2">
+                    {[
+                        { icon: 'verified_user', text: 'Datos protegidos' },
+                        { icon: 'schedule', text: 'Cancela gratis' },
+                        { icon: 'shield', text: 'Garantía 0€' },
+                    ].map((badge) => (
+                        <div key={badge.icon} className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)]">
+                            <span className="material-icons-outlined text-[var(--color-primary)] text-[14px]">
+                                {badge.icon}
+                            </span>
+                            {badge.text}
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
