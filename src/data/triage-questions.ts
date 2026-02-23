@@ -24,14 +24,28 @@ export interface TriageQuestionDef {
 }
 
 // ───────────────────────────────────────────────────
-// 8 PREGUNTAS DE CUALIFICACIÓN (Cuaderno "Calendly reservas")
+// 9 PREGUNTAS DE CUALIFICACIÓN (Refactorizadas Q1/Q2)
 // ───────────────────────────────────────────────────
 
 export const triageQuestions: TriageQuestionDef[] = [
-    // ─── Q1: Motivo de consulta (Desplegable) ─────────
+    // ─── Q1: Motivo (Ansiedad, depresión, miedos, autoestima, traumas) ─────────
     {
-        id: 'motivo',
-        text: 'Cuéntame, ¿cuál de las siguientes opciones encaja más con tu motivo de consulta?',
+        id: 'motivo_consulta',
+        text: 'Cuéntame, ¿cuál es tu motivo de consulta?',
+        type: 'select',
+        options: [
+            { value: 'ansiedad', label: 'Ansiedad' },
+            { value: 'depresion', label: 'Depresión' },
+            { value: 'miedos', label: 'Miedos' },
+            { value: 'autoestima', label: 'Autoestima' },
+            { value: 'traumas', label: 'Traumas' },
+            { value: 'otro', label: 'Otro motivo' },
+        ],
+    },
+    // ─── Q2: ¿Qué es lo que más miedo te da que pase? (Enfermedad, soledad...) ───
+    {
+        id: 'miedo_futuro',
+        text: '¿Qué es lo que más miedo te da que pase?',
         type: 'select',
         options: [
             { value: 'enfermedad', label: 'Enfermedad' },
@@ -39,26 +53,24 @@ export const triageQuestions: TriageQuestionDef[] = [
             { value: 'movilidad', label: 'Movilidad' },
             { value: 'ruina', label: 'Ruina' },
             { value: 'sin_trabajo', label: 'Sin trabajo' },
-            { value: 'duelo', label: 'Muerte / Duelo' },
-            { value: 'ansiedad_depresion', label: 'Ansiedad / Depresión / Bloqueos emocionales' },
-            { value: 'otro', label: 'Otro motivo' },
+            { value: 'muerte', label: 'Muerte / Duelo' },
         ],
     },
-    // ─── Q2: Dedicación (Texto libre) ─────────────────
+    // ─── Q3: Dedicación (Texto libre) ─────────────────
     {
         id: 'dedicacion',
         text: '¿A qué te dedicas actualmente?',
         type: 'text',
         placeholder: 'Ej. Enfermera, autónomo, desempleado...',
     },
-    // ─── Q3: Ciudad (Texto corto) ─────────────────────
+    // ─── Q4: Ciudad (Texto corto) ─────────────────────
     {
         id: 'ciudad',
         text: '¿En qué ciudad o población vives?',
         type: 'text',
         placeholder: 'Ej. Valencia, Madrid, Cuenca...',
     },
-    // ─── Q4: Edad (Desplegable) ───────────────────────
+    // ─── Q5: Edad (Desplegable) ───────────────────────
     {
         id: 'edad',
         text: '¿Cuántos años tienes?',
@@ -70,8 +82,7 @@ export const triageQuestions: TriageQuestionDef[] = [
             { value: '55_mas', label: 'De 55 en adelante' },
         ],
     },
-    // ─── Q5A: Situación Actual (Textarea) ─────────────
-    // Nota: 5A y 5B se muestran juntas para generar contraste psicológico
+    // ─── Q6A: Situación Actual (Textarea) ─────────────
     {
         id: 'situacion_actual',
         text: 'SITUACIÓN ACTUAL: Describe brevemente cómo estás en este momento a nivel emocional y qué te impide hacer tu problema.',
@@ -79,7 +90,7 @@ export const triageQuestions: TriageQuestionDef[] = [
         placeholder: 'Cuéntame cómo te sientes ahora mismo y cómo afecta tu día a día...',
         group: 'situacion',
     },
-    // ─── Q5B: Situación Deseada (Textarea) ────────────
+    // ─── Q6B: Situación Deseada (Textarea) ────────────
     {
         id: 'situacion_deseada',
         text: 'SITUACIÓN DESEADA: ¿Cómo te gustaría estar y sentirte dentro de exactamente un mes si trabajamos juntos?',
@@ -88,7 +99,7 @@ export const triageQuestions: TriageQuestionDef[] = [
         group: 'situacion',
         pairWith: 'situacion_actual',
     },
-    // ─── Q6: Compromiso (Escala 1-10 como desplegable) ─
+    // ─── Q7: Compromiso (Escala 1-10 como desplegable) ─
     {
         id: 'compromiso_escala',
         text: 'En una escala del 1 al 10, ¿qué tan comprometid@ estás para empezar a hacer hoy mismo lo que tengas que hacer para solucionar tu problema?',
@@ -106,7 +117,7 @@ export const triageQuestions: TriageQuestionDef[] = [
             { value: '10', label: '10 — Totalmente comprometid@' },
         ],
     },
-    // ─── Q7: Tiempo (Selección única) ─────────────────
+    // ─── Q8: Tiempo (Selección única) ─────────────────
     {
         id: 'tiempo',
         text: '¿Estás dispuest@ a invertir tiempo para conseguir tus objetivos?',
@@ -117,8 +128,7 @@ export const triageQuestions: TriageQuestionDef[] = [
             { value: 'todo_tiempo', label: '🟢 El tiempo que haga falta. Mi salud mental es ahora mismo mi prioridad absoluta.' },
         ],
     },
-    // ─── Q8: INVERSIÓN — GATE QUESTION ────────────────
-    // Si elige 🔴 → se bloquea el acceso al calendario
+    // ─── Q9: INVERSIÓN — GATE QUESTION ────────────────
     {
         id: 'inversion',
         text: 'EL COMPROMISO (Inversión)',
@@ -131,7 +141,7 @@ export const triageQuestions: TriageQuestionDef[] = [
     },
 ];
 
-// Texto introductorio que se muestra antes de Q8
+// Texto introductorio que se muestra antes de Q9
 export const GATE_INTRO_TEXT =
     'Como ya sabes, si veo que puedo ayudarte a solucionar este problema de raíz, la inversión de mi método completo oscila entre 700€ y 1.000€ (pago dividido: señal en esta evaluación y el resto en la primera sesión).\n\nSabiendo que si no te puedo ayudar el coste es 0€, elige la opción que mejor te defina:';
 

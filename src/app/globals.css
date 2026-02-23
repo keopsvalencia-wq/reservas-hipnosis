@@ -4,19 +4,15 @@
 
 /* ─── Stitch Design Tokens ─────────────────────── */
 :root {
-  --color-primary: #39DCA8;
-  --color-primary-hover: #2bc493;
-  --color-primary-soft: rgba(57, 220, 168, 0.12);
-  --color-secondary: #0A2833;
-  --color-bg: #F9FAFB;
+  --color-bg: #FFFFFF;
   --color-bg-card: #FFFFFF;
-  --color-bg-card-hover: #F3F4F6;
+  --color-primary: #39DCA8;
+  --color-secondary: #0A2833;
+  --color-primary-soft: rgba(57, 220, 168, 0.08);
+  --color-border: #E5E7EB;
   --color-text: #1F2937;
   --color-text-muted: #6B7280;
-  --color-border: #E5E7EB;
-  --color-success: #22c55e;
-  --color-error: #ef4444;
-  --color-shadow-mint: rgba(57, 220, 168, 0.25);
+  --color-error: #EF4444;
 }
 
 .dark {

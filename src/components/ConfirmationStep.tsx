@@ -8,9 +8,10 @@ import { LOCATION_LABELS, LOCATION_DESCRIPTIONS } from '@/lib/booking-rules';
 interface ConfirmationStepProps {
     data: Partial<BookingData>;
     onSubmit: (info: { name: string; email: string; phone: string; acceptPrivacy: boolean }) => void;
+    onBack: () => void;
 }
 
-export function ConfirmationStep({ data, onSubmit }: ConfirmationStepProps) {
+export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepProps) {
     const [form, setForm] = useState({
         name: '',
         email: '',

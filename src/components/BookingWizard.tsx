@@ -36,16 +36,9 @@ export function BookingWizard() {
         goTo(3);
     };
 
-    const handleSubmit = (data: BookingData) => {
-        setBookingData(data);
+    const handleConfirmationSubmit = (info: { name: string; email: string; phone: string; acceptPrivacy: boolean }) => {
+        setBookingData((prev) => ({ ...prev, ...info }));
     };
-
-    // Get preselect from triage modalidad question
-    const modalidadPreselect = bookingData.triageAnswers?.modalidad as
-        | 'presencial'
-        | 'online'
-        | 'sin_preferencia'
-        | undefined;
 
     // ─── Animation Variants ───────────────────────────
     const variants = {
@@ -64,7 +57,7 @@ export function BookingWizard() {
     };
 
     return (
-        <div className="stitch-card p-6 md:p-8">
+        <div className="stitch-card p-4 md:p-6 lg:p-8">
             <StepIndicator currentStep={step} />
 
             <AnimatePresence mode="wait" custom={direction}>
@@ -84,7 +77,6 @@ export function BookingWizard() {
                     {step === 1 && (
                         <LocationSelector
                             onSelect={handleLocationSelect}
-                            preselect={modalidadPreselect}
                         />
                     )}
 
@@ -98,8 +90,8 @@ export function BookingWizard() {
 
                     {step === 3 && (
                         <ConfirmationStep
-                            bookingData={bookingData}
-                            onSubmit={handleSubmit}
+                            data={bookingData}
+                            onSubmit={handleConfirmationSubmit}
                             onBack={() => goTo(2)}
                         />
                     )}
