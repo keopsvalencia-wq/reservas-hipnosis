@@ -507,7 +507,7 @@ function ContrastScreen({
 function Shell({ children, progress, showProgress = true }: { children: React.ReactNode; progress: number; showProgress?: boolean }) {
   return (
     <div className="min-h-screen bg-white flex flex-col items-center p-0">
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-6xl flex flex-col">
         {showProgress && (
           <div className="px-6 md:px-14 lg:px-20 pt-8">
             <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -515,7 +515,8 @@ function Shell({ children, progress, showProgress = true }: { children: React.Re
             </div>
           </div>
         )}
-        <div className="bg-white p-6 md:p-14 lg:p-20 overflow-hidden">
+        {/* Main Card Container with fixed min-height and vertical centering */}
+        <div className="flex-1 flex flex-col justify-center min-h-[850px] p-6 md:p-14 lg:p-20 overflow-hidden">
           {children}
         </div>
       </div>
