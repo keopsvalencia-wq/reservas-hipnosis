@@ -151,7 +151,7 @@ export default function Home() {
       // ─── P2: REGALOS ─────────────────────────
       case 1:
         return (
-          <div className="space-y-10 py-10 max-w-3xl mx-auto">
+          <div className="space-y-12 py-6 max-w-5xl mx-auto">
             <div className="text-center space-y-4">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
                 Tus 3 Regalos de Claridad.
@@ -160,32 +160,58 @@ export default function Home() {
                 Solo por asistir a tu evaluación, te llevarás 3 revelaciones que liberarán la presión de tu cabeza:
               </p>
             </div>
-            <div className="space-y-8 max-w-2xl mx-auto">
-              <div className="flex gap-5 items-start">
-                <span className="text-3xl font-black text-[var(--color-primary)] leading-none shrink-0">01</span>
-                <p className="text-base md:text-lg text-[var(--color-secondary)] leading-relaxed">
-                  Verás tu problema desde una perspectiva que <strong>NADIE te había contado jamás</strong>. <span className="text-[var(--color-text-muted)]">(Mis pacientes dicen que esto les da más paz en 45 min que años de terapias convencionales).</span>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+              {/* Card 01 */}
+              <motion.div
+                whileHover={{ y: -5 }}
+                className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden group hover:border-[var(--color-primary)] transition-all duration-300"
+              >
+                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity">01</div>
+                <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                  Verás tu problema desde una perspectiva que <span className="text-[var(--color-primary)]">NADIE te había contado jamás</span>.
                 </p>
-              </div>
-              <div className="flex gap-5 items-start">
-                <span className="text-3xl font-black text-[var(--color-primary)] leading-none shrink-0">02</span>
-                <p className="text-base md:text-lg text-[var(--color-secondary)] leading-relaxed">
-                  Entenderás exactamente por qué <strong>NADA de lo que has intentado</strong> hasta hoy ha funcionado.
+                <div className="border-t border-gray-50 pt-4">
+                  <p className="text-xs lg:text-sm text-[var(--color-text-muted)] leading-relaxed italic">
+                    "Mis pacientes dicen que esto les da más paz en 45 min que años de terapias convencionales."
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Card 02 */}
+              <motion.div
+                whileHover={{ y: -5 }}
+                className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden group hover:border-[var(--color-primary)] transition-all duration-300"
+              >
+                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity">02</div>
+                <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                  Entenderás exactamente por qué <span className="text-[var(--color-primary)]">NADA de lo que has intentado</span> hasta hoy ha funcionado.
                 </p>
-              </div>
-              <div className="flex gap-5 items-start">
-                <span className="text-3xl font-black text-[var(--color-primary)] leading-none shrink-0">03</span>
-                <p className="text-base md:text-lg text-[var(--color-secondary)] leading-relaxed">
-                  Descubrirás la <strong>ÚNICA y verdadera solución definitiva</strong> a tu situación.
+              </motion.div>
+
+              {/* Card 03 */}
+              <motion.div
+                whileHover={{ y: -5 }}
+                className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden group hover:border-[var(--color-primary)] transition-all duration-300"
+              >
+                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity">03</div>
+                <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                  Descubrirás la <span className="text-[var(--color-primary)]">ÚNICA y verdadera solución definitiva</span> a tu situación.
                 </p>
-              </div>
+              </motion.div>
             </div>
-            <div className="text-center space-y-3 pt-2">
-              <div className="flex items-center justify-center gap-4">
-                <button onClick={back} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
-                  <span className="material-icons-outlined">arrow_back</span> Atrás
+
+            <div className="text-center space-y-4 pt-6">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <button onClick={back} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)] group order-2 sm:order-1">
+                  <span className="material-icons-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span> Atrás
                 </button>
-                <motion.button onClick={next} className="btn-primary text-lg py-5 px-12 uppercase tracking-wider font-black" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <motion.button
+                  onClick={next}
+                  className="btn-primary w-full sm:w-auto text-lg py-5 px-12 uppercase tracking-wider font-black shadow-xl shadow-emerald-100/50 order-1 sm:order-2"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
                   Siguiente paso
                 </motion.button>
               </div>
