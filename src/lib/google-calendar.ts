@@ -92,6 +92,7 @@ export async function getBusySlots(date: string): Promise<string[]> {
     ];
 
     try {
+        console.log(`🔍 [GCal] Consultando Agenda para ${date}. Calendarios vigilados:`, items.map(i => i.id));
         const response = await calendar.freebusy.query({
             requestBody: {
                 timeMin,
@@ -107,9 +108,12 @@ export async function getBusySlots(date: string): Promise<string[]> {
         if (calendars) {
             for (const id in calendars) {
                 const busyList = calendars[id].busy || [];
+                if (busyList.length > 0) {
+                    console.log(`📅 [${id}] tiene ${busyList.length} eventos.`);
+                }
                 busyList.forEach((period) => {
                     if (period.start && period.end) {
-                        // BLOQUEO ESTRICTO: Cualquier evento, sin importar su duración, ocupa el hueco. 
+                        // BLOQUEO TOTAL: Cualquier evento bloquea la disponibilidad
                         busySlots.push(`${period.start}|${period.end}`);
                     }
                 });
