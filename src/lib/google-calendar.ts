@@ -39,14 +39,13 @@ export async function checkAvailability(
     // Añadimos margen de seguridad de 15 min antes y después
     const BUFFER = 15;
     const startDate = new Date(`${date}T${time}:00`);
-    const bufferedStart = new Date(startDate.getTime() - BUFFER * 60 * 1000);
-    const bufferedEnd = new Date(startDate.getTime() + (SESSION_DURATION_MINUTES + BUFFER) * 60 * 1000);
+    const endDate = new Date(startDate.getTime() + SESSION_DURATION_MINUTES * 60 * 1000);
 
     try {
         const response = await calendar.freebusy.query({
             requestBody: {
-                timeMin: bufferedStart.toISOString(),
-                timeMax: bufferedEnd.toISOString(),
+                timeMin: startDate.toISOString(),
+                timeMax: endDate.toISOString(),
                 items: [
                     { id: calendarId },
                     { id: personalCalendarId }
@@ -105,16 +104,9 @@ export async function getBusySlots(date: string): Promise<string[]> {
                 const busyList = calendars[id].busy || [];
                 busyList.forEach((period) => {
                     if (period.start && period.end) {
-                        const start = new Date(period.start);
-                        const end = new Date(period.end);
-
-                        // Buffer de 15 min
-                        const bufferedStart = new Date(start.getTime() - 15 * 60 * 1000);
-                        const bufferedEnd = new Date(end.getTime() + 15 * 60 * 1000);
-
-                        // Marcamos como ocupados todos los slots que caigan dentro del periodo
-                        // (esto se procesará en el frontend contra el horario predefinido)
-                        busySlots.push(`${bufferedStart.toISOString()}|${bufferedEnd.toISOString()}`);
+                        // Respetamos exactamente los tiempos del calendario sin añadir buffer extra
+                        // ya que el usuario suele bloquear la hora completa (45 min + margen)
+                        busySlots.push(`${period.start}|${period.end}`);
                     }
                 });
             }
