@@ -195,10 +195,11 @@ export default function Home() {
             step="Paso 3 de 7"
             title="¿Qué es lo que más miedo te da que pase si no solucionas esto ahora?"
             options={IMPACTO_OPTIONS}
-            selected={triageData.impacto_emocional as string}
+            selected={triageData.impacto_emocional as string | string[]}
             onSelect={(val) => handleChoice('impacto_emocional', val)}
             onBack={back}
             columns={1}
+            multi
             otherLabel="Otro miedo diferente"
             otherText={(triageData.impacto_otro as string) || ''}
             onOtherTextChange={(txt) => setTriageData(prev => ({ ...prev, impacto_otro: txt }))}
@@ -363,8 +364,8 @@ function ContrastScreen({
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
                 className={`px-4 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all ${active
-                    ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)] text-white shadow-sm'
-                    : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
+                  ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)] text-white shadow-sm'
+                  : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
                   }`}
               >
                 {active && <span className="mr-1.5">✓</span>}
