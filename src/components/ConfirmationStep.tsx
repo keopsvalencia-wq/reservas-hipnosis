@@ -47,6 +47,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                     name: form.name,
                     email: form.email,
                     phone: form.phone,
+                    acceptPrivacy: form.acceptPrivacy,
                 }),
             });
             const result = await res.json();
