@@ -42,65 +42,64 @@ const locationCards: {
 
 export function LocationSelector({ onSelect }: LocationSelectorProps) {
     return (
-        <div className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {locationCards.map((card, idx) => (
-                    <motion.button
-                        key={card.id}
-                        onClick={() => onSelect(card.id)}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1, duration: 0.3 }}
-                        className="group relative text-center p-8 rounded-2xl border-2 border-[var(--color-border)]
-                            hover:border-[var(--color-primary)] hover:shadow-xl transition-all duration-300
-                            bg-white flex flex-col items-center h-full"
-                        whileHover={{ y: -5 }}
-                    >
-                        {/* Icon circle - Centered at top */}
+        <div className="max-w-2xl mx-auto space-y-4">
+            {locationCards.map((card, idx) => (
+                <motion.button
+                    key={card.id}
+                    onClick={() => onSelect(card.id)}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.1, duration: 0.3 }}
+                    className="group w-full text-left p-6 rounded-3xl border-2 border-[var(--color-border)]
+                        hover:border-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] 
+                        transition-all duration-300 bg-white relative overflow-hidden"
+                    whileHover={{ x: 8 }}
+                >
+                    <div className="flex items-center gap-6">
+                        {/* Icon - Circular like in Stitch's design */}
                         <div
-                            className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110"
+                            className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110"
                             style={{ backgroundColor: card.color + '15' }}
                         >
                             <span
-                                className="material-icons-outlined text-3xl"
+                                className="material-icons-outlined text-2xl"
                                 style={{ color: card.color }}
                             >
                                 {card.icon}
                             </span>
                         </div>
 
-                        {/* Info - Full width vertical stack */}
-                        <div className="flex-1 w-full space-y-2">
-                            <h3 className="text-lg font-black text-[var(--color-secondary)] leading-tight">
+                        {/* Text Content */}
+                        <div className="flex-1 min-w-0">
+                            <h3 className="text-xl font-black text-[var(--color-secondary)]">
                                 {card.title}
                             </h3>
-                            <p className="text-sm text-[var(--color-text-muted)] font-medium">
+                            <p className="text-sm text-[var(--color-text-muted)] font-medium mt-0.5">
                                 {card.subtitle}
                             </p>
 
-                            {/* Google Meet note - Legible and wide */}
+                            {/* Note for Online - Integrated as a clean sub-text */}
                             {card.note && (
-                                <div className="mt-6 p-4 rounded-xl bg-[var(--color-primary-soft)] border border-[var(--color-primary)] border-opacity-10 text-left">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <span className="material-icons-outlined text-[var(--color-primary)] text-lg">
-                                            info
-                                        </span>
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-primary)]">Nota importante</span>
-                                    </div>
-                                    <p className="text-[13px] text-[var(--color-secondary)] leading-relaxed">
+                                <div className="mt-3 flex items-start gap-2 text-left">
+                                    <span className="material-icons-outlined text-[var(--color-primary)] text-sm mt-0.5">
+                                        auto_awesome
+                                    </span>
+                                    <p className="text-[13px] text-[var(--color-secondary)] leading-tight opacity-80 italic">
                                         {card.note}
                                     </p>
                                 </div>
                             )}
                         </div>
 
-                        {/* Selection Indicator */}
-                        <div className="mt-6 flex items-center gap-2 text-[var(--color-primary)] font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-                            Seleccionar <span className="material-icons-outlined text-sm">arrow_forward</span>
+                        {/* Arrow - Subtle indicator */}
+                        <div className="hidden md:flex opacity-0 group-hover:opacity-100 transition-opacity pr-2">
+                            <span className="material-icons-outlined text-[var(--color-primary)] text-2xl">
+                                chevron_right
+                            </span>
                         </div>
-                    </motion.button>
-                ))}
-            </div>
+                    </div>
+                </motion.button>
+            ))}
         </div>
     );
 }
