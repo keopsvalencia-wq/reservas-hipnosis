@@ -109,9 +109,6 @@ export async function createCalendarEvent(data: {
                     timeZone: 'Europe/Madrid',
                 },
                 location: locationLabel,
-                attendees: [
-                    { email: data.email, displayName: data.name },
-                ],
                 reminders: {
                     useDefault: false,
                     overrides: [
