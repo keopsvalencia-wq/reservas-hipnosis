@@ -26,6 +26,7 @@ const calendarId = process.env.GOOGLE_CALENDAR_ID || '';
 
 /**
  * Verifica disponibilidad en Google Calendar.
+ * Usa freebusy para ser más preciso.
  */
 export async function checkAvailability(
     date: string,
@@ -34,26 +35,87 @@ export async function checkAvailability(
     const auth = getAuthClient();
     const calendar = google.calendar({ version: 'v3', auth });
 
+    // Añadimos margen de seguridad de 15 min antes y después
+    const BUFFER = 15;
     const startDate = new Date(`${date}T${time}:00`);
-    const endDate = new Date(startDate.getTime() + SESSION_DURATION_MINUTES * 60 * 1000);
+    const bufferedStart = new Date(startDate.getTime() - BUFFER * 60 * 1000);
+    const bufferedEnd = new Date(startDate.getTime() + (SESSION_DURATION_MINUTES + BUFFER) * 60 * 1000);
 
     try {
-        const response = await calendar.events.list({
-            calendarId,
-            timeMin: startDate.toISOString(),
-            timeMax: endDate.toISOString(),
-            singleEvents: true,
+        const response = await calendar.freebusy.query({
+            requestBody: {
+                timeMin: bufferedStart.toISOString(),
+                timeMax: bufferedEnd.toISOString(),
+                items: [{ id: 'primary' }, { id: calendarId }],
+                timeZone: 'Europe/Madrid',
+            },
         });
 
-        const events = response.data.items || [];
-        return events.length === 0;
+        const busy = response.data.calendars;
+        if (!busy) return true;
+
+        // Si hay algún intervalo ocupado en cualquiera de los calendarios
+        for (const calId in busy) {
+            if (busy[calId].busy && busy[calId].busy.length > 0) {
+                return false;
+            }
+        }
+
+        return true;
     } catch (error: any) {
-        console.error('❌ Error checking availability:', {
-            status: error.status,
-            message: error.message,
-            reason: error.errors?.[0]?.reason
+        console.error('❌ Error checking availability:', error.message);
+        throw new Error(`Google Calendar (FreeBusy): ${error.message}`);
+    }
+}
+
+/**
+ * Obtiene todos los huecos ocupados para un día dado.
+ */
+export async function getBusySlots(date: string): Promise<string[]> {
+    const auth = getAuthClient();
+    const calendar = google.calendar({ version: 'v3', auth });
+
+    // Consultamos todo el día
+    const timeMin = new Date(`${date}T00:00:00Z`).toISOString();
+    const timeMax = new Date(`${date}T23:59:59Z`).toISOString();
+
+    try {
+        const response = await calendar.freebusy.query({
+            requestBody: {
+                timeMin,
+                timeMax,
+                items: [{ id: 'primary' }, { id: calendarId }],
+                timeZone: 'Europe/Madrid',
+            },
         });
-        throw new Error(`Google Calendar (List): ${error.message}`);
+
+        const busySlots: string[] = [];
+        const calendars = response.data.calendars;
+
+        if (calendars) {
+            for (const calId in calendars) {
+                const busyList = calendars[calId].busy || [];
+                busyList.forEach((period) => {
+                    if (period.start && period.end) {
+                        const start = new Date(period.start);
+                        const end = new Date(period.end);
+
+                        // Añadimos buffer de 15 min al inicio y fin para el bloqueo
+                        const bufferedStart = new Date(start.getTime() - 15 * 60 * 1000);
+                        const bufferedEnd = new Date(end.getTime() + 15 * 60 * 1000);
+
+                        // Marcamos como ocupados todos los slots que caigan dentro del periodo
+                        // (esto se procesará en el frontend contra el horario predefinido)
+                        busySlots.push(`${bufferedStart.toISOString()}|${bufferedEnd.toISOString()}`);
+                    }
+                });
+            }
+        }
+
+        return busySlots;
+    } catch (error: any) {
+        console.error('❌ Error getting busy slots:', error.message);
+        return [];
     }
 }
 

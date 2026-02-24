@@ -32,8 +32,27 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
+    const [busySlots, setBusySlots] = useState<string[]>([]);
+    const [loadingBusy, setLoadingBusy] = useState(false);
 
     const today = startOfDay(new Date());
+
+    // Fecth busy slots when date changes
+    const fetchBusySlots = async (date: Date) => {
+        setLoadingBusy(true);
+        try {
+            const formattedDate = format(date, 'yyyy-MM-dd');
+            const res = await fetch(`/api/availability?date=${formattedDate}`);
+            const data = await res.json();
+            if (data.success) {
+                setBusySlots(data.busySlots);
+            }
+        } catch (error) {
+            console.error('Error fetching busy slots:', error);
+        } finally {
+            setLoadingBusy(false);
+        }
+    };
 
     // Build calendar grid
     const calendarDays = useMemo(() => {
@@ -51,18 +70,43 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
         return days;
     }, [currentMonth]);
 
+    // Helper to check if a specific time is busy
+    const isSlotBusy = (time: string) => {
+        if (!selectedDate) return false;
+        const slotStart = new Date(`${format(selectedDate, 'yyyy-MM-dd')}T${time}:00`);
+        const slotEnd = new Date(slotStart.getTime() + 45 * 60 * 1000);
+
+        return busySlots.some(period => {
+            const [pStartStr, pEndStr] = period.split('|');
+            const pStart = new Date(pStartStr);
+            const pEnd = new Date(pEndStr);
+
+            // Hay solapamiento si el slot comienza antes de que termine el periodo ocupado
+            // Y termina después de que empiece el periodo ocupado
+            return slotStart < pEnd && slotEnd > pStart;
+        });
+    };
+
     // Get available slots for selected date
     const availableSlots: TimeSlot[] = useMemo(() => {
         if (!selectedDate) return [];
         const dayOfWeek = selectedDate.getDay();
         const occupiedValencia: string[] = [];
         const occupiedMotilla: string[] = [];
-        return getAvailableSlots(location, dayOfWeek, occupiedValencia, occupiedMotilla);
-    }, [selectedDate, location]);
+
+        const theoreticalSlots = getAvailableSlots(location, dayOfWeek, occupiedValencia, occupiedMotilla);
+
+        // Filtrar por ocupación real de Google Calendar (FreeBusy)
+        return theoreticalSlots.map(slot => ({
+            ...slot,
+            available: slot.available && !isSlotBusy(slot.time)
+        }));
+    }, [selectedDate, location, busySlots]);
 
     const handleDateClick = (date: Date) => {
         setSelectedDate(date);
         setSelectedTime(null);
+        fetchBusySlots(date);
     };
 
     const handleTimeSelect = (time: string) => {
@@ -171,11 +215,18 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
                                     {format(selectedDate, "EEEE d 'de' MMMM", { locale: es })}
                                 </p>
                                 <div className="h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                                    <TimeSlotGrid
-                                        slots={availableSlots}
-                                        selectedTime={selectedTime}
-                                        onSelectTime={handleTimeSelect}
-                                    />
+                                    {loadingBusy ? (
+                                        <div className="h-full flex flex-col items-center justify-center space-y-3">
+                                            <div className="w-8 h-8 border-4 border-[var(--color-primary-soft)] border-t-[var(--color-primary)] rounded-full animate-spin" />
+                                            <p className="text-xs text-[var(--color-text-muted)] animate-pulse">Sincronizando agenda...</p>
+                                        </div>
+                                    ) : (
+                                        <TimeSlotGrid
+                                            slots={availableSlots}
+                                            selectedTime={selectedTime}
+                                            onSelectTime={handleTimeSelect}
+                                        />
+                                    )}
                                 </div>
                             </motion.div>
                         ) : (
