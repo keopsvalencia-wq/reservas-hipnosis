@@ -97,17 +97,17 @@ export default function Home() {
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
                   Solicita tu Evaluación Diagnóstica.
                 </h1>
-                <p className="text-xl md:text-2xl text-[var(--color-primary)] font-bold tracking-tight">
+                <p className="text-xl md:text-2xl text-[var(--color-primary)] font-bold tracking-tight lg:text-justify">
                   Solo de 3 a 5 plazas disponibles cada mes.
                 </p>
               </div>
 
-              <p className="text-lg text-[var(--color-text-muted)] leading-relaxed font-medium">
+              <p className="text-lg text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
                 Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo de forma definitiva.
               </p>
 
               <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 shadow-sm inline-block w-full">
-                <p className="text-base text-[var(--color-secondary)] font-bold leading-relaxed">
+                <p className="text-base text-[var(--color-secondary)] font-bold leading-relaxed lg:text-justify">
                   🛡️ Garantía: Si veo que no puedo garantizarte resultados, el coste de la sesión será 0€.
                 </p>
               </div>
@@ -141,7 +141,7 @@ export default function Home() {
               {/* Authority Badge */}
               <div className="absolute -top-4 -right-4 bg-white shadow-xl border border-emerald-50 px-6 py-3 rounded-2xl hidden lg:block z-10">
                 <p className="text-xs font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
-                <p className="text-[10px] font-bold text-[var(--color-primary)]">Experto en Hipnosis</p>
+                <p className="text-[10px] font-bold text-[var(--color-primary)]">Hipnoterapeuta Profesional</p>
               </div>
             </div>
           </div>
