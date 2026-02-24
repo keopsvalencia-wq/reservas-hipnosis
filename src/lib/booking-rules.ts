@@ -18,7 +18,7 @@ export const SESSION_DURATION_MINUTES = 60;
 export const SCHEDULE: Record<Location, Record<number, string[]>> = {
     valencia: {
         2: ['11:00', '18:00'],                                          // Martes
-        3: ['11:00', '12:00', '13:00', '16:00', '17:00', '18:00'],     // Miércoles
+        3: ['11:00', '12:00', '13:00', '16:00', '17:00'],              // Miércoles (reducido: sin 18h para desplazarme)
         4: ['11:00', '12:00', '13:00', '16:00', '17:00', '18:00', '19:00'], // Jueves
         5: ['11:00', '12:00', '13:00', '16:00', '17:00', '18:00', '19:00'], // Viernes
     },

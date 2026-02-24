@@ -45,6 +45,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
             const res = await fetch(`/api/availability?date=${formattedDate}`);
             const data = await res.json();
             if (data.success) {
+                console.log(`[DEBUG] Agenda GCal para ${formattedDate}:`, data.busySlots);
                 setBusySlots(data.busySlots);
             }
         } catch (error) {
@@ -71,17 +72,14 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
     }, [currentMonth]);
 
     // Helper to check if a specific time is busy
-    const isSlotBusy = (time: string) => {
-        if (!selectedDate) return false;
-
-        // Creamos los tiempos del slot (45 min de duración + 15 min de MARGEN obligatorio)
-        // El slot de las 11:00 ocupa realmente de 11:00 a 12:00 en la agenda
+    const isSlotBusy = (time: string, date: Date) => {
+        // Creamos los tiempos del slot (60 min de duración total)
         const [h, m] = time.split(':').map(Number);
-        const slotStart = new Date(selectedDate);
+        const slotStart = new Date(date);
         slotStart.setHours(h, m, 0, 0);
 
         const startTime = slotStart.getTime();
-        const endTimeWithBuffer = startTime + 60 * 60 * 1000; // 60 minutos totales
+        const endTime = startTime + 60 * 60 * 1000; // 1 hora completa
 
         // Tolerancia de 1 minuto para los bordes exactos
         const TOLERANCE = 60 * 1000;
@@ -91,9 +89,11 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
             const pStart = new Date(pStartStr).getTime();
             const pEnd = new Date(pEndStr).getTime();
 
-            // Solapamiento: el bloque de la app empieza antes de que termine el evento 
-            // Y el bloque de la app termina después de que empiece el evento
-            return (startTime + TOLERANCE) < pEnd && (endTimeWithBuffer - TOLERANCE) > pStart;
+            const overlaps = (startTime + TOLERANCE) < pEnd && (endTime - TOLERANCE) > pStart;
+            if (overlaps) {
+                console.log(`🚫 Slot ${time} bloqueado por GCal: ${new Date(pStart).toLocaleTimeString()} - ${new Date(pEnd).toLocaleTimeString()}`);
+            }
+            return overlaps;
         });
     };
 
@@ -109,7 +109,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
         // Filtrar por ocupación real de Google Calendar (FreeBusy)
         return theoreticalSlots.map(slot => ({
             ...slot,
-            available: slot.available && !isSlotBusy(slot.time)
+            available: slot.available && !isSlotBusy(slot.time, selectedDate)
         }));
     }, [selectedDate, location, busySlots]);
 
