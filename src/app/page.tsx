@@ -217,13 +217,18 @@ export default function Home() {
           </div>
         );
 
-      // ─── P7: COMPROMISO ──────────────────────
+      // ─── P7: COMPROMISO (Triple Inversión) ────
       case 6:
         return (
           <div className="space-y-6 max-w-3xl mx-auto">
             <div className="text-center space-y-3">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 5 de 7</p>
               <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu nivel de compromiso</h2>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 max-w-xl mx-auto">
+              <p className="text-sm text-[var(--color-text-muted)] leading-relaxed text-center">
+                Para que el tratamiento funcione, necesitas invertir en <strong className="text-[var(--color-secondary)]">3 áreas</strong>: tu <strong className="text-[var(--color-secondary)]">Compromiso</strong> personal, tu <strong className="text-[var(--color-secondary)]">Tiempo</strong> diario y tu <strong className="text-[var(--color-secondary)]">Dinero</strong>.
+              </p>
             </div>
             <TriageForm subset={['compromiso_escala', 'disponibilidad_tiempo']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
           </div>

@@ -89,13 +89,12 @@ export const triageQuestions: TriageQuestionDef[] = [
     },
     {
         id: 'disponibilidad_tiempo',
-        text: '¿Cuánto tiempo puedes dedicar a las sesiones semanalmente?',
-        type: 'select',
+        text: '¿Cuánto tiempo puedes dedicar a tu proceso de cambio diariamente?',
+        type: 'radio',
         options: [
-            { value: '1h', label: '1 hora a la semana' },
-            { value: '2h', label: '2 horas a la semana' },
-            { value: 'flexible', label: 'Soy flexible, lo que haga falta' },
-            { value: 'no_seguro', label: 'No estoy segur@' },
+            { value: 'sin_tiempo', label: '🔴 No tengo tiempo, mi día a día me come.' },
+            { value: '2h_dia', label: '🟡 Podría sacar unas 2 horas al día.' },
+            { value: 'lo_que_haga_falta', label: '🟢 El tiempo que haga falta. Mi salud mental es ahora mismo mi prioridad absoluta.' },
         ],
         group: 'compromiso',
     },
@@ -118,7 +117,7 @@ export const GATE_QUESTION_ID = 'inversion';
 export const GATE_BLOCKED_VALUE = 'sin_recursos';
 
 export const GATE_INTRO_TEXT =
-    'La inversión de mi método completo oscila entre 700€ y 1.000€ (pago dividido: señal en esta evaluación y el resto en la primera sesión).\n\nSi no te puedo garantizar resultados, el coste de la visita será 0€. Sin riesgo para ti.';
+    'Para que el tratamiento funcione, necesitas invertir en tres áreas: tu Compromiso personal, tu Tiempo diario y tu Dinero.\n\nLa inversión económica de mi método completo oscila entre 700€ y 1.000€ (pago dividido: señal en esta evaluación y el resto en la primera sesión).\n\nSi no te puedo garantizar resultados, el coste de la visita será 0€. Sin riesgo para ti.';
 
 export const GATE_BLOCKED_NOTE =
     'Si es tu caso, por favor no reserves la sesión para no quitarle la plaza a otra persona. Vuelve cuando sea tu momento.';
