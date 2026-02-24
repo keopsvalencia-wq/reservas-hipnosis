@@ -80,9 +80,8 @@ export async function POST(request: Request) {
                 console.log('✅ Evento creado en GCalendar:', eventId);
             } catch (calErr: any) {
                 console.error('❌ Error en Google Calendar:', calErr.message);
-                // Si falla el calendario, lanzamos error para que no parezca que se reservó si no hay hueco asegurado
                 return NextResponse.json(
-                    { success: false, message: 'Error al conectar con el calendario. Por favor, contacta por WhatsApp.' },
+                    { success: false, message: `Error GCalendar: ${calErr.message}. Contacta por WhatsApp.` },
                     { status: 500 }
                 );
             }
