@@ -113,8 +113,9 @@ export async function getBusySlots(date: string): Promise<string[]> {
                 }
                 busyList.forEach((period) => {
                     if (period.start && period.end) {
-                        // BLOQUEO TOTAL: Cualquier evento bloquea la disponibilidad
-                        busySlots.push(`${period.start}|${period.end}`);
+                        // Guardamos [inicio]|[fin]|[resumen] para depuración
+                        const summary = (period as any).summary || '';
+                        busySlots.push(`${period.start}|${period.end}|${summary}`);
                     }
                 });
             }

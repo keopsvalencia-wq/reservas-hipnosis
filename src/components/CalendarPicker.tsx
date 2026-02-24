@@ -85,13 +85,13 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
         const TOLERANCE = 60 * 1000;
 
         return busySlots.some(period => {
-            const [pStartStr, pEndStr] = period.split('|');
+            const [pStartStr, pEndStr, summary] = period.split('|');
             const pStart = new Date(pStartStr).getTime();
             const pEnd = new Date(pEndStr).getTime();
 
             const overlaps = (startTime + TOLERANCE) < pEnd && (endTime - TOLERANCE) > pStart;
             if (overlaps) {
-                console.log(`🚫 Slot ${time} bloqueado por GCal: ${new Date(pStart).toLocaleTimeString()} - ${new Date(pEnd).toLocaleTimeString()}`);
+                console.log(`🚫 Slot ${time} bloqueado por GCal: "${summary || 'Evento sin título'}" (${new Date(pStart).toLocaleTimeString()} - ${new Date(pEnd).toLocaleTimeString()})`);
             }
             return overlaps;
         });
