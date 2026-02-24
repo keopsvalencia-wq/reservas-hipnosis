@@ -59,8 +59,8 @@ export default function Home() {
     next();
   };
 
-  // Choice card handler
-  const handleChoice = (key: string, value: string) => {
+  // Choice card handler (single or multi)
+  const handleChoice = (key: string, value: string | string[]) => {
     setTriageData(prev => ({ ...prev, [key]: value }));
     next();
   };
@@ -157,30 +157,31 @@ export default function Home() {
           </div>
         );
 
-      // ─── P3: PERFIL (dedicación, ciudad, edad) ──
+      // ─── P3: MOTIVO DE CONSULTA (choice cards, multi) ──
       case 2:
+        return (
+          <ChoiceCardScreen
+            step="Paso 1 de 7"
+            title="¿Cuál es tu motivo de consulta?"
+            options={MOTIVO_OPTIONS}
+            selected={triageData.motivo_consulta as string | string[]}
+            onSelect={(val) => handleChoice('motivo_consulta', val)}
+            onBack={back}
+            columns={2}
+            multi
+          />
+        );
+
+      // ─── P4: PERFIL (dedicación, ciudad, edad) ────
+      case 3:
         return (
           <div className="space-y-6 max-w-3xl mx-auto">
             <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 1 de 7</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
               <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
             </div>
             <TriageForm subset={['dedicacion', 'ciudad', 'edad']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
           </div>
-        );
-
-      // ─── P4: MOTIVO PRINCIPAL (choice cards) ────
-      case 3:
-        return (
-          <ChoiceCardScreen
-            step="Paso 2 de 7"
-            title="¿Cuál es el problema principal que quieres resolver?"
-            options={MOTIVO_OPTIONS}
-            selected={triageData.motivo_consulta as string}
-            onSelect={(val) => handleChoice('motivo_consulta', val)}
-            onBack={back}
-            columns={2}
-          />
         );
 
       // ─── P5: IMPACTO EMOCIONAL (choice cards) ──
@@ -308,6 +309,7 @@ function Shell({ children, progress, showProgress = true }: { children: React.Re
 
 // ──────────────────────────────────────────────────
 // CHOICE CARD SCREEN: Large tactile cards grid
+// Supports single select (default) and multi select
 // ──────────────────────────────────────────────────
 function ChoiceCardScreen({
   step,
@@ -317,16 +319,37 @@ function ChoiceCardScreen({
   onSelect,
   onBack,
   columns = 2,
+  multi = false,
 }: {
   step: string;
   title: string;
   options: string[];
-  selected?: string;
-  onSelect: (value: string) => void;
+  selected?: string | string[];
+  onSelect: (value: string | string[]) => void;
   onBack: () => void;
   columns?: 1 | 2;
+  multi?: boolean;
 }) {
-  const [choice, setChoice] = useState(selected || '');
+  const [choices, setChoices] = useState<string[]>(
+    multi
+      ? (Array.isArray(selected) ? selected : selected ? [selected] : [])
+      : (selected && !Array.isArray(selected) ? [selected] : [])
+  );
+
+  const toggle = (opt: string) => {
+    if (multi) {
+      setChoices(prev => prev.includes(opt) ? prev.filter(v => v !== opt) : [...prev, opt]);
+    } else {
+      setChoices([opt]);
+    }
+  };
+
+  const isValid = choices.length > 0;
+
+  const handleNext = () => {
+    if (!isValid) return;
+    onSelect(multi ? choices : choices[0]);
+  };
 
   return (
     <div className="space-y-8 max-w-3xl mx-auto">
@@ -334,17 +357,18 @@ function ChoiceCardScreen({
       <div className="text-center space-y-3">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">{step}</p>
         <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)] leading-tight">{title}</h2>
+        {multi && <p className="text-sm text-[var(--color-text-muted)]">Puedes seleccionar varias opciones</p>}
       </div>
 
       {/* Cards Grid */}
       <div className={`grid gap-4 ${columns === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
         {options.map((opt) => {
-          const isSelected = choice === opt;
+          const isSelected = choices.includes(opt);
           return (
             <motion.button
               key={opt}
               type="button"
-              onClick={() => setChoice(opt)}
+              onClick={() => toggle(opt)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={`
@@ -355,9 +379,16 @@ function ChoiceCardScreen({
                 }
               `}
             >
-              <span className={`text-base md:text-lg font-semibold leading-snug ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
-                {opt}
-              </span>
+              <div className="flex items-center gap-3">
+                {multi && (
+                  <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)]' : 'border-gray-300'}`}>
+                    {isSelected && <span className="text-white text-xs font-bold">✓</span>}
+                  </div>
+                )}
+                <span className={`text-base md:text-lg font-semibold leading-snug ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
+                  {opt}
+                </span>
+              </div>
             </motion.button>
           );
         })}
@@ -369,11 +400,11 @@ function ChoiceCardScreen({
           <span className="material-icons-outlined">arrow_back</span> Atrás
         </button>
         <motion.button
-          onClick={() => { if (choice) onSelect(choice); }}
-          disabled={!choice}
+          onClick={handleNext}
+          disabled={!isValid}
           className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed"
-          whileHover={choice ? { scale: 1.03 } : {}}
-          whileTap={choice ? { scale: 0.97 } : {}}
+          whileHover={isValid ? { scale: 1.03 } : {}}
+          whileTap={isValid ? { scale: 0.97 } : {}}
         >
           SIGUIENTE PASO
         </motion.button>
