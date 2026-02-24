@@ -66,8 +66,8 @@ export default function Home() {
           <div className="text-center space-y-8 py-10">
             <div className="space-y-4">
               <h1 className="text-3xl md:text-4xl font-black text-[var(--color-secondary)] leading-tight">
-                Evaluación Diagnóstica<br />
-                <span className="text-[var(--color-primary)]">Gratuita</span>
+                Solicita tu Evaluación<br />
+                <span className="text-[var(--color-primary)]">Diagnóstica</span>
               </h1>
               <p className="text-lg text-[var(--color-text-muted)] max-w-lg mx-auto">
                 Descubre si la Hipnosis Clínica puede ayudarte a resolver tu problema de raíz en pocas sesiones.
@@ -79,10 +79,10 @@ export default function Home() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              Empezar Evaluación Gratis
+              Ver disponibilidad y reservar
               <span className="material-icons-outlined">arrow_forward</span>
             </motion.button>
-            <p className="text-xs text-gray-400">Solo 2 minutos · Sin compromiso</p>
+            <p className="text-xs text-gray-400">Solo de 3 a 5 plazas disponibles al mes</p>
           </div>
         );
 
@@ -91,17 +91,30 @@ export default function Home() {
         return (
           <div className="text-center space-y-8 py-8">
             <div className="w-16 h-16 rounded-2xl bg-[var(--color-primary-soft)] flex items-center justify-center mx-auto">
-              <span className="material-icons-outlined text-[var(--color-primary)] text-3xl">visibility</span>
+              <span className="material-icons-outlined text-[var(--color-primary)] text-3xl">card_giftcard</span>
             </div>
-            <div className="space-y-4 max-w-xl mx-auto">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Tu Regalo</p>
+            <div className="space-y-4 max-w-2xl mx-auto">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Un regalo para ti</p>
               <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">
-                Una Perspectiva Única de tu Problema
+                3 Regalos de Claridad
               </h2>
               <p className="text-base text-[var(--color-text-muted)] leading-relaxed">
-                Al completar esta evaluación, recibirás una primera valoración clínica basada en hipnosis.
-                Entenderás <strong>la raíz real</strong> de lo que te ocurre, no solo los síntomas.
+                Al asistir a tu evaluación, te llevarás <strong>3 regalos de claridad</strong> para liberar la presión de tu cabeza:
               </p>
+              <div className="grid gap-4 text-left max-w-lg mx-auto">
+                <div className="flex items-start gap-3 bg-gray-50 rounded-xl p-4">
+                  <span className="text-xl mt-0.5">🎁</span>
+                  <p className="text-sm text-[var(--color-secondary)] font-medium">Entenderás por fin <strong>qué te pasa realmente</strong></p>
+                </div>
+                <div className="flex items-start gap-3 bg-gray-50 rounded-xl p-4">
+                  <span className="text-xl mt-0.5">🎁</span>
+                  <p className="text-sm text-[var(--color-secondary)] font-medium">Sabrás <strong>por qué nada ha funcionado</strong> hasta hoy</p>
+                </div>
+                <div className="flex items-start gap-3 bg-gray-50 rounded-xl p-4">
+                  <span className="text-xl mt-0.5">🎁</span>
+                  <p className="text-sm text-[var(--color-secondary)] font-medium">Descubrirás <strong>la verdadera solución definitiva</strong></p>
+                </div>
+              </div>
             </div>
             <div className="flex items-center justify-center gap-4">
               <button onClick={back} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
@@ -156,7 +169,7 @@ export default function Home() {
         return (
           <div className="space-y-4">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)] text-center">Paso 5 de 6</p>
-            <TriageForm subset={['compromiso_escala', 'inversion']} onComplete={handleTriageStep} onBack={back} buttonLabel="Ver Disponibilidad" />
+            <TriageForm subset={['compromiso_escala', 'inversion']} onComplete={handleTriageStep} onBack={back} buttonLabel="Confirmar mi compromiso y ver agenda" />
           </div>
         );
 

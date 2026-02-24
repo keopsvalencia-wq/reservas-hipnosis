@@ -32,6 +32,7 @@ export const triageQuestions: TriageQuestionDef[] = [
         text: '¿Cuál es tu motivo de consulta?',
         type: 'multiselect',
         options: [
+            { value: 'ansiedad_depresion_bloqueos', label: 'Ansiedad / Depresión / Bloqueos' },
             { value: 'ansiedad', label: 'Ansiedad' },
             { value: 'depresion', label: 'Depresión' },
             { value: 'traumas', label: 'Traumas' },

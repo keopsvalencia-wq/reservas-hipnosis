@@ -313,7 +313,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                     ) : (
                         <>
                             <span className="material-icons-outlined text-lg">lock</span>
-                            Confirmar Reserva
+                            Finalizar y Reservar mi Plaza
                         </>
                     )}
                 </motion.button>
