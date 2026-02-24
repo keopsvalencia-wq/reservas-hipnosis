@@ -13,9 +13,9 @@ interface ConfirmationStepProps {
 
 export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepProps) {
     const [form, setForm] = useState({
-        name: '',
-        email: '',
-        phone: '',
+        name: data.name || '',
+        email: data.email || '',
+        phone: data.phone || '',
         acceptPrivacy: false,
     });
     const [submitted, setSubmitted] = useState(false);
