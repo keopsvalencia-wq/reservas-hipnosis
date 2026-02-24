@@ -506,16 +506,16 @@ function ContrastScreen({
 // ──────────────────────────────────────────────────
 function Shell({ children, progress, showProgress = true }: { children: React.ReactNode; progress: number; showProgress?: boolean }) {
   return (
-    <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-4 md:p-8">
-      <div className="w-full max-w-5xl">
+    <div className="min-h-screen bg-white flex flex-col items-center p-0">
+      <div className="w-full max-w-6xl">
         {showProgress && (
-          <div className="mb-6">
+          <div className="px-6 md:px-14 lg:px-20 pt-8">
             <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
               <motion.div className="h-full bg-[var(--color-primary)] rounded-full" initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.5, ease: 'easeOut' }} />
             </div>
           </div>
         )}
-        <div className="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-[var(--color-border)] p-6 md:p-14 lg:p-20 overflow-hidden">
+        <div className="bg-white p-6 md:p-14 lg:p-20 overflow-hidden">
           {children}
         </div>
       </div>
