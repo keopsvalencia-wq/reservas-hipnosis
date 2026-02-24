@@ -126,19 +126,20 @@ export default function Home() {
             </div>
 
             {/* Right: Authority Image */}
-            <div className="flex-1 relative order-1 lg:order-2 w-full max-w-lg mx-auto lg:mx-0">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+            <div className="flex-1 relative order-1 lg:order-2 w-full max-w-xl mx-auto lg:mx-0">
+              <div className="relative rounded-3xl overflow-hidden bg-white">
                 <img
                   src="/images/salva-autoridad.png"
-                  alt="Salva Vera - Terapeuta"
-                  className="w-full h-auto object-cover rounded-3xl"
+                  alt="Salva Vera"
+                  className="w-full h-auto block rounded-3xl shadow-xl"
+                  style={{ display: 'block', minHeight: '300px' }}
                 />
                 {/* Visual Treatment: Fading Gradient */}
-                <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white via-white/40 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" />
               </div>
 
-              {/* Floating Badge (Opcional para elegancia) */}
-              <div className="absolute top-6 -right-4 lg:-right-8 bg-white/90 backdrop-blur shadow-lg border border-gray-100 px-6 py-3 rounded-2xl hidden lg:block">
+              {/* Authority Badge */}
+              <div className="absolute -top-4 -right-4 bg-white shadow-xl border border-emerald-50 px-6 py-3 rounded-2xl hidden lg:block z-10">
                 <p className="text-xs font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
                 <p className="text-[10px] font-bold text-[var(--color-primary)]">Experto en Hipnosis</p>
               </div>
