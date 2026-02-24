@@ -25,6 +25,18 @@ export async function POST(request: Request) {
             );
         }
 
+        // Date validation: No agendar hoy, mínimo mañana
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const bookingDate = new Date(`${data.date}T00:00:00`);
+
+        if (bookingDate <= today) {
+            return NextResponse.json(
+                { success: false, message: 'La reserva debe ser como mínimo con un día de antelación.' },
+                { status: 400 }
+            );
+        }
+
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(data.email)) {
@@ -42,6 +54,7 @@ export async function POST(request: Request) {
             process.env.GOOGLE_CALENDAR_ID;
 
         if (hasGoogleCredentials) {
+            console.log('📅 Reintentando Google Calendar para:', data.date, data.time);
             const isAvailable = await checkAvailability(data.date, data.time);
             if (!isAvailable) {
                 return NextResponse.json(
@@ -105,8 +118,12 @@ export async function POST(request: Request) {
             eventId,
             message: 'Reserva confirmada correctamente',
         });
-    } catch (error) {
-        console.error('Error en /api/booking:', error);
+    } catch (error: any) {
+        console.error('❌ ERROR CRÍTICO EN /api/booking:', {
+            message: error.message,
+            stack: error.stack,
+            cause: error.cause
+        });
         return NextResponse.json(
             {
                 success: false,

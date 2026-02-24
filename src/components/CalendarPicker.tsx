@@ -124,7 +124,8 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
                             {calendarDays.map((day) => {
                                 const dayOfWeek = day.getDay();
                                 const hasSlots = isDayAvailable(location, dayOfWeek);
-                                const isPast = isBefore(day, today);
+                                // Modificado: No permitir hoy, solo a partir de mañana
+                                const isPast = isBefore(day, startOfDay(addDays(today, 1)));
                                 const isCurrentMonth = isSameMonth(day, currentMonth);
                                 const isSelected = selectedDate ? isSameDay(day, selectedDate) : false;
                                 const isTodayDate = isToday(day);

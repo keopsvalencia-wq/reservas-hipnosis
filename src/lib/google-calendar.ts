@@ -13,7 +13,9 @@ import { SESSION_DURATION_MINUTES } from './booking-rules';
 function getAuthClient() {
     const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
     // Replace escaped newlines with actual newlines
-    const privateKey = (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+    const privateKey = (process.env.GOOGLE_PRIVATE_KEY || '')
+        .replace(/^"(.*)"$/, '$1') // Remove surrounding quotes if they exist
+        .replace(/\\n/g, '\n');   // Replace literal \n with actual newlines
 
     if (!email || !privateKey) {
         throw new Error('Google Calendar credentials not configured');
