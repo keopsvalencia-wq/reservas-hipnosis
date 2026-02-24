@@ -73,17 +73,23 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
     // Helper to check if a specific time is busy
     const isSlotBusy = (time: string) => {
         if (!selectedDate) return false;
-        const slotStart = new Date(`${format(selectedDate, 'yyyy-MM-dd')}T${time}:00`);
-        const slotEnd = new Date(slotStart.getTime() + 45 * 60 * 1000);
+
+        // Creamos los tiempos del slot (45 min de duración)
+        const slotStart = new Date(`${format(selectedDate, 'yyyy-MM-dd')}T${time}:00`).getTime();
+        const slotEnd = slotStart + 45 * 60 * 1000;
+
+        // Tolerancia de 1 minuto para evitar problemas con los bordes exactos
+        const TOLERANCE = 60 * 1000;
 
         return busySlots.some(period => {
             const [pStartStr, pEndStr] = period.split('|');
-            const pStart = new Date(pStartStr);
-            const pEnd = new Date(pEndStr);
+            const pStart = new Date(pStartStr).getTime();
+            const pEnd = new Date(pEndStr).getTime();
 
-            // Hay solapamiento si el slot comienza antes de que termine el periodo ocupado
-            // Y termina después de que empiece el periodo ocupado
-            return slotStart < pEnd && slotEnd > pStart;
+            // Solapamiento real: el slot termina después de que empiece el evento
+            // Y el slot empieza antes de que termine el evento.
+            // Aplicamos la tolerancia para permitir sesiones que empiezan justo al terminar la anterior.
+            return (slotStart + TOLERANCE) < pEnd && (slotEnd - TOLERANCE) > pStart;
         });
     };
 

@@ -84,6 +84,7 @@ export async function getBusySlots(date: string): Promise<string[]> {
     const timeMax = new Date(`${date}T23:59:59`).toISOString();
 
     try {
+        console.log(`🔍 Consultando disponibilidad para ${date} en Calendarios:`, [calendarId, personalCalendarId]);
         const response = await calendar.freebusy.query({
             requestBody: {
                 timeMin,
@@ -102,10 +103,12 @@ export async function getBusySlots(date: string): Promise<string[]> {
         if (calendars) {
             for (const id in calendars) {
                 const busyList = calendars[id].busy || [];
+                if (busyList.length > 0) {
+                    console.log(`📅 [${id}] tiene ${busyList.length} intervalos ocupados.`);
+                }
                 busyList.forEach((period) => {
                     if (period.start && period.end) {
-                        // Respetamos exactamente los tiempos del calendario sin añadir buffer extra
-                        // ya que el usuario suele bloquear la hora completa (45 min + margen)
+                        console.log(`   - Ocupado: ${period.start} a ${period.end}`);
                         busySlots.push(`${period.start}|${period.end}`);
                     }
                 });
