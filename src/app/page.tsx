@@ -369,7 +369,7 @@ function ContrastScreen({
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             className={`px-4 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all ${on
-              ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)] text-white shadow-sm'
+              ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white shadow-sm'
               : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
               }`}
           >
