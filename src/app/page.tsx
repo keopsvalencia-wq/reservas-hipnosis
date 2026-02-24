@@ -33,6 +33,7 @@ const IMPACTO_OPTIONS = [
   'Arruinarme o perder mi trabajo',
   'Quedarme solo/a para siempre',
   'No volver a ser yo mismo/a nunca',
+  'Otro miedo diferente',
 ];
 
 export default function Home() {
@@ -169,6 +170,9 @@ export default function Home() {
             onBack={back}
             columns={2}
             multi
+            otherLabel="Otros"
+            otherText={(triageData.motivo_otro as string) || ''}
+            onOtherTextChange={(txt) => setTriageData(prev => ({ ...prev, motivo_otro: txt }))}
           />
         );
 
@@ -195,6 +199,9 @@ export default function Home() {
             onSelect={(val) => handleChoice('impacto_emocional', val)}
             onBack={back}
             columns={1}
+            otherLabel="Otro miedo diferente"
+            otherText={(triageData.impacto_otro as string) || ''}
+            onOtherTextChange={(txt) => setTriageData(prev => ({ ...prev, impacto_otro: txt }))}
           />
         );
 
@@ -309,7 +316,7 @@ function Shell({ children, progress, showProgress = true }: { children: React.Re
 
 // ──────────────────────────────────────────────────
 // CHOICE CARD SCREEN: Large tactile cards grid
-// Supports single select (default) and multi select
+// Supports single/multi select + dynamic "Otros" textarea
 // ──────────────────────────────────────────────────
 function ChoiceCardScreen({
   step,
@@ -320,6 +327,9 @@ function ChoiceCardScreen({
   onBack,
   columns = 2,
   multi = false,
+  otherLabel,
+  otherText = '',
+  onOtherTextChange,
 }: {
   step: string;
   title: string;
@@ -329,6 +339,9 @@ function ChoiceCardScreen({
   onBack: () => void;
   columns?: 1 | 2;
   multi?: boolean;
+  otherLabel?: string;
+  otherText?: string;
+  onOtherTextChange?: (text: string) => void;
 }) {
   const [choices, setChoices] = useState<string[]>(
     multi
@@ -344,7 +357,8 @@ function ChoiceCardScreen({
     }
   };
 
-  const isValid = choices.length > 0;
+  const otherIsSelected = otherLabel ? choices.includes(otherLabel) : false;
+  const isValid = choices.length > 0 && (!otherIsSelected || (otherText?.trim().length ?? 0) > 0);
 
   const handleNext = () => {
     if (!isValid) return;
@@ -364,32 +378,52 @@ function ChoiceCardScreen({
       <div className={`grid gap-4 ${columns === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
         {options.map((opt) => {
           const isSelected = choices.includes(opt);
+          const isOther = otherLabel && opt === otherLabel;
           return (
-            <motion.button
-              key={opt}
-              type="button"
-              onClick={() => toggle(opt)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`
-                p-5 md:p-6 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer
-                ${isSelected
-                  ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] shadow-md'
-                  : 'border-[var(--color-border)] bg-white hover:border-gray-300 hover:shadow-sm'
-                }
-              `}
-            >
-              <div className="flex items-center gap-3">
-                {multi && (
-                  <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)]' : 'border-gray-300'}`}>
-                    {isSelected && <span className="text-white text-xs font-bold">✓</span>}
-                  </div>
-                )}
-                <span className={`text-base md:text-lg font-semibold leading-snug ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
-                  {opt}
-                </span>
-              </div>
-            </motion.button>
+            <div key={opt} className={isOther && columns === 2 ? 'md:col-span-2' : ''}>
+              <motion.button
+                type="button"
+                onClick={() => toggle(opt)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`
+                  w-full p-5 md:p-6 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer
+                  ${isSelected
+                    ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] shadow-md'
+                    : 'border-[var(--color-border)] bg-white hover:border-gray-300 hover:shadow-sm'
+                  }
+                `}
+              >
+                <div className="flex items-center gap-3">
+                  {multi && (
+                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)]' : 'border-gray-300'}`}>
+                      {isSelected && <span className="text-white text-xs font-bold">✓</span>}
+                    </div>
+                  )}
+                  <span className={`text-base md:text-lg font-semibold leading-snug ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
+                    {opt}
+                  </span>
+                </div>
+              </motion.button>
+              {/* Dynamic textarea for "Otros" */}
+              {isOther && isSelected && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="mt-3"
+                >
+                  <textarea
+                    className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-24 resize-none text-base"
+                    placeholder="Describe brevemente tu situación..."
+                    value={otherText}
+                    onChange={(e) => onOtherTextChange?.(e.target.value)}
+                    autoFocus
+                  />
+                </motion.div>
+              )}
+            </div>
           );
         })}
       </div>
