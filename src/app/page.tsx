@@ -205,16 +205,14 @@ export default function Home() {
           />
         );
 
-      // ─── P6: CONTRASTE ───────────────────────
+      // ─── P6: CONTRASTE (Híbrido: tags + texto) ──
       case 5:
         return (
-          <div className="space-y-6 max-w-3xl mx-auto">
-            <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
-              <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">¿Dónde estás y a dónde quieres llegar?</h2>
-            </div>
-            <TriageForm subset={['situacion_actual', 'situacion_deseada']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
-          </div>
+          <ContrastScreen
+            triageData={triageData}
+            onComplete={(answers) => { setTriageData(prev => ({ ...prev, ...answers })); next(); }}
+            onBack={back}
+          />
         );
 
       // ─── P7: COMPROMISO (Triple Inversión) ────
@@ -294,6 +292,131 @@ export default function Home() {
         </motion.div>
       </AnimatePresence>
     </Shell>
+  );
+}
+
+// ──────────────────────────────────────────────────
+// CONTRAST SCREEN: Quick tags + dual textareas
+// ──────────────────────────────────────────────────
+const QUICK_TAGS = [
+  'No duermo bien',
+  'Ansiedad constante',
+  'Me siento paralizado/a',
+  'Problemas de pareja/familia',
+  'Falta de confianza',
+];
+
+function ContrastScreen({
+  triageData,
+  onComplete,
+  onBack,
+}: {
+  triageData: Record<string, unknown>;
+  onComplete: (answers: Record<string, string | string[]>) => void;
+  onBack: () => void;
+}) {
+  const [tags, setTags] = useState<string[]>(
+    Array.isArray(triageData.situacion_tags) ? (triageData.situacion_tags as string[]) : []
+  );
+  const [actualText, setActualText] = useState((triageData.situacion_actual as string) || '');
+  const [deseadaText, setDeseadaText] = useState((triageData.situacion_deseada as string) || '');
+
+  const toggleTag = (tag: string) => {
+    setTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+  };
+
+  const isValid = deseadaText.trim().length > 0 && (tags.length > 0 || actualText.trim().length > 0);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isValid) return;
+    onComplete({
+      situacion_tags: tags,
+      situacion_actual: actualText,
+      situacion_deseada: deseadaText,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-10 max-w-3xl mx-auto">
+      {/* Header */}
+      <div className="text-center space-y-3">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
+        <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)] leading-tight">¿Dónde estás y a dónde quieres llegar?</h2>
+      </div>
+
+      {/* ── SITUACIÓN ACTUAL ── */}
+      <div className="space-y-5">
+        <h3 className="text-lg md:text-xl font-bold text-[var(--color-secondary)]">
+          Describe brevemente cómo estás en este momento y qué te impide hacer tu problema.
+        </h3>
+
+        {/* Quick Tags */}
+        <div className="flex flex-wrap gap-3">
+          {QUICK_TAGS.map(tag => {
+            const active = tags.includes(tag);
+            return (
+              <motion.button
+                key={tag}
+                type="button"
+                onClick={() => toggleTag(tag)}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                className={`px-4 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all ${active
+                    ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)] text-white shadow-sm'
+                    : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
+                  }`}
+              >
+                {active && <span className="mr-1.5">✓</span>}
+                {tag}
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* Detail Text */}
+        <textarea
+          className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-28 resize-none text-base"
+          placeholder="¿Quieres añadir algún detalle más sobre tu malestar actual?"
+          value={actualText}
+          onChange={(e) => setActualText(e.target.value)}
+        />
+      </div>
+
+      {/* Divider */}
+      <div className="border-t border-gray-100" />
+
+      {/* ── SITUACIÓN DESEADA ── */}
+      <div className="space-y-5">
+        <h3 className="text-lg md:text-xl font-bold text-[var(--color-secondary)]">
+          ¿Cómo te gustaría estar y sentirte dentro de exactamente un mes <span className="text-[var(--color-primary)]">cuando solucionemos</span> tu problema?
+        </h3>
+
+        <textarea
+          className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-32 resize-none text-base"
+          placeholder="Ej: Quiero levantarme con energía, sin ese nudo en el estómago y sintiendo que vuelvo a tener el control..."
+          value={deseadaText}
+          onChange={(e) => setDeseadaText(e.target.value)}
+          required
+        />
+      </div>
+
+      {/* Navigation */}
+      <div className="flex items-center justify-between pt-2">
+        <button type="button" onClick={onBack} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
+          <span className="material-icons-outlined">arrow_back</span> Atrás
+        </button>
+        <motion.button
+          type="submit"
+          disabled={!isValid}
+          className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed"
+          whileHover={isValid ? { scale: 1.03 } : {}}
+          whileTap={isValid ? { scale: 0.97 } : {}}
+        >
+          SIGUIENTE PASO
+        </motion.button>
+      </div>
+    </form>
   );
 }
 
