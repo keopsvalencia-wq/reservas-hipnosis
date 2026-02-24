@@ -23,6 +23,7 @@ function getAuthClient() {
 }
 
 const calendarId = process.env.GOOGLE_CALENDAR_ID || '';
+const personalCalendarId = 'keopsvalencia@gmail.com'; // Calendario personal mencionado por el usuario
 
 /**
  * Verifica disponibilidad en Google Calendar.
@@ -46,7 +47,10 @@ export async function checkAvailability(
             requestBody: {
                 timeMin: bufferedStart.toISOString(),
                 timeMax: bufferedEnd.toISOString(),
-                items: [{ id: 'primary' }, { id: calendarId }],
+                items: [
+                    { id: calendarId },
+                    { id: personalCalendarId }
+                ],
                 timeZone: 'Europe/Madrid',
             },
         });
@@ -55,8 +59,9 @@ export async function checkAvailability(
         if (!busy) return true;
 
         // Si hay algún intervalo ocupado en cualquiera de los calendarios
-        for (const calId in busy) {
-            if (busy[calId].busy && busy[calId].busy.length > 0) {
+        for (const id in busy) {
+            if (busy[id].busy && busy[id].busy.length > 0) {
+                console.log(`🚫 Ocupado en calendario ${id} para ${time}`);
                 return false;
             }
         }
@@ -75,16 +80,19 @@ export async function getBusySlots(date: string): Promise<string[]> {
     const auth = getAuthClient();
     const calendar = google.calendar({ version: 'v3', auth });
 
-    // Consultamos todo el día
-    const timeMin = new Date(`${date}T00:00:00Z`).toISOString();
-    const timeMax = new Date(`${date}T23:59:59Z`).toISOString();
+    // Consultamos todo el día en rango amplio local (00:00 a 23:59 de la fecha elegida)
+    const timeMin = new Date(`${date}T00:00:00`).toISOString();
+    const timeMax = new Date(`${date}T23:59:59`).toISOString();
 
     try {
         const response = await calendar.freebusy.query({
             requestBody: {
                 timeMin,
                 timeMax,
-                items: [{ id: 'primary' }, { id: calendarId }],
+                items: [
+                    { id: calendarId },
+                    { id: personalCalendarId }
+                ],
                 timeZone: 'Europe/Madrid',
             },
         });
@@ -93,14 +101,14 @@ export async function getBusySlots(date: string): Promise<string[]> {
         const calendars = response.data.calendars;
 
         if (calendars) {
-            for (const calId in calendars) {
-                const busyList = calendars[calId].busy || [];
+            for (const id in calendars) {
+                const busyList = calendars[id].busy || [];
                 busyList.forEach((period) => {
                     if (period.start && period.end) {
                         const start = new Date(period.start);
                         const end = new Date(period.end);
 
-                        // Añadimos buffer de 15 min al inicio y fin para el bloqueo
+                        // Buffer de 15 min
                         const bufferedStart = new Date(start.getTime() - 15 * 60 * 1000);
                         const bufferedEnd = new Date(end.getTime() + 15 * 60 * 1000);
 
