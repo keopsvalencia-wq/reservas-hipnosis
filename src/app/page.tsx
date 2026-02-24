@@ -92,21 +92,22 @@ export default function Home() {
         return (
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16 py-4 lg:py-10 max-w-6xl mx-auto">
             {/* Left: Content */}
-            <div className="flex-1 text-center lg:text-left space-y-8 order-2 lg:order-1">
-              <div className="space-y-4">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
-                  Solicita tu Evaluación Diagnóstica.
-                </h1>
-                <p className="text-xl md:text-2xl text-[var(--color-primary)] font-bold tracking-tight lg:text-justify">
+            <div className="flex-1 text-center lg:text-left space-y-8 order-2 lg:order-1 max-w-2xl">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
+                Solicita tu Evaluación Diagnóstica.
+              </h1>
+
+              <div className="space-y-6">
+                <p className="text-xl md:text-2xl text-[var(--color-primary)] font-bold tracking-tight">
                   Solo de 3 a 5 plazas disponibles cada mes.
+                </p>
+
+                <p className="text-lg text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
+                  Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo de forma definitiva.
                 </p>
               </div>
 
-              <p className="text-lg text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
-                Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo de forma definitiva.
-              </p>
-
-              <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 shadow-sm inline-block w-full">
+              <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 shadow-sm w-full">
                 <p className="text-base text-[var(--color-secondary)] font-bold leading-relaxed lg:text-justify">
                   🛡️ Garantía: Si veo que no puedo garantizarte resultados, el coste de la sesión será 0€.
                 </p>
