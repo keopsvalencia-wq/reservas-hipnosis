@@ -126,15 +126,15 @@ export default function Home() {
             </div>
 
             {/* Right: Authority Image */}
-            <div className="flex-1 relative order-1 lg:order-2 w-full max-w-md lg:max-w-none px-4 lg:px-0">
-              <div className="relative rounded-3xl overflow-hidden aspect-[4/5] lg:aspect-auto">
+            <div className="flex-1 relative order-1 lg:order-2 w-full max-w-lg mx-auto lg:mx-0">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="/images/salva-autoridad.png"
                   alt="Salva Vera - Terapeuta"
-                  className="w-full h-full object-cover rounded-3xl shadow-2xl scale-x-[-1]" // Volteada horizontalmente para que mire al texto
+                  className="w-full h-auto object-cover rounded-3xl"
                 />
                 {/* Visual Treatment: Fading Gradient */}
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white via-white/50 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-white via-white/40 to-transparent" />
               </div>
 
               {/* Floating Badge (Opcional para elegancia) */}
