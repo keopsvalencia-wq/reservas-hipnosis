@@ -63,9 +63,9 @@ export const triageQuestions: TriageQuestionDef[] = [
     },
     {
         id: 'situacion_deseada',
-        text: '¿Cómo te gustaría estar dentro de un MES?',
+        text: '¿Cómo te gustaría estar y sentirte dentro de exactamente un mes cuando solucionemos tu problema?',
         type: 'textarea',
-        placeholder: 'Describe cómo sería tu vida ideal dentro de un mes si solucionas tu problema...',
+        placeholder: 'Describe con detalle cómo será tu vida, tus emociones y tu día a día cuando hayamos resuelto esto juntos...',
         group: 'contraste',
     },
     // ─── P5: Compromiso ───────────────────────────────
