@@ -444,39 +444,36 @@ function ContrastScreen({
   );
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-10 max-w-3xl mx-auto">
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto">
       {/* Header */}
-      <div className="text-center space-y-3">
+      <div className="text-center space-y-2">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
-        <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)] leading-tight">¿Dónde estás y a dónde quieres llegar?</h2>
+        <h2 className="text-xl md:text-2xl font-black text-[var(--color-secondary)] leading-tight">¿Dónde estás y a dónde quieres llegar?</h2>
       </div>
 
       {/* ── SITUACIÓN ACTUAL ── */}
-      <div className="space-y-5">
-        <h3 className="text-lg md:text-xl font-bold text-[var(--color-secondary)]">
-          Describe brevemente cómo estás en este momento y qué te impide hacer tu problema.
+      <div className="space-y-3">
+        <h3 className="text-base md:text-lg font-bold text-[var(--color-secondary)]">
+          Describe brevemente cómo estás ahora.
         </h3>
         {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual)}
         <textarea
-          className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-28 resize-none text-base"
-          placeholder="¿Quieres añadir algún detalle más sobre tu malestar actual?"
+          className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-20 resize-none text-sm"
+          placeholder="¿Qué te impide hacer tu problema?"
           value={actualText}
           onChange={(e) => setActualText(e.target.value)}
         />
       </div>
 
-      {/* Divider */}
-      <div className="border-t border-gray-100" />
-
       {/* ── SITUACIÓN DESEADA ── */}
-      <div className="space-y-5">
-        <h3 className="text-lg md:text-xl font-bold text-[var(--color-secondary)]">
-          ¿Cómo te gustaría estar y sentirte dentro de aproximadamente un mes <span className="text-[var(--color-primary)]">cuando solucionemos</span> tu problema?
+      <div className="space-y-3">
+        <h3 className="text-base md:text-lg font-bold text-[var(--color-secondary)]">
+          ¿Cómo te gustaría estar en un mes <span className="text-[var(--color-primary)]">al solucionar</span> esto?
         </h3>
         {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
         <textarea
-          className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-32 resize-none text-base"
-          placeholder="¿Quieres añadir algún detalle más sobre cómo te gustaría sentirte?"
+          className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-20 resize-none text-sm"
+          placeholder="¿Cómo te gustaría sentirte?"
           value={deseadaText}
           onChange={(e) => setDeseadaText(e.target.value)}
         />
@@ -490,7 +487,7 @@ function ContrastScreen({
         <motion.button
           type="submit"
           disabled={!isValid}
-          className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed"
+          className="btn-primary py-3 px-8 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed"
           whileHover={isValid ? { scale: 1.03 } : {}}
           whileTap={isValid ? { scale: 0.97 } : {}}
         >
