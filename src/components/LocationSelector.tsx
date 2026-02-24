@@ -51,48 +51,52 @@ export function LocationSelector({ onSelect }: LocationSelectorProps) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.1, duration: 0.3 }}
-                        className="group relative text-left p-5 rounded-xl border-2 border-[var(--color-border)]
-                            hover:border-[var(--color-primary)] hover:shadow-lg transition-all duration-200
-                            bg-[var(--color-bg-card)]"
-                        whileHover={{ y: -2 }}
+                        className="group relative text-center p-8 rounded-2xl border-2 border-[var(--color-border)]
+                            hover:border-[var(--color-primary)] hover:shadow-xl transition-all duration-300
+                            bg-white flex flex-col items-center h-full"
+                        whileHover={{ y: -5 }}
                     >
-                        <div className="flex items-start gap-4">
-                            {/* Icon circle */}
-                            <div
-                                className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                                style={{ backgroundColor: card.color + '18' }}
+                        {/* Icon circle - Centered at top */}
+                        <div
+                            className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110"
+                            style={{ backgroundColor: card.color + '15' }}
+                        >
+                            <span
+                                className="material-icons-outlined text-3xl"
+                                style={{ color: card.color }}
                             >
-                                <span
-                                    className="material-icons-outlined text-2xl"
-                                    style={{ color: card.color }}
-                                >
-                                    {card.icon}
-                                </span>
-                            </div>
-                            {/* Info */}
-                            <div className="flex-1 min-w-0">
-                                <p className="font-semibold text-[var(--color-secondary)]">
-                                    {card.title}
-                                </p>
-                                <p className="text-sm text-[var(--color-text-muted)] mt-0.5">
-                                    {card.subtitle}
-                                </p>
-                                {/* Google Meet note */}
-                                {card.note && (
-                                    <div className="mt-3 flex items-start gap-2 p-3 rounded-lg bg-[var(--color-primary-soft)] border border-[var(--color-primary)] border-opacity-20">
-                                        <span className="material-icons-outlined text-[var(--color-primary)] text-[16px] mt-0.5 flex-shrink-0">
+                                {card.icon}
+                            </span>
+                        </div>
+
+                        {/* Info - Full width vertical stack */}
+                        <div className="flex-1 w-full space-y-2">
+                            <h3 className="text-lg font-black text-[var(--color-secondary)] leading-tight">
+                                {card.title}
+                            </h3>
+                            <p className="text-sm text-[var(--color-text-muted)] font-medium">
+                                {card.subtitle}
+                            </p>
+
+                            {/* Google Meet note - Legible and wide */}
+                            {card.note && (
+                                <div className="mt-6 p-4 rounded-xl bg-[var(--color-primary-soft)] border border-[var(--color-primary)] border-opacity-10 text-left">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="material-icons-outlined text-[var(--color-primary)] text-lg">
                                             info
                                         </span>
-                                        <p className="text-xs text-[var(--color-secondary)] leading-relaxed">
-                                            {card.note}
-                                        </p>
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-primary)]">Nota importante</span>
                                     </div>
-                                )}
-                            </div>
-                            {/* Arrow */}
-                            <span className="material-icons-outlined text-[var(--color-text-muted)] opacity-0 group-hover:opacity-100 transition-opacity self-center">
-                                arrow_forward
-                            </span>
+                                    <p className="text-[13px] text-[var(--color-secondary)] leading-relaxed">
+                                        {card.note}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Selection Indicator */}
+                        <div className="mt-6 flex items-center gap-2 text-[var(--color-primary)] font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                            Seleccionar <span className="material-icons-outlined text-sm">arrow_forward</span>
                         </div>
                     </motion.button>
                 ))}
