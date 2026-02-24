@@ -109,14 +109,8 @@ export async function getBusySlots(date: string): Promise<string[]> {
                 const busyList = calendars[id].busy || [];
                 busyList.forEach((period) => {
                     if (period.start && period.end) {
-                        const start = new Date(period.start);
-                        const end = new Date(period.end);
-                        const durationMs = end.getTime() - start.getTime();
-
-                        // IGNORAR RECORDATORIOS: Si el evento dura menos de 15 min, lo ignoramos
-                        if (durationMs > 15 * 60 * 1000) {
-                            busySlots.push(`${period.start}|${period.end}`);
-                        }
+                        // BLOQUEO ESTRICTO: Cualquier evento, sin importar su duración, ocupa el hueco. 
+                        busySlots.push(`${period.start}|${period.end}`);
                     }
                 });
             }
