@@ -241,9 +241,6 @@ export default function Home() {
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 6 de 7</p>
               <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">La inversión</h2>
             </div>
-            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 max-w-xl mx-auto space-y-3">
-              <p className="text-sm text-[var(--color-text-muted)] leading-relaxed whitespace-pre-line">{GATE_INTRO_TEXT}</p>
-            </div>
             <TriageForm subset={['inversion']} onComplete={handleTriageStep} onBack={back} buttonLabel="Confirmar mi compromiso y ver agenda" />
           </div>
         );
