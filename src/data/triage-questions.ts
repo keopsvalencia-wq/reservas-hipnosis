@@ -3,7 +3,7 @@ import { TriageAnswers } from '@/lib/types';
 // ───────────────────────────────────────────────────
 // Tipos de input soportados por el formulario
 // ───────────────────────────────────────────────────
-export type QuestionInputType = 'select' | 'radio' | 'text' | 'textarea';
+export type QuestionInputType = 'select' | 'radio' | 'text' | 'textarea' | 'multiselect';
 
 export interface TriageQuestionOption {
     value: string;
@@ -16,33 +16,31 @@ export interface TriageQuestionDef {
     type: QuestionInputType;
     options?: TriageQuestionOption[];
     placeholder?: string;
-    /** Visual grouping hint: questions with same group render together */
     group?: string;
-    /** Visual hint for adjacent pairing (5A + 5B) */
     pairWith?: string;
     showIf?: (answers: TriageAnswers) => boolean;
 }
 
 // ───────────────────────────────────────────────────
-// 9 PREGUNTAS DE CUALIFICACIÓN (Refactorizadas Q1/Q2)
+// PREGUNTAS DE CUALIFICACIÓN
 // ───────────────────────────────────────────────────
 
 export const triageQuestions: TriageQuestionDef[] = [
-    // ─── Q1: Motivo (Ansiedad, depresión, miedos, autoestima, traumas) ─────────
+    // ─── P3: Motivo (MULTISELECCIÓN) ──────────────────
     {
         id: 'motivo_consulta',
-        text: 'Cuéntame, ¿cuál es tu motivo de consulta?',
-        type: 'select',
+        text: '¿Cuál es tu motivo de consulta?',
+        type: 'multiselect',
         options: [
             { value: 'ansiedad', label: 'Ansiedad' },
             { value: 'depresion', label: 'Depresión' },
-            { value: 'miedos', label: 'Miedos' },
-            { value: 'autoestima', label: 'Autoestima' },
             { value: 'traumas', label: 'Traumas' },
-            { value: 'otro', label: 'Otro motivo' },
+            { value: 'adicciones', label: 'Adicciones' },
+            { value: 'fobias', label: 'Fobias' },
+            { value: 'otros', label: 'Otros' },
         ],
     },
-    // ─── Q2: ¿Qué es lo que más miedo te da que pase? (Enfermedad, soledad...) ───
+    // ─── P4: Miedo profundo (Selección única) ─────────
     {
         id: 'miedo_futuro',
         text: '¿Qué es lo que más miedo te da que pase?',
@@ -56,21 +54,21 @@ export const triageQuestions: TriageQuestionDef[] = [
             { value: 'muerte', label: 'Muerte / Duelo' },
         ],
     },
-    // ─── Q3: Dedicación (Texto libre) ─────────────────
+    // ─── P5: Datos personales ─────────────────────────
     {
         id: 'dedicacion',
         text: '¿A qué te dedicas actualmente?',
         type: 'text',
         placeholder: 'Ej. Enfermera, autónomo, desempleado...',
+        group: 'datos',
     },
-    // ─── Q4: Ciudad (Texto corto) ─────────────────────
     {
         id: 'ciudad',
         text: '¿En qué ciudad o población vives?',
         type: 'text',
         placeholder: 'Ej. Valencia, Madrid, Cuenca...',
+        group: 'datos',
     },
-    // ─── Q5: Edad (Desplegable) ───────────────────────
     {
         id: 'edad',
         text: '¿Cuántos años tienes?',
@@ -81,25 +79,25 @@ export const triageQuestions: TriageQuestionDef[] = [
             { value: '40_55', label: 'De 40 a 55' },
             { value: '55_mas', label: 'De 55 en adelante' },
         ],
+        group: 'datos',
     },
-    // ─── Q6A: Situación Actual (Textarea) ─────────────
+    // ─── P6: Bloque de Contraste ──────────────────────
     {
         id: 'situacion_actual',
         text: 'SITUACIÓN ACTUAL: Describe brevemente cómo estás en este momento a nivel emocional y qué te impide hacer tu problema.',
         type: 'textarea',
         placeholder: 'Cuéntame cómo te sientes ahora mismo y cómo afecta tu día a día...',
-        group: 'situacion',
+        group: 'contraste',
     },
-    // ─── Q6B: Situación Deseada (Textarea) ────────────
     {
         id: 'situacion_deseada',
         text: 'SITUACIÓN DESEADA: ¿Cómo te gustaría estar y sentirte dentro de exactamente un mes si trabajamos juntos?',
         type: 'textarea',
         placeholder: 'Describe cómo sería tu vida ideal dentro de un mes...',
-        group: 'situacion',
+        group: 'contraste',
         pairWith: 'situacion_actual',
     },
-    // ─── Q7: Compromiso (Escala 1-10 como desplegable) ─
+    // ─── P7: Compromiso ───────────────────────────────
     {
         id: 'compromiso_escala',
         text: 'En una escala del 1 al 10, ¿qué tan comprometid@ estás para empezar a hacer hoy mismo lo que tengas que hacer para solucionar tu problema?',
@@ -116,19 +114,9 @@ export const triageQuestions: TriageQuestionDef[] = [
             { value: '9', label: '9' },
             { value: '10', label: '10 — Totalmente comprometid@' },
         ],
+        group: 'filtros',
     },
-    // ─── Q8: Tiempo (Selección única) ─────────────────
-    {
-        id: 'tiempo',
-        text: '¿Estás dispuest@ a invertir tiempo para conseguir tus objetivos?',
-        type: 'radio',
-        options: [
-            { value: 'sin_tiempo', label: '🔴 No tengo tiempo, mi día a día me come.' },
-            { value: '2_horas', label: '🟡 Podría sacar unas 2 horas al día.' },
-            { value: 'todo_tiempo', label: '🟢 El tiempo que haga falta. Mi salud mental es ahora mismo mi prioridad absoluta.' },
-        ],
-    },
-    // ─── Q9: INVERSIÓN — GATE QUESTION ────────────────
+    // ─── P7: Inversión (GATE) ─────────────────────────
     {
         id: 'inversion',
         text: 'EL COMPROMISO (Inversión)',
@@ -138,10 +126,11 @@ export const triageQuestions: TriageQuestionDef[] = [
             { value: 'dispuesto', label: '🟢 Estoy dispuest@ a invertir lo necesario. Invertiré lo que haga falta para resolver mi problema definitivamente.' },
             { value: 'sin_recursos', label: '🔴 No tengo recursos ni intención de invertir dinero en mi salud mental.' },
         ],
+        group: 'filtros',
     },
 ];
 
-// Texto introductorio que se muestra antes de Q9
+// Texto introductorio que se muestra antes de Q inversión
 export const GATE_INTRO_TEXT =
     'Como ya sabes, si veo que puedo ayudarte a solucionar este problema de raíz, la inversión de mi método completo oscila entre 700€ y 1.000€ (pago dividido: señal en esta evaluación y el resto en la primera sesión).\n\nSabiendo que si no te puedo ayudar el coste es 0€, elige la opción que mejor te defina:';
 
@@ -149,6 +138,5 @@ export const GATE_INTRO_TEXT =
 export const GATE_QUESTION_ID = 'inversion';
 export const GATE_BLOCKED_VALUE = 'sin_recursos';
 
-// Nota para la opción roja
 export const GATE_BLOCKED_NOTE =
     'Si es tu caso, por favor no reserves la sesión para no quitarle la plaza a otra persona. Vuelve cuando sea tu momento.';

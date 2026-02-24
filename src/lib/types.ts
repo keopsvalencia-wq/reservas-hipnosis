@@ -5,7 +5,7 @@
 export type Location = 'valencia' | 'motilla' | 'online';
 
 export interface TriageAnswers {
-  [questionId: string]: string;
+  [questionId: string]: string | string[];
 }
 
 export interface TimeSlot {

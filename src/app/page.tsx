@@ -4,210 +4,213 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookingWizard } from '@/components/BookingWizard';
 import { TriageForm } from '@/components/TriageForm';
-import { TriageAnswers, BookingData } from '@/lib/types';
-import { GATE_BLOCKED_VALUE, GATE_QUESTION_ID } from '@/data/triage-questions';
+import { GATE_BLOCKED_VALUE, GATE_BLOCKED_NOTE } from '@/data/triage-questions';
+import { TriageAnswers } from '@/lib/types';
+
+// ──────────────────────────────────────────────────
+// 8-SCREEN LINEAR FLOW
+// P1: CTA        P2: Regalo      P3: Motivo (multi)
+// P4: Miedo      P5: Datos       P6: Contraste
+// P7: Filtros    P8: Booking
+// ──────────────────────────────────────────────────
 
 export default function Home() {
-  // 0-3: Intro/Regalos, 4: Triaje A, 5: Triaje B, 6: Triaje C, 7: Booking
-  const [screenIndex, setScreenIndex] = useState(0);
-  const [bookingData, setBookingData] = useState<Partial<BookingData>>({
-    triageAnswers: {}
-  });
+  const [screen, setScreen] = useState(0);
+  const [triageData, setTriageData] = useState<TriageAnswers>({});
   const [isBlocked, setIsBlocked] = useState(false);
 
-  const handleNext = () => {
-    setScreenIndex(prev => prev + 1);
-  };
+  const TOTAL = 8;
+  const progress = ((screen + 1) / TOTAL) * 100;
 
-  const handleBack = () => {
-    if (screenIndex > 0) setScreenIndex(prev => prev - 1);
-  };
+  const next = () => setScreen(s => s + 1);
+  const back = () => setScreen(s => Math.max(0, s - 1));
 
-  const handleTriagePart = (answers: TriageAnswers) => {
-    const newAnswers = { ...bookingData.triageAnswers, ...answers };
-    setBookingData(prev => ({ ...prev, triageAnswers: newAnswers }));
+  const handleTriageStep = (answers: TriageAnswers) => {
+    const merged = { ...triageData, ...answers };
+    setTriageData(merged);
 
-    // Check blocking logic for Screen 7 (Triage C)
-    if (screenIndex === 6 && answers[GATE_QUESTION_ID] === GATE_BLOCKED_VALUE) {
+    // P7 gate check
+    if (merged.inversion === GATE_BLOCKED_VALUE) {
       setIsBlocked(true);
       return;
     }
-
-    handleNext();
+    next();
   };
 
-  // ─── Renderers ────────────────────────────────────
-
-  const renderScreen = () => {
-    if (isBlocked) {
-      return (
-        <div className="flex flex-col items-center justify-center text-center space-y-6 py-12 px-4 max-w-2xl mx-auto">
-          <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center">
-            <span className="material-icons-outlined text-red-500 text-4xl">block</span>
+  // ─── Blocked screen ───────────────────────────────
+  if (isBlocked) {
+    return (
+      <Shell progress={100}>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center space-y-6 py-10">
+          <div className="w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center mx-auto">
+            <span className="material-icons-outlined text-amber-500 text-4xl">favorite</span>
           </div>
           <h2 className="text-2xl font-bold text-[var(--color-secondary)]">Gracias por tu sinceridad</h2>
-          <p className="text-[var(--color-text-muted)] leading-relaxed">
-            En este momento, mi método requiere un nivel de inversión y compromiso que no parece encajar con tu situación actual.
-            No reserves la sesión ahora mismo para no quitarle la plaza a otra persona. Vuelve cuando sea tu momento adecuado. Podrás encontrar recursos gratuitos en mis redes sociales.
+          <p className="text-[var(--color-text-muted)] max-w-md mx-auto leading-relaxed">
+            {GATE_BLOCKED_NOTE}
           </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="btn-primary"
-          >
-            Volver al inicio
+          <button onClick={() => { setIsBlocked(false); setScreen(6); }} className="text-sm text-[var(--color-primary)] underline">
+            Cambiar mi respuesta
           </button>
-        </div>
-      );
-    }
+        </motion.div>
+      </Shell>
+    );
+  }
 
-    switch (screenIndex) {
-      case 0: // Intro
+  // ─── Screen renderer ──────────────────────────────
+  const renderScreen = () => {
+    switch (screen) {
+      // ─── P1: CTA ─────────────────────────────
+      case 0:
         return (
-          <div className="space-y-8 animate-in fade-in duration-500">
-            <div className="text-center space-y-4">
-              <h1 className="text-3xl md:text-5xl font-extrabold text-[var(--color-secondary)] leading-tight">
-                Solicita tu Evaluación Diagnóstica
+          <div className="text-center space-y-8 py-10">
+            <div className="space-y-4">
+              <h1 className="text-3xl md:text-4xl font-black text-[var(--color-secondary)] leading-tight">
+                Evaluación Diagnóstica<br />
+                <span className="text-[var(--color-primary)]">Gratuita</span>
               </h1>
-              <p className="text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto">
-                Estás a un paso de empezar a solucionar tu problema de raíz.
+              <p className="text-lg text-[var(--color-text-muted)] max-w-lg mx-auto">
+                Descubre si la Hipnosis Clínica puede ayudarte a resolver tu problema de raíz en pocas sesiones.
               </p>
             </div>
-            <div className="bg-[var(--color-bg)] rounded-2xl border border-[var(--color-border)] p-8 md:p-12">
-              <ul className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {[
-                  { icon: 'psychology', title: 'Raíz del Problema', desc: 'Analizaremos qué te pasa realmente.' },
-                  { icon: 'verified', title: 'Metodología Especial', desc: 'Veremos si tu caso es apto para Reset.' },
-                  { icon: 'trending_up', title: 'Plan de Acción', desc: 'Saldrás con un camino claro.' }
-                ].map((item, i) => (
-                  <li key={i} className="flex flex-col items-center text-center space-y-3">
-                    <span className="material-icons-outlined text-[var(--color-primary)] text-4xl">{item.icon}</span>
-                    <h3 className="font-bold text-[var(--color-secondary)]">{item.title}</h3>
-                    <p className="text-sm text-[var(--color-text-muted)]">{item.desc}</p>
-                  </li>
-                ))}
-              </ul>
+            <motion.button
+              onClick={next}
+              className="btn-primary text-lg py-5 px-10 mx-auto"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              Empezar Evaluación Gratis
+              <span className="material-icons-outlined">arrow_forward</span>
+            </motion.button>
+            <p className="text-xs text-gray-400">Solo 2 minutos · Sin compromiso</p>
+          </div>
+        );
+
+      // ─── P2: Regalo ──────────────────────────
+      case 1:
+        return (
+          <div className="text-center space-y-8 py-8">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--color-primary-soft)] flex items-center justify-center mx-auto">
+              <span className="material-icons-outlined text-[var(--color-primary)] text-3xl">visibility</span>
             </div>
-            <div className="flex justify-center pt-4">
-              <button onClick={handleNext} className="btn-primary min-w-[300px] text-lg py-5 shadow-2xl">
-                Empezar Evaluación Gratis
-                <span className="material-icons-outlined">arrow_forward</span>
+            <div className="space-y-4 max-w-xl mx-auto">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Tu Regalo</p>
+              <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">
+                Una Perspectiva Única de tu Problema
+              </h2>
+              <p className="text-base text-[var(--color-text-muted)] leading-relaxed">
+                Al completar esta evaluación, recibirás una primera valoración clínica basada en hipnosis.
+                Entenderás <strong>la raíz real</strong> de lo que te ocurre, no solo los síntomas.
+              </p>
+            </div>
+            <div className="flex items-center justify-center gap-4">
+              <button onClick={back} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
+                <span className="material-icons-outlined">arrow_back</span> Atrás
+              </button>
+              <button onClick={next} className="btn-primary py-4 px-8 text-base">
+                Siguiente <span className="material-icons-outlined">arrow_forward</span>
               </button>
             </div>
           </div>
         );
-      case 1: // Gift 1
-      case 2: // Gift 2
-      case 3: // Gift 3
-        return <GiftSlide index={screenIndex} onNext={handleNext} onBack={handleBack} />;
-      case 4: // Triage A
+
+      // ─── P3: Motivo (multiselect) ────────────
+      case 2:
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-[var(--color-secondary)] text-center">Cuéntame sobre ti</h2>
-            <TriageForm
-              onComplete={handleTriagePart}
-              subset={['motivo_consulta']}
-              buttonLabel="Siguiente"
-            />
+          <div className="space-y-4">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)] text-center">Paso 1 de 6</p>
+            <TriageForm subset={['motivo_consulta']} onComplete={handleTriageStep} onBack={back} buttonLabel="Siguiente" />
           </div>
         );
-      case 5: // Triage B
+
+      // ─── P4: Miedo ───────────────────────────
+      case 3:
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-[var(--color-secondary)] text-center">Mirando al futuro</h2>
-            <TriageForm
-              onComplete={handleTriagePart}
-              subset={['miedo_futuro']}
-              buttonLabel="Siguiente"
-            />
+          <div className="space-y-4">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)] text-center">Paso 2 de 6</p>
+            <TriageForm subset={['miedo_futuro']} onComplete={handleTriageStep} onBack={back} buttonLabel="Siguiente" />
           </div>
         );
-      case 6: // Triage C (Qualification)
+
+      // ─── P5: Datos ───────────────────────────
+      case 4:
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-[var(--color-secondary)] text-center">Compromiso y Situación</h2>
-            <TriageForm
-              onComplete={handleTriagePart}
-              subset={['dedicacion', 'ciudad', 'edad', 'situacion_actual', 'situacion_deseada', 'compromiso_escala', 'tiempo', 'inversion']}
-              buttonLabel="Finalizar Evaluación y Reservar"
-            />
+          <div className="space-y-4">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)] text-center">Paso 3 de 6</p>
+            <TriageForm subset={['dedicacion', 'ciudad', 'edad']} onComplete={handleTriageStep} onBack={back} buttonLabel="Siguiente" />
           </div>
         );
-      case 7: // Booking
-        return <BookingWizard preloadedData={bookingData} onBack={handleBack} />;
+
+      // ─── P6: Contraste ───────────────────────
+      case 5:
+        return (
+          <div className="space-y-4">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)] text-center">Paso 4 de 6</p>
+            <h2 className="text-xl font-black text-[var(--color-secondary)] text-center">¿Dónde estás y a dónde quieres llegar?</h2>
+            <TriageForm subset={['situacion_actual', 'situacion_deseada']} onComplete={handleTriageStep} onBack={back} buttonLabel="Siguiente" />
+          </div>
+        );
+
+      // ─── P7: Filtros ─────────────────────────
+      case 6:
+        return (
+          <div className="space-y-4">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)] text-center">Paso 5 de 6</p>
+            <TriageForm subset={['compromiso_escala', 'inversion']} onComplete={handleTriageStep} onBack={back} buttonLabel="Ver Disponibilidad" />
+          </div>
+        );
+
+      // ─── P8: Booking ─────────────────────────
+      case 7:
+        return <BookingWizard preloadedData={{ triageAnswers: triageData }} onBack={back} />;
+
       default:
         return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-4 md:p-8">
-      <div className="w-full max-w-5xl">
-        {/* Global Progress Bar (Top) */}
-        {screenIndex < 7 && !isBlocked && (
-          <div className="flex justify-center gap-2 mb-10 overflow-hidden">
-            {[...Array(7)].map((_, i) => (
-              <div
-                key={i}
-                className={`h-1.5 flex-1 max-w-[40px] rounded-full transition-all duration-500 ${i <= screenIndex ? 'bg-[var(--color-primary)]' : 'bg-gray-100'
-                  }`}
-              />
-            ))}
-          </div>
-        )}
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={screenIndex + (isBlocked ? '_blocked' : '')}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.4 }}
-            className="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-[var(--color-border)] p-6 md:p-14 lg:p-20 overflow-hidden"
-          >
-            {renderScreen()}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </div>
+    <Shell progress={progress} showProgress={screen > 0 && screen < 7}>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={screen}
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -40 }}
+          transition={{ duration: 0.35, ease: 'easeInOut' }}
+        >
+          {renderScreen()}
+        </motion.div>
+      </AnimatePresence>
+    </Shell>
   );
 }
 
-// ─── Subcomponentes ───────────────────────────────────
-
-function GiftSlide({ index, onNext, onBack }: { index: number; onNext: () => void; onBack: () => void }) {
-  const gifts = [
-    { title: 'Regalo 1: Paz Mental', icon: 'psychology', text: 'Entenderás de una vez por todas qué te pasa realmente.', subtext: '"Mis pacientes me dicen que esta revelación les ha dado más paz mental en 45 minutos que años de terapias convencionales."' },
-    { title: 'Regalo 2: El Origen', icon: 'history', text: 'Verás exactamente por qué NO te ha funcionado nada de lo que has intentado hasta hoy.', subtext: 'Identificaremos el bloqueo inconsciente que te mantiene estancado.' },
-    { title: 'Regalo 3: La Solución', icon: 'lightbulb', text: 'Descubrirás cuál es la verdadera y única solución a tu problema.', subtext: '🛡️ Garantía: Si veo que no te puedo ayudar, el coste de la sesión es 0€.' },
-  ];
-  const gift = gifts[index - 1];
-
+// ──────────────────────────────────────────────────
+// SHELL: White card container + optional progress bar
+// ──────────────────────────────────────────────────
+function Shell({ children, progress, showProgress = true }: { children: React.ReactNode; progress: number; showProgress?: boolean }) {
   return (
-    <div className="space-y-10 text-center py-4">
-      <div className="w-24 h-24 bg-[var(--color-primary-soft)] rounded-3xl flex items-center justify-center mx-auto mb-6 transform rotate-3">
-        <span className="material-icons-outlined text-[var(--color-primary)] text-5xl">{gift.icon}</span>
-      </div>
-      <div className="space-y-4">
-        <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--color-primary)]">Reclama tu regalo</h3>
-        <h2 className="text-3xl md:text-5xl font-black text-[var(--color-secondary)]">{gift.title}</h2>
-        <p className="text-xl text-[var(--color-text-muted)] max-w-2xl mx-auto leading-relaxed">
-          {gift.text}
-        </p>
-        {gift.subtext && (
-          <div className="mt-8 p-6 bg-gray-50 rounded-2xl italic text-[var(--color-text-muted)] border-l-4 border-[var(--color-primary)] inline-block">
-            {gift.subtext}
+    <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-4 md:p-8">
+      <div className="w-full max-w-5xl">
+        {/* Progress bar */}
+        {showProgress && (
+          <div className="mb-6">
+            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-[var(--color-primary)] rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+              />
+            </div>
           </div>
         )}
-      </div>
-      <div className="flex flex-col md:flex-row items-center justify-center gap-6 pt-10">
-        <button onClick={onBack} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
-          <span className="material-icons-outlined">arrow_back</span>
-          Anterior
-        </button>
-        <button onClick={onNext} className="btn-primary min-w-[240px] py-5">
-          Continuar
-          <span className="material-icons-outlined">arrow_forward</span>
-        </button>
+
+        {/* Card */}
+        <div className="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-[var(--color-border)] p-6 md:p-14 lg:p-20 overflow-hidden">
+          {children}
+        </div>
       </div>
     </div>
   );
