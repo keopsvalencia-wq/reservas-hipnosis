@@ -8,11 +8,31 @@ import { GATE_INTRO_TEXT, GATE_BLOCKED_VALUE, GATE_BLOCKED_NOTE } from '@/data/t
 import { TriageAnswers } from '@/lib/types';
 
 // ──────────────────────────────────────────────────
-// EMBUDO 8 PANTALLAS — Re-ingeniería v3
-// P1: Bienvenida      P2: Regalos       P3: Perfil+Motivo
-// P4: Contraste       P5: Compromiso    P6: Inversión (gate)
-// P7: Datos contacto  P8: Booking
+// EMBUDO 10 PANTALLAS — Re-ingeniería v4
+// P1: Bienvenida        P2: Regalos         P3: Perfil
+// P4: Motivo (cards)    P5: Impacto (cards) P6: Contraste
+// P7: Compromiso        P8: Inversión (gate)
+// P9: Datos contacto    P10: Booking
 // ──────────────────────────────────────────────────
+
+const MOTIVO_OPTIONS = [
+  'Ansiedad',
+  'Estrés',
+  'Depresión',
+  'Bloqueos Emocionales',
+  'Adicciones (Tabaco, Alcohol, etc.)',
+  'Fobias y Miedos específicos',
+  'Tristeza, Duelo y Pérdida',
+  'Trastornos del Sueño',
+];
+
+const IMPACTO_OPTIONS = [
+  'Enfermar físicamente por el estrés',
+  'Perder a mi familia o pareja',
+  'Arruinarme o perder mi trabajo',
+  'Quedarme solo/a para siempre',
+  'No volver a ser yo mismo/a nunca',
+];
 
 export default function Home() {
   const [screen, setScreen] = useState(0);
@@ -20,7 +40,7 @@ export default function Home() {
   const [contactData, setContactData] = useState({ name: '', email: '', phone: '' });
   const [isBlocked, setIsBlocked] = useState(false);
 
-  const TOTAL = 8;
+  const TOTAL = 10;
   const progress = ((screen + 1) / TOTAL) * 100;
 
   const next = () => setScreen(s => s + 1);
@@ -38,6 +58,12 @@ export default function Home() {
     next();
   };
 
+  // Choice card handler
+  const handleChoice = (key: string, value: string) => {
+    setTriageData(prev => ({ ...prev, [key]: value }));
+    next();
+  };
+
   // ─── Blocked screen ───────────────────────────────
   if (isBlocked) {
     return (
@@ -48,7 +74,7 @@ export default function Home() {
           </div>
           <h2 className="text-2xl font-bold text-[var(--color-secondary)]">Gracias por tu sinceridad</h2>
           <p className="text-[var(--color-text-muted)] max-w-md mx-auto leading-relaxed">{GATE_BLOCKED_NOTE}</p>
-          <button onClick={() => { setIsBlocked(false); setScreen(5); }} className="text-sm text-[var(--color-primary)] underline">
+          <button onClick={() => { setIsBlocked(false); setScreen(7); }} className="text-sm text-[var(--color-primary)] underline">
             Cambiar mi respuesta
           </button>
         </motion.div>
@@ -130,48 +156,76 @@ export default function Home() {
           </div>
         );
 
-      // ─── P3: PERFIL + MOTIVO ──────────────────
+      // ─── P3: PERFIL (dedicación, ciudad, edad) ──
       case 2:
         return (
           <div className="space-y-6 max-w-3xl mx-auto">
             <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 1 de 5</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 1 de 7</p>
               <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
             </div>
-            <TriageForm subset={['dedicacion', 'ciudad', 'edad', 'motivo_consulta']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
+            <TriageForm subset={['dedicacion', 'ciudad', 'edad']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
           </div>
         );
 
-      // ─── P4: CONTRASTE ───────────────────────
+      // ─── P4: MOTIVO PRINCIPAL (choice cards) ────
       case 3:
+        return (
+          <ChoiceCardScreen
+            step="Paso 2 de 7"
+            title="¿Cuál es el problema principal que quieres resolver?"
+            options={MOTIVO_OPTIONS}
+            selected={triageData.motivo_consulta as string}
+            onSelect={(val) => handleChoice('motivo_consulta', val)}
+            onBack={back}
+            columns={2}
+          />
+        );
+
+      // ─── P5: IMPACTO EMOCIONAL (choice cards) ──
+      case 4:
+        return (
+          <ChoiceCardScreen
+            step="Paso 3 de 7"
+            title="¿Qué es lo que más miedo te da que pase si no solucionas esto ahora?"
+            options={IMPACTO_OPTIONS}
+            selected={triageData.impacto_emocional as string}
+            onSelect={(val) => handleChoice('impacto_emocional', val)}
+            onBack={back}
+            columns={1}
+          />
+        );
+
+      // ─── P6: CONTRASTE ───────────────────────
+      case 5:
         return (
           <div className="space-y-6 max-w-3xl mx-auto">
             <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 5</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
               <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">¿Dónde estás y a dónde quieres llegar?</h2>
             </div>
             <TriageForm subset={['situacion_actual', 'situacion_deseada']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
           </div>
         );
 
-      // ─── P5: COMPROMISO ──────────────────────
-      case 4:
+      // ─── P7: COMPROMISO ──────────────────────
+      case 6:
         return (
           <div className="space-y-6 max-w-3xl mx-auto">
             <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 3 de 5</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 5 de 7</p>
               <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu nivel de compromiso</h2>
             </div>
             <TriageForm subset={['compromiso_escala', 'disponibilidad_tiempo']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
           </div>
         );
 
-      // ─── P6: INVERSIÓN (Gate) ────────────────
-      case 5:
+      // ─── P8: INVERSIÓN (Gate) ────────────────
+      case 7:
         return (
           <div className="space-y-6 max-w-3xl mx-auto">
             <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 5</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 6 de 7</p>
               <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">La inversión</h2>
             </div>
             <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 max-w-xl mx-auto space-y-3">
@@ -181,12 +235,12 @@ export default function Home() {
           </div>
         );
 
-      // ─── P7: DATOS DE CONTACTO ────────────────
-      case 6:
+      // ─── P9: DATOS DE CONTACTO ────────────────
+      case 8:
         return (
           <div className="space-y-6 max-w-3xl mx-auto">
             <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 5 de 5</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 7 de 7</p>
               <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tus datos de contacto</h2>
               <p className="text-base text-[var(--color-text-muted)]">Para confirmar tu plaza y enviarte los detalles de la cita.</p>
             </div>
@@ -198,8 +252,8 @@ export default function Home() {
           </div>
         );
 
-      // ─── P8: BOOKING ──────────────────────────
-      case 7:
+      // ─── P10: BOOKING ──────────────────────────
+      case 9:
         return (
           <BookingWizard
             preloadedData={{ triageAnswers: triageData, name: contactData.name, email: contactData.email, phone: contactData.phone }}
@@ -213,7 +267,7 @@ export default function Home() {
   };
 
   return (
-    <Shell progress={progress} showProgress={screen > 0 && screen < 7}>
+    <Shell progress={progress} showProgress={screen > 0 && screen < 9}>
       <AnimatePresence mode="wait">
         <motion.div
           key={screen + (isBlocked ? '_blocked' : '')}
@@ -252,7 +306,83 @@ function Shell({ children, progress, showProgress = true }: { children: React.Re
 }
 
 // ──────────────────────────────────────────────────
-// P7: Contact Form (Nombre, Email, WhatsApp)
+// CHOICE CARD SCREEN: Large tactile cards grid
+// ──────────────────────────────────────────────────
+function ChoiceCardScreen({
+  step,
+  title,
+  options,
+  selected,
+  onSelect,
+  onBack,
+  columns = 2,
+}: {
+  step: string;
+  title: string;
+  options: string[];
+  selected?: string;
+  onSelect: (value: string) => void;
+  onBack: () => void;
+  columns?: 1 | 2;
+}) {
+  const [choice, setChoice] = useState(selected || '');
+
+  return (
+    <div className="space-y-8 max-w-3xl mx-auto">
+      {/* Header */}
+      <div className="text-center space-y-3">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">{step}</p>
+        <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)] leading-tight">{title}</h2>
+      </div>
+
+      {/* Cards Grid */}
+      <div className={`grid gap-4 ${columns === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
+        {options.map((opt) => {
+          const isSelected = choice === opt;
+          return (
+            <motion.button
+              key={opt}
+              type="button"
+              onClick={() => setChoice(opt)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`
+                p-5 md:p-6 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer
+                ${isSelected
+                  ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] shadow-md'
+                  : 'border-[var(--color-border)] bg-white hover:border-gray-300 hover:shadow-sm'
+                }
+              `}
+            >
+              <span className={`text-base md:text-lg font-semibold leading-snug ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
+                {opt}
+              </span>
+            </motion.button>
+          );
+        })}
+      </div>
+
+      {/* Navigation */}
+      <div className="flex items-center justify-between pt-2">
+        <button onClick={onBack} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
+          <span className="material-icons-outlined">arrow_back</span> Atrás
+        </button>
+        <motion.button
+          onClick={() => { if (choice) onSelect(choice); }}
+          disabled={!choice}
+          className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed"
+          whileHover={choice ? { scale: 1.03 } : {}}
+          whileTap={choice ? { scale: 0.97 } : {}}
+        >
+          SIGUIENTE PASO
+        </motion.button>
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────
+// CONTACT FORM (Nombre, Email, WhatsApp)
 // ──────────────────────────────────────────────────
 function ContactForm({
   contactData,

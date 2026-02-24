@@ -46,19 +46,6 @@ export const triageQuestions: TriageQuestionDef[] = [
         placeholder: 'Ej: 35',
         group: 'perfil',
     },
-    {
-        id: 'motivo_consulta',
-        text: '¿Cuál es tu principal motivo de consulta?',
-        type: 'select',
-        options: [
-            { value: 'ansiedad_bloqueos', label: 'Ansiedad / Depresión / Bloqueos' },
-            { value: 'traumas', label: 'Traumas' },
-            { value: 'adicciones', label: 'Adicciones' },
-            { value: 'fobias', label: 'Fobias' },
-            { value: 'otros', label: 'Otros' },
-        ],
-        group: 'perfil',
-    },
     // ─── P4: Contraste ────────────────────────────────
     {
         id: 'situacion_actual',
