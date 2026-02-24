@@ -4,8 +4,8 @@ import { Location, TimeSlot } from './types';
 // Reglas de Negocio — Horarios y Restricciones
 // ───────────────────────────────────────────────────
 
-/** Duración de cada sesión en minutos */
-export const SESSION_DURATION_MINUTES = 45;
+/** Duración de cada sesión en minutos (Ocupa 1h en agenda) */
+export const SESSION_DURATION_MINUTES = 60;
 
 /**
  * Horarios disponibles por ubicación.

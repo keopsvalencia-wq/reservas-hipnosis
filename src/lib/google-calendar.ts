@@ -79,12 +79,13 @@ export async function getBusySlots(date: string): Promise<string[]> {
     const auth = getAuthClient();
     const calendar = google.calendar({ version: 'v3', auth });
 
-    // Consultamos todo el día en rango amplio local (00:00 a 23:59 de la fecha elegida)
-    const timeMin = new Date(`${date}T00:00:00`).toISOString();
-    const timeMax = new Date(`${date}T23:59:59`).toISOString();
+    // Forzamos el uso de la zona horaria de Madrid (+01:00 en invierno)
+    // para evitar que el servidor (si está en UTC) desplace los horarios
+    const timeMin = `${date}T00:00:00+01:00`;
+    const timeMax = `${date}T23:59:59+01:00`;
 
     try {
-        console.log(`🔍 Consultando disponibilidad para ${date} en Calendarios:`, [calendarId, personalCalendarId]);
+        console.log(`🔍 [GCal] Consultando agenda para ${date} (Madrid Time)`);
         const response = await calendar.freebusy.query({
             requestBody: {
                 timeMin,
@@ -103,12 +104,9 @@ export async function getBusySlots(date: string): Promise<string[]> {
         if (calendars) {
             for (const id in calendars) {
                 const busyList = calendars[id].busy || [];
-                if (busyList.length > 0) {
-                    console.log(`📅 [${id}] tiene ${busyList.length} intervalos ocupados.`);
-                }
                 busyList.forEach((period) => {
                     if (period.start && period.end) {
-                        console.log(`   - Ocupado: ${period.start} a ${period.end}`);
+                        // Guardamos el intervalo tal cual lo da Google (UTC ISO)
                         busySlots.push(`${period.start}|${period.end}`);
                     }
                 });

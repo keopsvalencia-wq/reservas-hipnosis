@@ -74,11 +74,16 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
     const isSlotBusy = (time: string) => {
         if (!selectedDate) return false;
 
-        // Creamos los tiempos del slot (45 min de duración)
-        const slotStart = new Date(`${format(selectedDate, 'yyyy-MM-dd')}T${time}:00`).getTime();
-        const slotEnd = slotStart + 45 * 60 * 1000;
+        // Creamos los tiempos del slot (45 min de duración + 15 min de MARGEN obligatorio)
+        // El slot de las 11:00 ocupa realmente de 11:00 a 12:00 en la agenda
+        const [h, m] = time.split(':').map(Number);
+        const slotStart = new Date(selectedDate);
+        slotStart.setHours(h, m, 0, 0);
 
-        // Tolerancia de 1 minuto para evitar problemas con los bordes exactos
+        const startTime = slotStart.getTime();
+        const endTimeWithBuffer = startTime + 60 * 60 * 1000; // 60 minutos totales
+
+        // Tolerancia de 1 minuto para los bordes exactos
         const TOLERANCE = 60 * 1000;
 
         return busySlots.some(period => {
@@ -86,10 +91,9 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
             const pStart = new Date(pStartStr).getTime();
             const pEnd = new Date(pEndStr).getTime();
 
-            // Solapamiento real: el slot termina después de que empiece el evento
-            // Y el slot empieza antes de que termine el evento.
-            // Aplicamos la tolerancia para permitir sesiones que empiezan justo al terminar la anterior.
-            return (slotStart + TOLERANCE) < pEnd && (slotEnd - TOLERANCE) > pStart;
+            // Solapamiento: el bloque de la app empieza antes de que termine el evento 
+            // Y el bloque de la app termina después de que empiece el evento
+            return (startTime + TOLERANCE) < pEnd && (endTimeWithBuffer - TOLERANCE) > pStart;
         });
     };
 
