@@ -111,13 +111,26 @@ export const triageQuestions: TriageQuestionDef[] = [
         group: 'inversion',
     },
 ];
+// Gates: preguntas que bloquean el avance
+export const GATES: { questionId: string; blockedValue: string; message: string }[] = [
+    {
+        questionId: 'disponibilidad_tiempo',
+        blockedValue: 'sin_tiempo',
+        message: 'Para que el tratamiento funcione, necesitas dedicar algo de tiempo diario a tu proceso de cambio. Si ahora mismo no puedes, vuelve cuando sea tu momento.',
+    },
+    {
+        questionId: 'inversion',
+        blockedValue: 'sin_recursos',
+        message: 'Si es tu caso, por favor no reserves la sesión para no quitarle la plaza a otra persona. Vuelve cuando sea tu momento.',
+    },
+];
 
-// Gate: la pregunta que bloquea el avance
+// Legacy exports for backward compat
 export const GATE_QUESTION_ID = 'inversion';
 export const GATE_BLOCKED_VALUE = 'sin_recursos';
 
 export const GATE_INTRO_TEXT =
-    'Para que el tratamiento funcione, necesitas invertir en tres áreas: tu Compromiso personal, tu Tiempo diario y tu Dinero.\n\nLa inversión económica de mi método completo oscila entre 700€ y 1.000€ (pago dividido: señal en esta evaluación y el resto en la primera sesión).\n\nSi no te puedo garantizar resultados, el coste de la visita será 0€. Sin riesgo para ti.';
+    'La inversión económica de mi método completo oscila entre 700€ y 1.000€ (pago dividido: señal en esta evaluación y el resto en la primera sesión).\n\nSi no te puedo garantizar resultados, el coste de la visita será 0€. Sin riesgo para ti.';
 
 export const GATE_BLOCKED_NOTE =
     'Si es tu caso, por favor no reserves la sesión para no quitarle la plaza a otra persona. Vuelve cuando sea tu momento.';

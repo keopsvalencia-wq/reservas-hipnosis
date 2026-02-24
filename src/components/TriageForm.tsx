@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { triageQuestions, GATE_INTRO_TEXT, GATE_QUESTION_ID } from '@/data/triage-questions';
+import { triageQuestions, GATES, GATE_INTRO_TEXT, GATE_QUESTION_ID } from '@/data/triage-questions';
 import { TriageAnswers } from '@/lib/types';
 
 interface TriageFormProps {
@@ -32,15 +32,23 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
         });
     };
 
+    // Check if any gate is triggered (blocked value selected)
+    const activeGate = GATES.find(g => {
+        const val = answers[g.questionId];
+        return val === g.blockedValue;
+    });
+
     const isComplete = filteredQuestions.every(q => {
         const val = answers[q.id];
         if (q.type === 'multiselect') return Array.isArray(val) && val.length > 0;
         return val !== undefined && val !== '';
     });
 
+    const canSubmit = isComplete && !activeGate;
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (isComplete) onComplete(answers);
+        if (canSubmit) onComplete(answers);
     };
 
     return (
@@ -68,8 +76,8 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                                         type="button"
                                         onClick={() => handleMultiToggle(q.id, opt.value)}
                                         className={`px-5 py-3 rounded-2xl border-2 font-semibold transition-all text-sm ${selected
-                                                ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] text-[var(--color-secondary)]'
-                                                : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
+                                            ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] text-[var(--color-secondary)]'
+                                            : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
                                             }`}
                                     >
                                         {selected && <span className="mr-1">✓</span>}
@@ -102,8 +110,8 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                                 <label
                                     key={opt.value}
                                     className={`flex items-start gap-4 p-5 rounded-2xl border-2 transition-all cursor-pointer ${answers[q.id] === opt.value
-                                            ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
-                                            : 'border-[var(--color-border)] hover:border-gray-400 bg-white'
+                                        ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
+                                        : 'border-[var(--color-border)] hover:border-gray-400 bg-white'
                                         }`}
                                 >
                                     <input type="radio" name={q.id} value={opt.value} checked={answers[q.id] === opt.value} onChange={() => handleAnswer(q.id, opt.value)} className="hidden" />
@@ -141,6 +149,14 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                 </div>
             ))}
 
+            {/* ── GATE BLOCKED MESSAGE ── */}
+            {activeGate && (
+                <div className="bg-red-50 border border-red-200 rounded-2xl p-5 text-center space-y-2">
+                    <p className="text-red-600 font-semibold text-base">⚠️ No puedes continuar</p>
+                    <p className="text-sm text-red-500 leading-relaxed">{activeGate.message}</p>
+                </div>
+            )}
+
             {/* Navigation */}
             <div className="flex items-center justify-between pt-4">
                 {onBack ? (
@@ -148,7 +164,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                         <span className="material-icons-outlined">arrow_back</span> Atrás
                     </button>
                 ) : <div />}
-                <button type="submit" disabled={!isComplete} className="btn-primary py-4 px-8 text-base">
+                <button type="submit" disabled={!canSubmit} className="btn-primary py-4 px-8 text-base disabled:opacity-40 disabled:cursor-not-allowed">
                     {buttonLabel}
                     <span className="material-icons-outlined">arrow_forward</span>
                 </button>
