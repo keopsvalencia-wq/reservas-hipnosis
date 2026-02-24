@@ -53,31 +53,42 @@ export async function POST(request: Request) {
             process.env.GOOGLE_PRIVATE_KEY &&
             process.env.GOOGLE_CALENDAR_ID;
 
+        // ─── Extract triage data ────────────────────
+        const triage = data.triageAnswers || {};
+        const motivo = (triage.motivo_consulta || triage.motivo || '') as string;
+        const situacion = (triage.situacion_actual || '') as string;
+
         if (hasGoogleCredentials) {
-            console.log('📅 Reintentando Google Calendar para:', data.date, data.time);
-            const isAvailable = await checkAvailability(data.date, data.time);
-            if (!isAvailable) {
+            try {
+                const isAvailable = await checkAvailability(data.date, data.time);
+                if (!isAvailable) {
+                    return NextResponse.json(
+                        { success: false, message: 'Lo sentimos, este horario ya no está disponible.' },
+                        { status: 409 }
+                    );
+                }
+
+                eventId = await createCalendarEvent({
+                    name: data.name,
+                    email: data.email,
+                    phone: data.phone,
+                    date: data.date,
+                    time: data.time,
+                    location: data.location,
+                    motivo: motivo || situacion,
+                });
+                console.log('✅ Evento creado en GCalendar:', eventId);
+            } catch (calErr: any) {
+                console.error('❌ Error en Google Calendar:', calErr.message);
+                // Si falla el calendario, lanzamos error para que no parezca que se reservó si no hay hueco asegurado
                 return NextResponse.json(
-                    { success: false, message: 'Lo sentimos, este horario ya no está disponible. Por favor, elige otro.' },
-                    { status: 409 }
+                    { success: false, message: 'Error al conectar con el calendario. Por favor, contacta por WhatsApp.' },
+                    { status: 500 }
                 );
             }
-
-            // Create calendar event
-            eventId = await createCalendarEvent({
-                name: data.name,
-                email: data.email,
-                phone: data.phone,
-                date: data.date,
-                time: data.time,
-                location: data.location,
-                motivo: data.triageAnswers?.motivo as string,
-            });
         } else {
-            // Mock mode: generate fake event ID
             eventId = `mock_${Date.now()}`;
-            console.log('⚠️  Google Calendar no configurado. Modo mock activo.');
-            console.log('📋 Datos de la reserva:', JSON.stringify(data, null, 2));
+            console.log('⚠️ Modo mock activo (Calendar).');
         }
 
         // ─── Send emails ─────────────────────────────
@@ -96,20 +107,22 @@ export async function POST(request: Request) {
             date: dateFormatted,
             time: data.time,
             location: locationLabel,
-            motivo: data.triageAnswers?.motivo as string,
+            motivo: motivo || situacion,
         };
 
         const hasSmtpCredentials = process.env.SMTP_USER && process.env.SMTP_PASS;
 
         if (hasSmtpCredentials) {
-            await Promise.all([
-                sendPatientConfirmation(emailData),
-                sendTherapistNotification(emailData),
-            ]);
-        } else {
-            console.log('⚠️  SMTP no configurado. Emails no enviados.');
-            console.log('📧 Email al paciente:', data.email);
-            console.log('📧 Email al terapeuta:', process.env.NOTIFICATION_EMAIL || 'no configurado');
+            try {
+                // Enviamos correos. Si fallan, logueamos pero NO bloqueamos al usuario si el evento ya se creó
+                await Promise.all([
+                    sendPatientConfirmation(emailData),
+                    sendTherapistNotification(emailData),
+                ]);
+                console.log('📧 Emails enviados correctamente');
+            } catch (mailErr: any) {
+                console.error('⚠️ Error enviando emails (pero reserva creada):', mailErr.message);
+            }
         }
 
         // ─── Success ─────────────────────────────────
@@ -119,15 +132,11 @@ export async function POST(request: Request) {
             message: 'Reserva confirmada correctamente',
         });
     } catch (error: any) {
-        console.error('❌ ERROR CRÍTICO EN /api/booking:', {
-            message: error.message,
-            stack: error.stack,
-            cause: error.cause
-        });
+        console.error('❌ ERROR TOTAL /api/booking:', error);
         return NextResponse.json(
             {
                 success: false,
-                message: 'Error interno del servidor. Inténtalo de nuevo o contacta por WhatsApp.',
+                message: `Error interno: ${error.message || 'Desconocido'}. Contacta por WhatsApp.`,
             },
             { status: 500 }
         );
