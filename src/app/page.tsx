@@ -74,65 +74,85 @@ export default function Home() {
       // ─── P1: BIENVENIDA ──────────────────────
       case 0:
         return (
-          <div className="text-center space-y-8 py-8">
-            <div className="space-y-4">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Solo de 3 a 5 plazas al mes</p>
-              <h1 className="text-3xl md:text-4xl font-black text-[var(--color-secondary)] leading-tight">
-                Solicita tu Evaluación<br />
-                <span className="text-[var(--color-primary)]">Diagnóstica</span>
-              </h1>
-              <p className="text-base text-[var(--color-text-muted)] max-w-xl mx-auto leading-relaxed">
-                Cada mes solo acepto entre <strong>3 y 5 casos nuevos</strong> para garantizar la máxima atención.
-                Descubre si el <strong>Método RESET</strong> puede ayudarte a resolver tu problema de raíz.
-              </p>
+          <div className="text-center space-y-10 py-10 max-w-3xl mx-auto">
+            {/* Título */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
+              Solicita tu Evaluación Diagnóstica.
+            </h1>
+
+            {/* Subtítulo */}
+            <p className="text-lg md:text-xl text-[var(--color-text-muted)] font-medium leading-relaxed max-w-2xl mx-auto">
+              Solo de 3 a 5 plazas disponibles cada mes para garantizar la máxima atención.
+            </p>
+
+            {/* Bloque de Valor */}
+            <p className="text-base md:text-lg text-[var(--color-secondary)] leading-relaxed max-w-2xl mx-auto">
+              Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo de forma definitiva.
+            </p>
+
+            {/* Garantía */}
+            <p className="text-sm md:text-base text-[var(--color-text-muted)] font-semibold">
+              🛡️ Garantía: Si veo que no puedo garantizarte resultados, el coste de la sesión será 0€.
+            </p>
+
+            {/* CTA */}
+            <div className="space-y-3 pt-2">
+              <motion.button onClick={next} className="btn-primary text-lg py-5 px-12 mx-auto uppercase tracking-wider font-black" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                Reservar mi plaza ahora
+              </motion.button>
+              <p className="text-xs text-gray-400">Pulsa para ver disponibilidad y responder al formulario de compromiso.</p>
             </div>
-            <div className="grid gap-3 max-w-md mx-auto text-left">
-              {[
-                { icon: '🧠', text: 'Hipnosis Clínica de última generación' },
-                { icon: '⚡', text: 'Resultados desde la primera sesión' },
-                { icon: '🛡️', text: 'Garantía: si no te puedo ayudar, coste 0€' },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 bg-gray-50 rounded-xl p-4">
-                  <span className="text-lg">{item.icon}</span>
-                  <p className="text-sm font-medium text-[var(--color-secondary)]">{item.text}</p>
-                </div>
-              ))}
-            </div>
-            <motion.button onClick={next} className="btn-primary text-lg py-5 px-10 mx-auto" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              Ver disponibilidad y reservar
-              <span className="material-icons-outlined">arrow_forward</span>
-            </motion.button>
           </div>
         );
 
       // ─── P2: REGALOS ─────────────────────────
       case 1:
         return (
-          <div className="text-center space-y-8 py-8">
-            <div className="w-16 h-16 rounded-2xl bg-[var(--color-primary-soft)] flex items-center justify-center mx-auto">
-              <span className="material-icons-outlined text-[var(--color-primary)] text-3xl">card_giftcard</span>
-            </div>
-            <div className="space-y-4 max-w-2xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">3 Regalos de Claridad</h2>
-              <p className="text-base text-[var(--color-text-muted)] leading-relaxed">
-                Al asistir a tu evaluación, te llevarás <strong>3 regalos de claridad</strong> para liberar la presión de tu cabeza:
+          <div className="space-y-10 py-10 max-w-3xl mx-auto">
+            {/* Título */}
+            <div className="text-center space-y-4">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
+                Tus 3 Regalos de Claridad.
+              </h2>
+              <p className="text-lg md:text-xl text-[var(--color-text-muted)] font-medium leading-relaxed max-w-2xl mx-auto">
+                Solo por asistir a tu evaluación, te llevarás 3 revelaciones que liberarán la presión de tu cabeza:
               </p>
-              <div className="grid gap-4 text-left max-w-lg mx-auto">
-                <div className="flex items-start gap-3 bg-gray-50 rounded-xl p-4">
-                  <span className="text-xl mt-0.5">🎁</span>
-                  <p className="text-sm text-[var(--color-secondary)] font-medium">Entenderás por fin <strong>qué te pasa realmente</strong></p>
-                </div>
-                <div className="flex items-start gap-3 bg-gray-50 rounded-xl p-4">
-                  <span className="text-xl mt-0.5">🎁</span>
-                  <p className="text-sm text-[var(--color-secondary)] font-medium">Sabrás <strong>por qué nada ha funcionado</strong> hasta hoy</p>
-                </div>
-                <div className="flex items-start gap-3 bg-gray-50 rounded-xl p-4">
-                  <span className="text-xl mt-0.5">🎁</span>
-                  <p className="text-sm text-[var(--color-secondary)] font-medium">Descubrirás <strong>la verdadera solución definitiva</strong></p>
-                </div>
+            </div>
+
+            {/* Lista numerada */}
+            <div className="space-y-8 max-w-2xl mx-auto">
+              <div className="flex gap-5 items-start">
+                <span className="text-3xl font-black text-[var(--color-primary)] leading-none shrink-0">01</span>
+                <p className="text-base md:text-lg text-[var(--color-secondary)] leading-relaxed">
+                  Verás tu problema desde una perspectiva que <strong>NADIE te había contado jamás</strong>. <span className="text-[var(--color-text-muted)]">(Mis pacientes dicen que esto les da más paz en 45 min que años de terapias convencionales).</span>
+                </p>
+              </div>
+              <div className="flex gap-5 items-start">
+                <span className="text-3xl font-black text-[var(--color-primary)] leading-none shrink-0">02</span>
+                <p className="text-base md:text-lg text-[var(--color-secondary)] leading-relaxed">
+                  Entenderás exactamente por qué <strong>NADA de lo que has intentado</strong> hasta hoy ha funcionado.
+                </p>
+              </div>
+              <div className="flex gap-5 items-start">
+                <span className="text-3xl font-black text-[var(--color-primary)] leading-none shrink-0">03</span>
+                <p className="text-base md:text-lg text-[var(--color-secondary)] leading-relaxed">
+                  Descubrirás la <strong>ÚNICA y verdadera solución definitiva</strong> a tu situación.
+                </p>
               </div>
             </div>
-            <NavButtons onBack={back} onNext={next} />
+
+            {/* CTA */}
+            <div className="text-center space-y-3 pt-2">
+              <div className="flex items-center justify-center gap-4">
+                <button onClick={back} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
+                  <span className="material-icons-outlined">arrow_back</span> Atrás
+                </button>
+                <motion.button onClick={next} className="btn-primary text-lg py-5 px-12 uppercase tracking-wider font-black" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  Siguiente paso
+                </motion.button>
+              </div>
+              <p className="text-xs text-gray-400">Pulsa para completar tu perfil de compromiso.</p>
+            </div>
           </div>
         );
 
@@ -337,8 +357,8 @@ function DataAndMotivoForm({
             return (
               <button key={opt.value} type="button" onClick={() => toggleMotivo(opt.value)}
                 className={`px-5 py-3 rounded-2xl border-2 font-semibold transition-all text-sm ${selected
-                    ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] text-[var(--color-secondary)]'
-                    : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
+                  ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] text-[var(--color-secondary)]'
+                  : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
                   }`}>
                 {selected && <span className="mr-1">✓</span>}
                 {opt.label}
