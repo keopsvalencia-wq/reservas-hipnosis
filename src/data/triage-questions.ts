@@ -42,8 +42,15 @@ export const triageQuestions: TriageQuestionDef[] = [
     {
         id: 'edad',
         text: '¿Cuántos años tienes?',
-        type: 'text',
-        placeholder: 'Ej: 35',
+        type: 'select',
+        options: [
+            { value: 'menos_18', label: 'Menos de 18' },
+            { value: '18_25', label: '18 - 25' },
+            { value: '26_35', label: '26 - 35' },
+            { value: '36_45', label: '36 - 45' },
+            { value: '46_55', label: '46 - 55' },
+            { value: 'mas_55', label: 'Más de 55' },
+        ],
         group: 'perfil',
     },
     // ─── P4: Contraste ────────────────────────────────

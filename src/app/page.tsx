@@ -24,6 +24,7 @@ const MOTIVO_OPTIONS = [
   'Fobias y Miedos específicos',
   'Tristeza, Duelo y Pérdida',
   'Trastornos del Sueño',
+  'Otros',
 ];
 
 const IMPACTO_OPTIONS = [
