@@ -9,10 +9,13 @@
   --color-primary: #39DCA8;
   --color-secondary: #0A2833;
   --color-primary-soft: rgba(57, 220, 168, 0.08);
-  --color-border: #E5E7EB;
+  --color-border: #E1E8ED;
   --color-text: #1F2937;
-  --color-text-muted: #6B7280;
+  --color-text-muted: #64748B;
   --color-error: #EF4444;
+  --color-shadow-mint: rgba(57, 220, 168, 0.15);
+  --max-width-wide: 1024px;
+  /* Wide design reference */
 }
 
 .dark {
@@ -38,11 +41,10 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
-  min-height: 100vh;
   margin: 0;
+  padding: 0;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Scrollbar custom */
@@ -67,15 +69,12 @@ body {
 .stitch-card {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
-    0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.stitch-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08),
-    0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05),
+    0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
 }
 
 /* Mint glow */
