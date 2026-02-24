@@ -161,18 +161,18 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            <div className="space-y-6 max-w-4xl mx-auto">
               {/* Card 01 */}
               <motion.div
-                whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden group hover:border-[var(--color-primary)] transition-all duration-300"
+                whileHover={{ x: 10 }}
+                className="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] flex flex-col md:flex-row items-center md:items-start gap-6 group hover:border-[var(--color-primary)] transition-all duration-300"
               >
-                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity">01</div>
-                <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
-                  Verás tu problema desde una perspectiva que <span className="text-[var(--color-primary)]">NADIE te había contado jamás</span>.
-                </p>
-                <div className="border-t border-gray-50 pt-4">
-                  <p className="text-xs lg:text-sm text-[var(--color-text-muted)] leading-relaxed italic">
+                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">01</div>
+                <div className="space-y-4">
+                  <p className="text-lg lg:text-xl text-[var(--color-secondary)] leading-relaxed font-bold">
+                    Verás tu problema desde una perspectiva que <span className="text-[var(--color-primary)]">NADIE te había contado jamás</span>.
+                  </p>
+                  <p className="text-sm lg:text-base text-[var(--color-text-muted)] leading-relaxed italic border-l-4 border-emerald-50 pl-4">
                     "Mis pacientes dicen que esto les da más paz en 45 min que años de terapias convencionales."
                   </p>
                 </div>
@@ -180,22 +180,22 @@ export default function Home() {
 
               {/* Card 02 */}
               <motion.div
-                whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden group hover:border-[var(--color-primary)] transition-all duration-300"
+                whileHover={{ x: 10 }}
+                className="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] flex flex-col md:flex-row items-center md:items-start gap-6 group hover:border-[var(--color-primary)] transition-all duration-300"
               >
-                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity">02</div>
-                <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">02</div>
+                <p className="text-lg lg:text-xl text-[var(--color-secondary)] leading-relaxed font-bold">
                   Entenderás exactamente por qué <span className="text-[var(--color-primary)]">NADA de lo que has intentado</span> hasta hoy ha funcionado.
                 </p>
               </motion.div>
 
               {/* Card 03 */}
               <motion.div
-                whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden group hover:border-[var(--color-primary)] transition-all duration-300"
+                whileHover={{ x: 10 }}
+                className="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] flex flex-col md:flex-row items-center md:items-start gap-6 group hover:border-[var(--color-primary)] transition-all duration-300"
               >
-                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity">03</div>
-                <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">03</div>
+                <p className="text-lg lg:text-xl text-[var(--color-secondary)] leading-relaxed font-bold">
                   Descubrirás la <span className="text-[var(--color-primary)]">ÚNICA y verdadera solución definitiva</span> a tu situación.
                 </p>
               </motion.div>
