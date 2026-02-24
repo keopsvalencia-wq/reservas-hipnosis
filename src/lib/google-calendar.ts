@@ -23,11 +23,15 @@ function getAuthClient() {
 }
 
 const calendarId = process.env.GOOGLE_CALENDAR_ID || '';
-const personalCalendarId = 'keopsvalencia@gmail.com'; // Calendario personal mencionado por el usuario
+const personalCalendarId = 'keopsvalencia@gmail.com';
+
+// Agrega aquí los IDs de los otros calendarios (GVA, Médico) cuando los tengas
+const extraCalendars: string[] = [
+    // 'CALENDAR_ID_HERE',
+];
 
 /**
- * Verifica disponibilidad en Google Calendar.
- * Usa freebusy para ser más preciso.
+ * Verifica disponibilidad en Google Calendar (Precisión estricta).
  */
 export async function checkAvailability(
     date: string,
@@ -36,20 +40,21 @@ export async function checkAvailability(
     const auth = getAuthClient();
     const calendar = google.calendar({ version: 'v3', auth });
 
-    // Añadimos margen de seguridad de 15 min antes y después
-    const BUFFER = 15;
     const startDate = new Date(`${date}T${time}:00`);
     const endDate = new Date(startDate.getTime() + SESSION_DURATION_MINUTES * 60 * 1000);
+
+    const items = [
+        { id: calendarId },
+        { id: personalCalendarId },
+        ...extraCalendars.map(id => ({ id }))
+    ];
 
     try {
         const response = await calendar.freebusy.query({
             requestBody: {
                 timeMin: startDate.toISOString(),
                 timeMax: endDate.toISOString(),
-                items: [
-                    { id: calendarId },
-                    { id: personalCalendarId }
-                ],
+                items,
                 timeZone: 'Europe/Madrid',
             },
         });
@@ -57,10 +62,8 @@ export async function checkAvailability(
         const busy = response.data.calendars;
         if (!busy) return true;
 
-        // Si hay algún intervalo ocupado en cualquiera de los calendarios
         for (const id in busy) {
             if (busy[id].busy && busy[id].busy.length > 0) {
-                console.log(`🚫 Ocupado en calendario ${id} para ${time}`);
                 return false;
             }
         }
@@ -68,7 +71,7 @@ export async function checkAvailability(
         return true;
     } catch (error: any) {
         console.error('❌ Error checking availability:', error.message);
-        throw new Error(`Google Calendar (FreeBusy): ${error.message}`);
+        return false;
     }
 }
 
@@ -79,21 +82,21 @@ export async function getBusySlots(date: string): Promise<string[]> {
     const auth = getAuthClient();
     const calendar = google.calendar({ version: 'v3', auth });
 
-    // Forzamos el uso de la zona horaria de Madrid (+01:00 en invierno)
-    // para evitar que el servidor (si está en UTC) desplace los horarios
     const timeMin = `${date}T00:00:00+01:00`;
     const timeMax = `${date}T23:59:59+01:00`;
 
+    const items = [
+        { id: calendarId },
+        { id: personalCalendarId },
+        ...extraCalendars.map(id => ({ id }))
+    ];
+
     try {
-        console.log(`🔍 [GCal] Consultando agenda para ${date} (Madrid Time)`);
         const response = await calendar.freebusy.query({
             requestBody: {
                 timeMin,
                 timeMax,
-                items: [
-                    { id: calendarId },
-                    { id: personalCalendarId }
-                ],
+                items,
                 timeZone: 'Europe/Madrid',
             },
         });
@@ -106,8 +109,14 @@ export async function getBusySlots(date: string): Promise<string[]> {
                 const busyList = calendars[id].busy || [];
                 busyList.forEach((period) => {
                     if (period.start && period.end) {
-                        // Guardamos el intervalo tal cual lo da Google (UTC ISO)
-                        busySlots.push(`${period.start}|${period.end}`);
+                        const start = new Date(period.start);
+                        const end = new Date(period.end);
+                        const durationMs = end.getTime() - start.getTime();
+
+                        // IGNORAR RECORDATORIOS: Si el evento dura menos de 15 min, lo ignoramos
+                        if (durationMs > 15 * 60 * 1000) {
+                            busySlots.push(`${period.start}|${period.end}`);
+                        }
                     }
                 });
             }
