@@ -24,20 +24,40 @@ export interface TriageQuestionDef {
 // ───────────────────────────────────────────────────
 
 export const triageQuestions: TriageQuestionDef[] = [
-    // ─── P3: Motivo (MULTISELECCIÓN) ──────────────────
+    // ─── P3: Perfil + Motivo ──────────────────────────
+    {
+        id: 'dedicacion',
+        text: '¿A qué te dedicas actualmente?',
+        type: 'text',
+        placeholder: 'Ej: Enfermera, autónomo, estudiante...',
+        group: 'perfil',
+    },
+    {
+        id: 'ciudad',
+        text: '¿En qué ciudad o población vives?',
+        type: 'text',
+        placeholder: 'Ej: Valencia, Madrid, Motilla del Palancar...',
+        group: 'perfil',
+    },
+    {
+        id: 'edad',
+        text: '¿Cuántos años tienes?',
+        type: 'text',
+        placeholder: 'Ej: 35',
+        group: 'perfil',
+    },
     {
         id: 'motivo_consulta',
         text: '¿Cuál es tu principal motivo de consulta?',
-        type: 'multiselect',
+        type: 'select',
         options: [
-            { value: 'ansiedad_bloqueos', label: 'Ansiedad / Bloqueos' },
-            { value: 'depresion', label: 'Depresión' },
+            { value: 'ansiedad_bloqueos', label: 'Ansiedad / Depresión / Bloqueos' },
             { value: 'traumas', label: 'Traumas' },
             { value: 'adicciones', label: 'Adicciones' },
             { value: 'fobias', label: 'Fobias' },
             { value: 'otros', label: 'Otros' },
         ],
-        group: 'datos',
+        group: 'perfil',
     },
     // ─── P4: Contraste ────────────────────────────────
     {
