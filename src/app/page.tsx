@@ -299,12 +299,20 @@ export default function Home() {
 // ──────────────────────────────────────────────────
 // CONTRAST SCREEN: Quick tags + dual textareas
 // ──────────────────────────────────────────────────
-const QUICK_TAGS = [
+const QUICK_TAGS_ACTUAL = [
   'No duermo bien',
   'Ansiedad constante',
   'Me siento paralizado/a',
   'Problemas de pareja/familia',
   'Falta de confianza',
+];
+
+const QUICK_TAGS_DESEADA = [
+  'Dormir profundamente',
+  'Sentirme en calma',
+  'Recuperar mi energía',
+  'Mejorar mis relaciones',
+  'Confiar en mí mismo/a',
 ];
 
 function ContrastScreen({
@@ -316,27 +324,65 @@ function ContrastScreen({
   onComplete: (answers: Record<string, string | string[]>) => void;
   onBack: () => void;
 }) {
-  const [tags, setTags] = useState<string[]>(
+  const [tagsActual, setTagsActual] = useState<string[]>(
     Array.isArray(triageData.situacion_tags) ? (triageData.situacion_tags as string[]) : []
   );
   const [actualText, setActualText] = useState((triageData.situacion_actual as string) || '');
+  const [tagsDeseada, setTagsDeseada] = useState<string[]>(
+    Array.isArray(triageData.situacion_deseada_tags) ? (triageData.situacion_deseada_tags as string[]) : []
+  );
   const [deseadaText, setDeseadaText] = useState((triageData.situacion_deseada as string) || '');
 
-  const toggleTag = (tag: string) => {
-    setTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+  const toggleActual = (tag: string) => {
+    setTagsActual(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+  };
+  const toggleDeseada = (tag: string) => {
+    setTagsDeseada(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
   };
 
-  const isValid = deseadaText.trim().length > 0 && (tags.length > 0 || actualText.trim().length > 0);
+  const isValid =
+    (tagsActual.length > 0 || actualText.trim().length > 0) &&
+    (tagsDeseada.length > 0 || deseadaText.trim().length > 0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isValid) return;
     onComplete({
-      situacion_tags: tags,
+      situacion_tags: tagsActual,
       situacion_actual: actualText,
+      situacion_deseada_tags: tagsDeseada,
       situacion_deseada: deseadaText,
     });
   };
+
+  /* Shared tag renderer */
+  const renderTags = (
+    list: string[],
+    active: string[],
+    toggle: (t: string) => void,
+  ) => (
+    <div className="flex flex-wrap gap-3">
+      {list.map(tag => {
+        const on = active.includes(tag);
+        return (
+          <motion.button
+            key={tag}
+            type="button"
+            onClick={() => toggle(tag)}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className={`px-4 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all ${on
+              ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)] text-white shadow-sm'
+              : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
+              }`}
+          >
+            {on && <span className="mr-1.5">✓</span>}
+            {tag}
+          </motion.button>
+        );
+      })}
+    </div>
+  );
 
   return (
     <form onSubmit={handleSubmit} className="space-y-10 max-w-3xl mx-auto">
@@ -351,31 +397,7 @@ function ContrastScreen({
         <h3 className="text-lg md:text-xl font-bold text-[var(--color-secondary)]">
           Describe brevemente cómo estás en este momento y qué te impide hacer tu problema.
         </h3>
-
-        {/* Quick Tags */}
-        <div className="flex flex-wrap gap-3">
-          {QUICK_TAGS.map(tag => {
-            const active = tags.includes(tag);
-            return (
-              <motion.button
-                key={tag}
-                type="button"
-                onClick={() => toggleTag(tag)}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                className={`px-4 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all ${active
-                  ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)] text-white shadow-sm'
-                  : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
-                  }`}
-              >
-                {active && <span className="mr-1.5">✓</span>}
-                {tag}
-              </motion.button>
-            );
-          })}
-        </div>
-
-        {/* Detail Text */}
+        {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual)}
         <textarea
           className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-28 resize-none text-base"
           placeholder="¿Quieres añadir algún detalle más sobre tu malestar actual?"
@@ -390,15 +412,14 @@ function ContrastScreen({
       {/* ── SITUACIÓN DESEADA ── */}
       <div className="space-y-5">
         <h3 className="text-lg md:text-xl font-bold text-[var(--color-secondary)]">
-          ¿Cómo te gustaría estar y sentirte dentro de exactamente un mes <span className="text-[var(--color-primary)]">cuando solucionemos</span> tu problema?
+          ¿Cómo te gustaría estar y sentirte dentro de aproximadamente un mes <span className="text-[var(--color-primary)]">cuando solucionemos</span> tu problema?
         </h3>
-
+        {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
         <textarea
           className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-32 resize-none text-base"
-          placeholder="Ej: Quiero levantarme con energía, sin ese nudo en el estómago y sintiendo que vuelvo a tener el control..."
+          placeholder="¿Quieres añadir algún detalle más sobre cómo te gustaría sentirte?"
           value={deseadaText}
           onChange={(e) => setDeseadaText(e.target.value)}
-          required
         />
       </div>
 
