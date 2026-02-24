@@ -90,24 +90,58 @@ export default function Home() {
       // ─── P1: BIENVENIDA ──────────────────────
       case 0:
         return (
-          <div className="text-center space-y-10 py-10 max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
-              Solicita tu Evaluación Diagnóstica.
-            </h1>
-            <p className="text-lg md:text-xl text-[var(--color-text-muted)] font-medium leading-relaxed max-w-2xl mx-auto">
-              Solo de 3 a 5 plazas disponibles cada mes para garantizar la máxima atención.
-            </p>
-            <p className="text-base md:text-lg text-[var(--color-secondary)] leading-relaxed max-w-2xl mx-auto">
-              Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo de forma definitiva.
-            </p>
-            <p className="text-sm md:text-base text-[var(--color-text-muted)] font-semibold">
-              🛡️ Garantía: Si veo que no puedo garantizarte resultados, el coste de la sesión será 0€.
-            </p>
-            <div className="space-y-3 pt-2">
-              <motion.button onClick={next} className="btn-primary text-lg py-5 px-12 mx-auto uppercase tracking-wider font-black" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                Reservar mi plaza ahora
-              </motion.button>
-              <p className="text-xs text-gray-400">Pulsa para ver disponibilidad y responder al formulario de compromiso.</p>
+          <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16 py-4 lg:py-10 max-w-6xl mx-auto">
+            {/* Left: Content */}
+            <div className="flex-1 text-center lg:text-left space-y-8 order-2 lg:order-1">
+              <div className="space-y-4">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
+                  Solicita tu Evaluación Diagnóstica.
+                </h1>
+                <p className="text-xl md:text-2xl text-[var(--color-primary)] font-bold tracking-tight">
+                  Solo de 3 a 5 plazas disponibles cada mes.
+                </p>
+              </div>
+
+              <p className="text-lg text-[var(--color-text-muted)] leading-relaxed font-medium">
+                Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo de forma definitiva.
+              </p>
+
+              <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 shadow-sm inline-block w-full">
+                <p className="text-base text-[var(--color-secondary)] font-bold leading-relaxed">
+                  🛡️ Garantía: Si veo que no puedo garantizarte resultados, el coste de la sesión será 0€.
+                </p>
+              </div>
+
+              <div className="space-y-4 pt-4">
+                <motion.button
+                  onClick={next}
+                  className="btn-primary w-full lg:w-auto text-xl py-6 px-14 uppercase tracking-wider font-black shadow-xl shadow-emerald-100/50"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  RESERVAR MI PLAZA AHORA
+                </motion.button>
+                <p className="text-xs text-gray-400">Pulsa para ver disponibilidad y responder al formulario de compromiso.</p>
+              </div>
+            </div>
+
+            {/* Right: Authority Image */}
+            <div className="flex-1 relative order-1 lg:order-2 w-full max-w-md lg:max-w-none px-4 lg:px-0">
+              <div className="relative rounded-3xl overflow-hidden aspect-[4/5] lg:aspect-auto">
+                <img
+                  src="/images/salva-autoridad.png"
+                  alt="Salva Vera - Terapeuta"
+                  className="w-full h-full object-cover rounded-3xl shadow-2xl scale-x-[-1]" // Volteada horizontalmente para que mire al texto
+                />
+                {/* Visual Treatment: Fading Gradient */}
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white via-white/50 to-transparent" />
+              </div>
+
+              {/* Floating Badge (Opcional para elegancia) */}
+              <div className="absolute top-6 -right-4 lg:-right-8 bg-white/90 backdrop-blur shadow-lg border border-gray-100 px-6 py-3 rounded-2xl hidden lg:block">
+                <p className="text-xs font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
+                <p className="text-[10px] font-bold text-[var(--color-primary)]">Experto en Hipnosis</p>
+              </div>
             </div>
           </div>
         );
