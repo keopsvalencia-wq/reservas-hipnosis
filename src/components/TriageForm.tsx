@@ -9,9 +9,10 @@ interface TriageFormProps {
     subset?: string[];
     buttonLabel?: string;
     onBack?: () => void;
+    formId?: string;
 }
 
-export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBack }: TriageFormProps) {
+export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBack, formId }: TriageFormProps) {
     const [answers, setAnswers] = useState<TriageAnswers>({});
 
     const filteredQuestions = subset
@@ -52,7 +53,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+        <form id={formId} onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
             {/* Scrollable questions area */}
             <div className="flex-1 overflow-y-auto space-y-8 pr-1" style={{ scrollbarWidth: 'thin' }}>
                 {filteredQuestions.map((q) => (

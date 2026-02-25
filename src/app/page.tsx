@@ -225,6 +225,7 @@ export default function Home() {
             otherText={(triageData.motivo_otro as string) || ''}
             onOtherTextChange={(txt) => setTriageData(prev => ({ ...prev, motivo_otro: txt }))}
             hideFooter
+            formId={`step-form-${screen}`}
           />
         );
 
@@ -237,7 +238,13 @@ export default function Home() {
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
                 <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
               </div>
-              <TriageForm subset={['dedicacion', 'ciudad', 'edad']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
+              <TriageForm
+                subset={['dedicacion', 'ciudad', 'edad']}
+                onComplete={handleTriageStep}
+                onBack={back}
+                buttonLabel="SIGUIENTE PASO"
+                formId="step-form-3"
+              />
             </div>
           </StepLayout>
         );
@@ -258,6 +265,7 @@ export default function Home() {
             otherText={(triageData.impacto_otro as string) || ''}
             onOtherTextChange={(txt) => setTriageData(prev => ({ ...prev, impacto_otro: txt }))}
             hideFooter
+            formId={`step-form-${screen}`}
           />
         );
 
@@ -285,7 +293,13 @@ export default function Home() {
                   Para que el tratamiento funcione, necesitas invertir en <strong className="text-[var(--color-secondary)]">3 áreas</strong>: tu <strong className="text-[var(--color-secondary)]">Compromiso</strong> personal, tu <strong className="text-[var(--color-secondary)]">Tiempo</strong> diario y tu <strong className="text-[var(--color-secondary)]">Dinero</strong>.
                 </p>
               </div>
-              <TriageForm subset={['compromiso_escala', 'disponibilidad_tiempo']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
+              <TriageForm
+                subset={['compromiso_escala', 'disponibilidad_tiempo']}
+                onComplete={handleTriageStep}
+                onBack={back}
+                buttonLabel="SIGUIENTE PASO"
+                formId="step-form-6"
+              />
             </div>
           </StepLayout>
         );
@@ -299,7 +313,13 @@ export default function Home() {
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 6 de 7</p>
                 <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">La inversión</h2>
               </div>
-              <TriageForm subset={['inversion']} onComplete={handleTriageStep} onBack={back} buttonLabel="Confirmar mi compromiso y ver agenda" />
+              <TriageForm
+                subset={['inversion']}
+                onComplete={handleTriageStep}
+                onBack={back}
+                buttonLabel="Confirmar mi compromiso y ver agenda"
+                formId="step-form-7"
+              />
             </div>
           </StepLayout>
         );
@@ -318,6 +338,7 @@ export default function Home() {
                 contactData={contactData}
                 onSubmit={(data) => { setContactData(data); next(); }}
                 onBack={back}
+                formId={`step-form-${screen}`}
               />
             </div>
           </StepLayout>
@@ -358,7 +379,7 @@ export default function Home() {
           onBack={back}
           onNext={isInformative ? next : undefined}
           type={isInformative ? "button" : "submit"}
-          formId={isInformative ? undefined : "step-form"}
+          formId={isInformative ? undefined : `step-form-${screen}`}
         />
       );
     }
@@ -625,7 +646,7 @@ function ContrastScreen({
 
   return (
     <StepLayout>
-      <form id="step-form" onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-5 max-w-3xl mx-auto w-full">
+      <form id={`step-form-${screen}`} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-5 max-w-3xl mx-auto w-full">
         {/* Header */}
         <div className="text-center space-y-2">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
@@ -682,6 +703,7 @@ function ChoiceCardScreen({
   otherText = '',
   onOtherTextChange,
   hideFooter = false,
+  formId,
 }: {
   step: string;
   title: string;
@@ -695,6 +717,7 @@ function ChoiceCardScreen({
   otherText?: string;
   onOtherTextChange?: (text: string) => void;
   hideFooter?: boolean;
+  formId?: string;
 }) {
   const [choices, setChoices] = useState<string[]>(
     multi
@@ -720,7 +743,7 @@ function ChoiceCardScreen({
 
   return (
     <StepLayout>
-      <form id="step-form" onSubmit={(e) => { e.preventDefault(); handleNext(); }} className="space-y-6 max-w-3xl mx-auto w-full">
+      <form id={formId} onSubmit={(e) => { e.preventDefault(); handleNext(); }} className="space-y-6 max-w-3xl mx-auto w-full">
         {/* Header */}
         <div className="text-center space-y-2">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">{step}</p>
@@ -794,10 +817,12 @@ function ContactForm({
   contactData,
   onSubmit,
   onBack,
+  formId,
 }: {
   contactData: { name: string; lastName: string; email: string; phone: string };
   onSubmit: (data: { name: string; lastName: string; email: string; phone: string }) => void;
   onBack: () => void;
+  formId?: string;
 }) {
   const [name, setName] = useState(contactData.name);
   const [lastName, setLastName] = useState(contactData.lastName);
@@ -812,7 +837,7 @@ function ContactForm({
   };
 
   return (
-    <form id="step-form" onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+    <form id={formId} onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
       {/* Scrollable inputs */}
       <div className="flex-1 overflow-y-auto pr-1 space-y-4" style={{ scrollbarWidth: 'thin' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
