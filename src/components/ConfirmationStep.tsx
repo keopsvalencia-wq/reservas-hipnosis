@@ -58,7 +58,9 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
         const ubicacion = labels[ubiKey];
         const trigger = triggers[ubiKey];
 
-        const text = `Hola Salva, soy ${nombre} ${apellido} de ${ciudad}. Mi motivo de consulta es: ${motivo}. He reservado para el ${dia} a las ${hora} en ${ubicacion}. ${trigger} (Ahora pulsa enviar para confirmar)`;
+        const text = `Hola Salva, soy *${nombre} ${apellido}* de *${ciudad}*.\n\n📍 *Ubicación:* ${ubicacion}\n🧠 *Motivo:* ${motivo}\n📅 *Cita:* ${dia} a las ${hora}\n\n${trigger}\n(Ahora pulsa enviar para confirmar)`;
+
+        // encodeURIComponent handles \n correctly as %0A
         return `https://wa.me/34656839568?text=${encodeURIComponent(text)}`;
     };
 
@@ -138,12 +140,12 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                 </div>
 
                 {/* ANCHORED FINAL ACTION */}
-                <div className="flex-shrink-0 pt-6 pb-4">
+                <div className="flex-shrink-0 pt-6 pb-4 px-4">
                     <motion.a
                         href={getWhatsAppUrl()}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white py-5 px-6 rounded-2xl text-lg font-black uppercase tracking-wider shadow-lg shadow-green-200 transition-all w-full max-w-md mx-auto"
+                        className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white py-5 px-6 rounded-2xl text-lg font-black uppercase tracking-wider shadow-lg shadow-green-200 transition-all w-full max-w-md mx-auto line-clamp-1"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                     >
@@ -152,7 +154,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                         </svg>
                         PULSA AQUÍ PARA CONFIRMAR Y RECIBIR LA INFO
                     </motion.a>
-                    <p className="text-[10px] text-gray-400 mt-2 uppercase tracking-widest font-bold">Reserva Segura • Salva Hipnosis</p>
+                    <p className="text-[10px] text-gray-400 mt-2 uppercase tracking-widest font-bold font-sans">RESERVA SEGURA • HIPNOSIS EN TERAPIA</p>
                 </div>
             </motion.div>
         );
