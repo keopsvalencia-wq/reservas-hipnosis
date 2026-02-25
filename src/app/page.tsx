@@ -234,7 +234,7 @@ export default function Home() {
       // ─── P3: PERFIL (dedicación, ciudad, edad) ────
       case 3:
         return (
-          <StepLayout>
+          <StepLayout fill>
             <div className="space-y-6 max-w-3xl mx-auto w-full">
               <div className="text-center space-y-3">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
@@ -276,7 +276,7 @@ export default function Home() {
       // ─── P6: COMPROMISO (Triple Inversión) ────
       case 6:
         return (
-          <StepLayout>
+          <StepLayout fill>
             <div className="space-y-6 max-w-3xl mx-auto w-full">
               <div className="text-center space-y-3">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 5 de 7</p>
@@ -295,7 +295,7 @@ export default function Home() {
       // ─── P7: INVERSIÓN (Gate) ────────────────
       case 7:
         return (
-          <StepLayout>
+          <StepLayout fill>
             <div className="space-y-6 max-w-3xl mx-auto w-full">
               <div className="text-center space-y-3">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 6 de 7</p>
@@ -309,7 +309,7 @@ export default function Home() {
       // ─── P8: DATOS DE CONTACTO ────────────────
       case 8:
         return (
-          <StepLayout>
+          <StepLayout fill>
             <div className="space-y-6 max-w-3xl mx-auto w-full">
               <div className="text-center space-y-3">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 7 de 7</p>
@@ -358,7 +358,7 @@ export default function Home() {
 }
 
 // ──────────────────────────────────────────────────
-// MASTER SCREEN: Fixed 850px container
+// MASTER SCREEN: 100% viewport height container
 // Buttons anchored at bottom via StepLayout
 // ──────────────────────────────────────────────────
 function MasterScreen({
@@ -406,18 +406,22 @@ function MasterScreen({
 
 // ──────────────────────────────────────────────────
 // STEP LAYOUT: Content + anchored footer
+// fill = true → for forms that manage their own buttons
+// fill = false (default) → content is vertically centered
 // ──────────────────────────────────────────────────
 function StepLayout({
   children,
   footer,
+  fill = false,
 }: {
   children: React.ReactNode;
   footer?: React.ReactNode;
+  fill?: boolean;
 }) {
   return (
     <div className="step-layout">
-      {/* Scrollable, vertically centered content */}
-      <div className="step-layout__content">
+      {/* Content area */}
+      <div className={`step-layout__content ${fill ? 'step-layout__content--fill' : ''}`}>
         {children}
       </div>
 
@@ -766,37 +770,40 @@ function ContactForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium text-[var(--color-secondary)]">Nombre completo *</label>
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">person</span>
-          <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Tu nombre completo" required
-            className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+    <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+      {/* Scrollable inputs */}
+      <div className="flex-1 overflow-y-auto space-y-5">
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-[var(--color-secondary)]">Nombre completo *</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">person</span>
+            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Tu nombre completo" required
+              className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+          </div>
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-[var(--color-secondary)]">Email *</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">email</span>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required
+              className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+          </div>
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-[var(--color-secondary)]">WhatsApp *</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">phone</span>
+            <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+34 600 000 000" required
+              className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+          </div>
         </div>
       </div>
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium text-[var(--color-secondary)]">Email *</label>
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">email</span>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required
-            className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
-        </div>
-      </div>
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium text-[var(--color-secondary)]">WhatsApp *</label>
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">phone</span>
-          <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+34 600 000 000" required
-            className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
-        </div>
-      </div>
-      {/* Navigation inside form for submit behavior */}
-      <div className="flex items-center justify-between pt-3">
+      {/* Anchored navigation */}
+      <div className="flex-shrink-0 flex items-center justify-between pt-6 pb-2">
         <button type="button" onClick={onBack} className="btn-back">
           <span className="material-icons-outlined">arrow_back</span> Atrás
         </button>
-        <button type="submit" disabled={!isValid} className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black">
+        <button type="submit" disabled={!isValid} className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed">
           SIGUIENTE PASO
         </button>
       </div>

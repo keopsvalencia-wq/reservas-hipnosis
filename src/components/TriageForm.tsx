@@ -52,113 +52,116 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-8">
-            {filteredQuestions.map((q) => (
-                <div key={q.id} className="space-y-3">
-                    <label className="block text-lg font-bold text-[var(--color-secondary)]">
-                        {q.text}
-                    </label>
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+            {/* Scrollable questions area */}
+            <div className="flex-1 overflow-y-auto space-y-8 pr-1" style={{ scrollbarWidth: 'thin' }}>
+                {filteredQuestions.map((q) => (
+                    <div key={q.id} className="space-y-3">
+                        <label className="block text-lg font-bold text-[var(--color-secondary)]">
+                            {q.text}
+                        </label>
 
-                    {q.id === GATE_QUESTION_ID && (
-                        <p className="text-sm text-[var(--color-text-muted)] bg-white p-4 rounded-xl border border-gray-100 italic">
-                            {GATE_INTRO_TEXT}
-                        </p>
-                    )}
+                        {q.id === GATE_QUESTION_ID && (
+                            <p className="text-sm text-[var(--color-text-muted)] bg-white p-4 rounded-xl border border-gray-100 italic">
+                                {GATE_INTRO_TEXT}
+                            </p>
+                        )}
 
-                    {/* MULTISELECT (chips) */}
-                    {q.type === 'multiselect' && (
-                        <div className="flex flex-wrap gap-3">
-                            {q.options?.map(opt => {
-                                const selected = Array.isArray(answers[q.id]) && (answers[q.id] as string[]).includes(opt.value);
-                                return (
-                                    <button
+                        {/* MULTISELECT (chips) */}
+                        {q.type === 'multiselect' && (
+                            <div className="flex flex-wrap gap-3">
+                                {q.options?.map(opt => {
+                                    const selected = Array.isArray(answers[q.id]) && (answers[q.id] as string[]).includes(opt.value);
+                                    return (
+                                        <button
+                                            key={opt.value}
+                                            type="button"
+                                            onClick={() => handleMultiToggle(q.id, opt.value)}
+                                            className={`px-5 py-3 rounded-2xl border-2 font-semibold transition-all text-sm ${selected
+                                                ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] text-[var(--color-secondary)]'
+                                                : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
+                                                }`}
+                                        >
+                                            {selected && <span className="mr-1">✓</span>}
+                                            {opt.label}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+
+                        {/* SELECT */}
+                        {q.type === 'select' && (
+                            <select
+                                className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all appearance-none cursor-pointer"
+                                onChange={(e) => handleAnswer(q.id, e.target.value)}
+                                value={(answers[q.id] as string) || ''}
+                                required
+                            >
+                                <option value="" disabled>Selecciona una opción...</option>
+                                {q.options?.map(opt => (
+                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                ))}
+                            </select>
+                        )}
+
+                        {/* RADIO */}
+                        {q.type === 'radio' && (
+                            <div className="space-y-3">
+                                {q.options?.map(opt => (
+                                    <label
                                         key={opt.value}
-                                        type="button"
-                                        onClick={() => handleMultiToggle(q.id, opt.value)}
-                                        className={`px-5 py-3 rounded-2xl border-2 font-semibold transition-all text-sm ${selected
-                                            ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] text-[var(--color-secondary)]'
-                                            : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
+                                        className={`flex items-start gap-4 p-5 rounded-2xl border-2 transition-all cursor-pointer ${answers[q.id] === opt.value
+                                            ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
+                                            : 'border-[var(--color-border)] hover:border-gray-400 bg-white'
                                             }`}
                                     >
-                                        {selected && <span className="mr-1">✓</span>}
-                                        {opt.label}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    )}
+                                        <input type="radio" name={q.id} value={opt.value} checked={answers[q.id] === opt.value} onChange={() => handleAnswer(q.id, opt.value)} className="hidden" />
+                                        <div className={`mt-1 h-5 w-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${answers[q.id] === opt.value ? 'border-[var(--color-primary)]' : 'border-gray-300'}`}>
+                                            {answers[q.id] === opt.value && <div className="h-2.5 w-2.5 rounded-full bg-[var(--color-primary)]" />}
+                                        </div>
+                                        <span className="text-base font-medium">{opt.label}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        )}
 
-                    {/* SELECT */}
-                    {q.type === 'select' && (
-                        <select
-                            className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all appearance-none cursor-pointer"
-                            onChange={(e) => handleAnswer(q.id, e.target.value)}
-                            value={(answers[q.id] as string) || ''}
-                            required
-                        >
-                            <option value="" disabled>Selecciona una opción...</option>
-                            {q.options?.map(opt => (
-                                <option key={opt.value} value={opt.value}>{opt.label}</option>
-                            ))}
-                        </select>
-                    )}
+                        {/* TEXT */}
+                        {q.type === 'text' && (
+                            <input
+                                type="text"
+                                className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all"
+                                placeholder={q.placeholder}
+                                onChange={(e) => handleAnswer(q.id, e.target.value)}
+                                value={(answers[q.id] as string) || ''}
+                                required
+                            />
+                        )}
 
-                    {/* RADIO */}
-                    {q.type === 'radio' && (
-                        <div className="space-y-3">
-                            {q.options?.map(opt => (
-                                <label
-                                    key={opt.value}
-                                    className={`flex items-start gap-4 p-5 rounded-2xl border-2 transition-all cursor-pointer ${answers[q.id] === opt.value
-                                        ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
-                                        : 'border-[var(--color-border)] hover:border-gray-400 bg-white'
-                                        }`}
-                                >
-                                    <input type="radio" name={q.id} value={opt.value} checked={answers[q.id] === opt.value} onChange={() => handleAnswer(q.id, opt.value)} className="hidden" />
-                                    <div className={`mt-1 h-5 w-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${answers[q.id] === opt.value ? 'border-[var(--color-primary)]' : 'border-gray-300'}`}>
-                                        {answers[q.id] === opt.value && <div className="h-2.5 w-2.5 rounded-full bg-[var(--color-primary)]" />}
-                                    </div>
-                                    <span className="text-base font-medium">{opt.label}</span>
-                                </label>
-                            ))}
-                        </div>
-                    )}
+                        {/* TEXTAREA */}
+                        {q.type === 'textarea' && (
+                            <textarea
+                                className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-32 resize-none"
+                                placeholder={q.placeholder}
+                                onChange={(e) => handleAnswer(q.id, e.target.value)}
+                                value={(answers[q.id] as string) || ''}
+                                required
+                            />
+                        )}
+                    </div>
+                ))}
 
-                    {/* TEXT */}
-                    {q.type === 'text' && (
-                        <input
-                            type="text"
-                            className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all"
-                            placeholder={q.placeholder}
-                            onChange={(e) => handleAnswer(q.id, e.target.value)}
-                            value={(answers[q.id] as string) || ''}
-                            required
-                        />
-                    )}
+                {/* ── GATE BLOCKED MESSAGE ── */}
+                {activeGate && (
+                    <div className="bg-red-50 border border-red-200 rounded-2xl p-5 text-center space-y-2">
+                        <p className="text-red-600 font-semibold text-base">⚠️ No puedes continuar</p>
+                        <p className="text-sm text-red-500 leading-relaxed">{activeGate.message}</p>
+                    </div>
+                )}
+            </div>
 
-                    {/* TEXTAREA */}
-                    {q.type === 'textarea' && (
-                        <textarea
-                            className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-32 resize-none"
-                            placeholder={q.placeholder}
-                            onChange={(e) => handleAnswer(q.id, e.target.value)}
-                            value={(answers[q.id] as string) || ''}
-                            required
-                        />
-                    )}
-                </div>
-            ))}
-
-            {/* ── GATE BLOCKED MESSAGE ── */}
-            {activeGate && (
-                <div className="bg-red-50 border border-red-200 rounded-2xl p-5 text-center space-y-2">
-                    <p className="text-red-600 font-semibold text-base">⚠️ No puedes continuar</p>
-                    <p className="text-sm text-red-500 leading-relaxed">{activeGate.message}</p>
-                </div>
-            )}
-
-            {/* Navigation */}
-            <div className="flex items-center justify-between pt-4">
+            {/* ── ANCHORED NAVIGATION ── */}
+            <div className="flex-shrink-0 flex items-center justify-between pt-6 pb-2">
                 {onBack ? (
                     <button type="button" onClick={onBack} className="btn-back">
                         <span className="material-icons-outlined">arrow_back</span> Atrás
