@@ -13,7 +13,6 @@ interface BookingWizardProps {
 }
 
 export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
-    // Start from step 1 (Location Selection) since Triage is done in page.tsx
     const [step, setStep] = useState<WizardStep>(1);
     const [bookingData, setBookingData] = useState<Partial<BookingData>>(preloadedData);
     const [direction, setDirection] = useState(1);
@@ -57,34 +56,6 @@ export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
 
     return (
         <div className="step-layout">
-            {/* Header with step indicator + back button */}
-            <div className="flex-shrink-0 px-6 md:px-14 lg:px-20 pt-4 pb-2">
-                <div className="flex items-center justify-between">
-                    <button
-                        onClick={() => step === 1 ? onBack() : goTo((step - 1) as WizardStep)}
-                        className="btn-back"
-                    >
-                        <span className="material-icons-outlined">arrow_back</span>
-                        Atrás
-                    </button>
-                    <div className="flex gap-3">
-                        {[1, 2, 3].map(s => (
-                            <div
-                                key={s}
-                                className={`h-2 rounded-full transition-all duration-300 ${step === s
-                                    ? 'w-8 bg-[var(--color-primary)]'
-                                    : step > s
-                                        ? 'w-2 bg-[var(--color-primary)] opacity-40'
-                                        : 'w-2 bg-gray-200'
-                                    }`}
-                            />
-                        ))}
-                    </div>
-                    <div className="w-16" />
-                </div>
-            </div>
-
-            {/* Dynamic content area — flex-grow, centered */}
             <div className="step-layout__content">
                 <AnimatePresence mode="wait" custom={direction}>
                     <motion.div
@@ -98,15 +69,21 @@ export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
                         className="w-full"
                     >
                         {step === 1 && (
-                            <div className="space-y-6 w-full">
-                                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)] text-center">¿Dónde prefieres la sesión?</h2>
+                            <div className="space-y-10 w-full mb-10">
+                                <div className="space-y-2">
+                                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Selección de Sede</p>
+                                    <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">¿Dónde prefieres la sesión?</h2>
+                                </div>
                                 <LocationSelector onSelect={handleLocationSelect} />
                             </div>
                         )}
 
                         {step === 2 && (
-                            <div className="space-y-6 w-full">
-                                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)] text-center">Elige tu horario</h2>
+                            <div className="space-y-10 w-full mb-10">
+                                <div className="space-y-2">
+                                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Disponibilidad</p>
+                                    <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Elige tu horario</h2>
+                                </div>
                                 <CalendarPicker
                                     location={bookingData.location!}
                                     onSelectSlot={handleSlotSelect}
@@ -116,8 +93,7 @@ export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
                         )}
 
                         {step === 3 && (
-                            <div className="space-y-6 w-full">
-                                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)] text-center">Datos de contacto</h2>
+                            <div className="w-full mb-10">
                                 <ConfirmationStep
                                     data={bookingData}
                                     onSubmit={handleConfirmationSubmit}
@@ -128,6 +104,33 @@ export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
                     </motion.div>
                 </AnimatePresence>
             </div>
+
+            {/* FIXED FOOTER NAVIGATION */}
+            {step < 3 && (
+                <div className="step-layout__footer">
+                    <div className="step-layout__nav">
+                        <button
+                            onClick={() => step === 1 ? onBack() : goTo((step - 1) as WizardStep)}
+                            className="btn-back"
+                        >
+                            <span className="material-icons-outlined">arrow_back</span>
+                            Atrás
+                        </button>
+                        <div className="flex gap-2">
+                            {[1, 2, 3].map(s => (
+                                <div
+                                    key={s}
+                                    className={`h-1.5 rounded-full transition-all duration-300 ${step === s
+                                        ? 'w-6 bg-[var(--color-primary)]'
+                                        : 'w-1.5 bg-gray-200'
+                                        }`}
+                                />
+                            ))}
+                        </div>
+                        <div className="w-16" />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

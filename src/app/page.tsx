@@ -69,7 +69,7 @@ export default function Home() {
   // ─── Blocked screen ───────────────────────────────
   if (isBlocked) {
     return (
-      <MasterScreen progress={100}>
+      <MasterScreen>
         <StepLayout>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center space-y-6">
             <div className="w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center mx-auto">
@@ -346,7 +346,7 @@ export default function Home() {
   };
 
   return (
-    <MasterScreen progress={progress} showProgress={screen > 0 && screen < 9}>
+    <MasterScreen>
       <AnimatePresence mode="wait">
         <motion.div
           key={screen + (isBlocked ? '_blocked' : '')}
@@ -367,53 +367,83 @@ export default function Home() {
 // MASTER SCREEN: 100% viewport height container
 // Buttons anchored at bottom via StepLayout
 // ──────────────────────────────────────────────────
-function MasterScreen({
-  children,
-  progress,
-  showProgress = true,
-}: {
-  children: React.ReactNode;
-  progress: number;
-  showProgress?: boolean;
-}) {
+// ──────────────────────────────────────────────────
+// AUTHORITY PANEL: Static info on the left
+// ──────────────────────────────────────────────────
+function AuthorityPanel() {
   return (
-    <div className="master-screen">
-      <div className="master-screen__container">
-        {/* Progress bar — thin, seamless */}
-        {showProgress && (
-          <div className="flex-shrink-0 px-6 md:px-14 lg:px-20 pt-6">
-            <div className="flex justify-between mb-1.5">
-              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--color-primary)]">
-                Progreso
-              </span>
-              <span className="text-[10px] font-semibold text-gray-400">
-                {Math.round(progress)}%
-              </span>
-            </div>
-            <div className="progress-bar">
-              <motion.div
-                className="progress-bar__fill"
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
-              />
-            </div>
+    <aside className="authority-panel">
+      <div className="flex flex-col gap-6 w-full">
+        {/* Brand / Logo Area */}
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-[var(--color-primary)] rounded-xl flex items-center justify-center text-white">
+            <span className="material-icons-outlined">psychology</span>
           </div>
-        )}
+          <span className="font-black text-[10px] uppercase tracking-[0.2em] text-gray-400">Hipnosis</span>
+        </div>
 
-        {/* Content area — flex column, fills remaining space */}
-        <div className="flex-1 flex flex-col min-h-0">
+        {/* Profile Area */}
+        <div className="space-y-4 pt-4">
+          <div className="relative w-24 h-24 rounded-2xl overflow-hidden border-2 border-[var(--color-primary-soft)] bg-gray-50">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/SALVA-HIPNOSIS-P-2-6-q3Q6B3Z9Z6Z6Z6Z6Z6Z6Z6Z6Z6Z.png"
+              alt="Salva Vera"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src = "https://ui-avatars.com/api/?name=Salva+Vera&background=39DCA8&color=fff";
+              }}
+            />
+          </div>
+          <div>
+            <h2 className="text-xl font-black text-[var(--color-secondary)]">Salva Vera</h2>
+            <p className="text-xs font-bold text-[var(--color-primary)] uppercase tracking-wide">Hipnoterapeuta Profesional</p>
+          </div>
+        </div>
+
+        {/* Appointment Meta */}
+        <div className="space-y-4 pt-6">
+          <div className="flex items-center gap-3 text-sm font-semibold text-gray-400">
+            <span className="material-icons-outlined text-[var(--color-primary)]">schedule</span>
+            <span>45 minutos</span>
+          </div>
+          <div className="flex gap-3 text-sm font-semibold text-gray-400">
+            <span className="material-icons-outlined text-[var(--color-primary)]">videocam</span>
+            <span className="leading-tight">Evaluación Diagnóstica Especializada</span>
+          </div>
+          <p className="text-xs text-gray-400 leading-relaxed pt-2">
+            Sesión personalizada para identificar las causas raíz de tu bloqueo y diseñar el plan de acción hipnótico.
+          </p>
+        </div>
+      </div>
+
+      {/* Footer Meta (Desktop only) */}
+      <div className="mt-auto pt-10 hidden md:block">
+        <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest leading-relaxed">
+          RESERVA SEGURA <br /> HIPNOSIS EN TERAPIA
+        </p>
+      </div>
+    </aside>
+  );
+}
+
+// ──────────────────────────────────────────────────
+// MASTER SCREEN: 2-Column layout shell
+// ──────────────────────────────────────────────────
+function MasterScreen({ children }: { children: React.ReactNode }) {
+  return (
+    <main className="master-screen">
+      <div className="master-screen__container">
+        <AuthorityPanel />
+        <div className="content-area">
           {children}
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
 // ──────────────────────────────────────────────────
 // STEP LAYOUT: Content + anchored footer
-// fill = true → for forms that manage their own buttons
-// fill = false (default) → content is vertically centered
 // ──────────────────────────────────────────────────
 function StepLayout({
   children,
@@ -426,12 +456,10 @@ function StepLayout({
 }) {
   return (
     <div className="step-layout">
-      {/* Content area */}
       <div className={`step-layout__content ${fill ? 'step-layout__content--fill' : ''}`}>
         {children}
       </div>
 
-      {/* Anchored footer — always at same Y coordinate */}
       {footer && (
         <div className="step-layout__footer">
           {footer}
