@@ -24,6 +24,7 @@ export interface BookingData {
   time: string;        // "11:00"
   // Personal info
   name: string;
+  lastName: string;
   email: string;
   phone: string;
   acceptPrivacy: boolean;

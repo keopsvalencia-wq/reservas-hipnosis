@@ -39,7 +39,7 @@ const IMPACTO_OPTIONS = [
 export default function Home() {
   const [screen, setScreen] = useState(0);
   const [triageData, setTriageData] = useState<TriageAnswers>({});
-  const [contactData, setContactData] = useState({ name: '', email: '', phone: '' });
+  const [contactData, setContactData] = useState({ name: '', lastName: '', email: '', phone: '' });
   const [isBlocked, setIsBlocked] = useState(false);
 
   const TOTAL = 10;
@@ -329,7 +329,13 @@ export default function Home() {
       case 9:
         return (
           <BookingWizard
-            preloadedData={{ triageAnswers: triageData, name: contactData.name, email: contactData.email, phone: contactData.phone }}
+            preloadedData={{
+              triageAnswers: triageData,
+              name: contactData.name,
+              lastName: contactData.lastName,
+              email: contactData.email,
+              phone: contactData.phone
+            }}
             onBack={back}
           />
         );
@@ -754,31 +760,42 @@ function ContactForm({
   onSubmit,
   onBack,
 }: {
-  contactData: { name: string; email: string; phone: string };
-  onSubmit: (data: { name: string; email: string; phone: string }) => void;
+  contactData: { name: string; lastName: string; email: string; phone: string };
+  onSubmit: (data: { name: string; lastName: string; email: string; phone: string }) => void;
   onBack: () => void;
 }) {
   const [name, setName] = useState(contactData.name);
+  const [lastName, setLastName] = useState(contactData.lastName);
   const [email, setEmail] = useState(contactData.email);
   const [phone, setPhone] = useState(contactData.phone);
 
-  const isValid = name.trim() && email.trim() && phone.trim();
+  const isValid = name.trim() && lastName.trim() && email.trim() && phone.trim();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isValid) onSubmit({ name, email, phone });
+    if (isValid) onSubmit({ name, lastName, email, phone });
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
       {/* Scrollable inputs */}
-      <div className="flex-1 overflow-y-auto space-y-5">
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[var(--color-secondary)]">Nombre completo *</label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">person</span>
-            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Tu nombre completo" required
-              className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+      <div className="flex-1 overflow-y-auto pr-1 space-y-4" style={{ scrollbarWidth: 'thin' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-[var(--color-secondary)]">Nombre *</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">person</span>
+              <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Tu nombre" required
+                className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-[var(--color-secondary)]">Apellidos *</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">badge</span>
+              <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} placeholder="Tus apellidos" required
+                className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+            </div>
           </div>
         </div>
         <div className="space-y-1.5">

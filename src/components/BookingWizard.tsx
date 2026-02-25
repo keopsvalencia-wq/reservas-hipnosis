@@ -35,7 +35,7 @@ export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
         goTo(3);
     };
 
-    const handleConfirmationSubmit = (info: { name: string; email: string; phone: string; acceptPrivacy: boolean }) => {
+    const handleConfirmationSubmit = (info: { name: string; lastName: string; email: string; phone: string; acceptPrivacy: boolean }) => {
         setBookingData((prev) => ({ ...prev, ...info }));
     };
 
@@ -72,10 +72,10 @@ export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
                             <div
                                 key={s}
                                 className={`h-2 rounded-full transition-all duration-300 ${step === s
-                                        ? 'w-8 bg-[var(--color-primary)]'
-                                        : step > s
-                                            ? 'w-2 bg-[var(--color-primary)] opacity-40'
-                                            : 'w-2 bg-gray-200'
+                                    ? 'w-8 bg-[var(--color-primary)]'
+                                    : step > s
+                                        ? 'w-2 bg-[var(--color-primary)] opacity-40'
+                                        : 'w-2 bg-gray-200'
                                     }`}
                             />
                         ))}
