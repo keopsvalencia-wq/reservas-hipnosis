@@ -534,7 +534,15 @@ function StepNav({
         <motion.button
           type={type}
           form={formId}
-          onClick={onNext}
+          onClick={(e) => {
+            if (onNext) {
+              onNext();
+            } else if (type === 'submit' && formId) {
+              // Manual trigger as backup for robustness
+              const f = document.getElementById(formId) as HTMLFormElement;
+              if (f) f.requestSubmit();
+            }
+          }}
           disabled={nextDisabled || nextLoading}
           className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed"
           whileHover={!nextDisabled ? { scale: 1.03 } : {}}
@@ -722,11 +730,12 @@ function ChoiceCardScreen({
   hideFooter?: boolean;
   formId?: string;
 }) {
-  const [choices, setChoices] = useState<string[]>(
-    multi
-      ? (Array.isArray(selected) ? selected : selected ? [selected] : [])
-      : (selected && !Array.isArray(selected) ? [selected] : [])
-  );
+  const [choices, setChoices] = useState<string[]>(() => {
+    if (multi) {
+      return Array.isArray(selected) ? selected : selected ? [selected] : [];
+    }
+    return selected && !Array.isArray(selected) ? [selected] : [];
+  });
 
   const toggle = (opt: string) => {
     if (multi) {
