@@ -249,16 +249,23 @@ export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPicke
                 </div>
             </div>
 
-            <div className="step-layout__footer -mx-10 lg:-mx-8 -mb-10 lg:-mb-10">
-                <div className="flex items-center justify-between gap-4 w-full">
-                    <button onClick={onBack} className="btn-back">
-                        <span className="material-icons-outlined">arrow_back</span>
-                        Atrás
-                    </button>
-                    <button onClick={handleConfirm} disabled={!selectedDate || !selectedTime} className="btn-primary flex-1">
-                        Siguiente Paso
-                    </button>
-                </div>
+            {/* Navigation */}
+            <div className="flex items-center justify-between pt-2">
+                <button
+                    onClick={onBack}
+                    className="flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors font-medium"
+                >
+                    <span className="material-icons-outlined mr-1 text-[18px]">arrow_back</span>
+                    Anterior
+                </button>
+                <button
+                    onClick={handleConfirm}
+                    disabled={!selectedDate || !selectedTime}
+                    className="btn-primary text-sm"
+                >
+                    Siguiente Paso
+                    <span className="material-icons-outlined text-[18px]">arrow_forward</span>
+                </button>
             </div>
         </div>
     );
