@@ -58,7 +58,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
         const ubicacion = labels[ubiKey];
         const trigger = triggers[ubiKey];
 
-        const text = `Hola Salva, soy *${nombre} ${apellido}* de *${ciudad}*.\n\n📍 *Ubicación:* ${ubicacion}\n🧠 *Motivo:* ${motivo}\n📅 *Cita:* ${dia} a las ${hora}\n\n${trigger}\n(Ahora pulsa enviar para confirmar)`;
+        const text = `🚨 *NUEVA SOLICITUD DE EVALUACIÓN* 🚨\n\nHola Salva, soy *${nombre} ${apellido}* de *${ciudad}*.\n*He agendado una sesión de evaluación contigo.*\n\n📍 *Ubicación:* ${ubicacion}\n🧠 *Motivo:* ${motivo}\n📅 *Cita:* ${dia} a las ${hora}\n\n${trigger}\n(Ahora pulsa enviar para confirmar)`;
 
         // encodeURIComponent handles \n correctly as %0A
         return `https://wa.me/34656839568?text=${encodeURIComponent(text)}`;
