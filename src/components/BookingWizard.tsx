@@ -13,6 +13,7 @@ interface BookingWizardProps {
 }
 
 export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
+    // Start from step 1 (Location Selection) since Triage is done in page.tsx
     const [step, setStep] = useState<WizardStep>(1);
     const [bookingData, setBookingData] = useState<Partial<BookingData>>(preloadedData);
     const [direction, setDirection] = useState(1);
@@ -56,7 +57,7 @@ export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
 
     return (
         <div className="step-layout">
-            <div className="step-layout__content">
+            <div className={`step-layout__content ${step === 3 ? 'step-layout__content--fill' : ''}`}>
                 <AnimatePresence mode="wait" custom={direction}>
                     <motion.div
                         key={step}
@@ -69,18 +70,18 @@ export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
                         className="w-full"
                     >
                         {step === 1 && (
-                            <div className="space-y-10 w-full mb-10">
-                                <div className="space-y-2">
-                                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Selección de Sede</p>
-                                    <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">¿Dónde prefieres la sesión?</h2>
+                            <div className="space-y-10 w-full mb-10 text-center">
+                                <div className="space-y-3">
+                                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Sede</p>
+                                    <h2 className="text-2xl md:text-4xl font-black text-[var(--color-secondary)]">¿Dónde prefieres la sesión?</h2>
                                 </div>
                                 <LocationSelector onSelect={handleLocationSelect} />
                             </div>
                         )}
 
                         {step === 2 && (
-                            <div className="space-y-10 w-full mb-10">
-                                <div className="space-y-2">
+                            <div className="space-y-10 w-full mb-10 text-center">
+                                <div className="space-y-3">
                                     <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Disponibilidad</p>
                                     <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Elige tu horario</h2>
                                 </div>
@@ -93,7 +94,7 @@ export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
                         )}
 
                         {step === 3 && (
-                            <div className="w-full mb-10">
+                            <div className="w-full">
                                 <ConfirmationStep
                                     data={bookingData}
                                     onSubmit={handleConfirmationSubmit}

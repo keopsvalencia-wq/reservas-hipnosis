@@ -121,3 +121,5 @@ export const LOCATION_DESCRIPTIONS: Record<Location, string> = {
     motilla: 'C/ San Isidro, 18',
     online: 'Google Meet — No necesitas instalar nada',
 };
+
+export const GATE_BLOCKED_NOTE = "Para que la terapia sea efectiva, es necesario un nivel alto de determinación. Si en este momento solo tienes curiosidad, quizás no sea el momento adecuado para empezar este proceso. Puedes volver cuando sientas que el cambio es una prioridad para ti.";
