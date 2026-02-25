@@ -228,6 +228,7 @@ export default function Home() {
             otherLabel="Otros"
             otherText={(triageData.motivo_otro as string) || ''}
             onOtherTextChange={(txt) => setTriageData(prev => ({ ...prev, motivo_otro: txt }))}
+            hideFooter
           />
         );
 
@@ -260,6 +261,7 @@ export default function Home() {
             otherLabel="Otro miedo diferente"
             otherText={(triageData.impacto_otro as string) || ''}
             onOtherTextChange={(txt) => setTriageData(prev => ({ ...prev, impacto_otro: txt }))}
+            hideFooter
           />
         );
 
@@ -345,20 +347,42 @@ export default function Home() {
     }
   };
 
+  // Determine footer content for the current screen
+  const renderFooter = () => {
+    // These screens handle their own internal navigation (like TriageForm or BookingWizard)
+    // because they need complex logic or are in a different flow.
+    // However, to make them "feel" fixed, we'll need to move their buttons here eventually
+    // For now, let's start with the basic ones.
+
+    // Screens that use standard StepNav
+    if (screen === 1) return <StepNav onBack={back} onNext={next} />;
+    if (screen === 2) return <StepNav onBack={back} onNext={next} />;
+    if (screen === 4) return <StepNav onBack={back} onNext={next} />;
+    if (screen === 5) return <StepNav onBack={back} />; // Contrast has its own internal next
+
+    return null;
+  };
+
   return (
-    <MasterScreen progress={progress} showProgress={screen > 0 && screen < 9}>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={screen + (isBlocked ? '_blocked' : '')}
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -40 }}
-          transition={{ duration: 0.35, ease: 'easeInOut' }}
-          className="flex-1 flex flex-col min-h-0"
-        >
-          {renderScreen()}
-        </motion.div>
-      </AnimatePresence>
+    <MasterScreen
+      progress={progress}
+      showProgress={screen > 0 && screen < 9}
+      footer={renderFooter()}
+    >
+      <div className="flex-1 flex flex-col min-h-0 relative">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={screen + (isBlocked ? '_blocked' : '')}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="flex-1 flex flex-col min-h-0"
+          >
+            {renderScreen()}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </MasterScreen>
   );
 }
@@ -371,10 +395,12 @@ function MasterScreen({
   children,
   progress,
   showProgress = true,
+  footer,
 }: {
   children: React.ReactNode;
   progress: number;
   showProgress?: boolean;
+  footer?: React.ReactNode;
 }) {
   return (
     <div className="master-screen">
@@ -401,10 +427,17 @@ function MasterScreen({
           </div>
         )}
 
-        {/* Content area — flex column, fills remaining space */}
-        <div className="flex-1 flex flex-col min-h-0">
+        {/* Dynamic content area — flex-grow, centered */}
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
           {children}
         </div>
+
+        {/* ANCHORED FOOTER — PERSISTENT ACROSS ANIMATIONS */}
+        {footer && (
+          <div className="step-layout__footer border-t border-gray-50">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -518,10 +551,12 @@ function ContrastScreen({
   triageData,
   onComplete,
   onBack,
+  hideFooter = true, // Default to true as it's now managed by MasterScreen
 }: {
   triageData: Record<string, unknown>;
   onComplete: (answers: Record<string, string | string[]>) => void;
   onBack: () => void;
+  hideFooter?: boolean;
 }) {
   const [tagsActual, setTagsActual] = useState<string[]>(
     Array.isArray(triageData.situacion_tags) ? (triageData.situacion_tags as string[]) : []
@@ -584,9 +619,7 @@ function ContrastScreen({
 
   return (
     <StepLayout
-      footer={
-        <StepNav onBack={onBack} onNext={handleSubmit} nextDisabled={!isValid} />
-      }
+      footer={!hideFooter ? <StepNav onBack={onBack} onNext={handleSubmit} nextDisabled={!isValid} /> : null}
     >
       <div className="space-y-5 max-w-3xl mx-auto w-full">
         {/* Header */}
@@ -644,6 +677,7 @@ function ChoiceCardScreen({
   otherLabel,
   otherText = '',
   onOtherTextChange,
+  hideFooter = false,
 }: {
   step: string;
   title: string;
@@ -656,6 +690,7 @@ function ChoiceCardScreen({
   otherLabel?: string;
   otherText?: string;
   onOtherTextChange?: (text: string) => void;
+  hideFooter?: boolean;
 }) {
   const [choices, setChoices] = useState<string[]>(
     multi
