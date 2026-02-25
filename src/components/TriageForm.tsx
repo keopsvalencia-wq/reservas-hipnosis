@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { triageQuestions, GATES, GATE_INTRO_TEXT, GATE_QUESTION_ID } from '@/data/triage-questions';
 import { TriageAnswers } from '@/lib/types';
 
@@ -10,9 +10,10 @@ interface TriageFormProps {
     buttonLabel?: string;
     onBack?: () => void;
     formId?: string;
+    onValidationChange?: (isValid: boolean) => void;
 }
 
-export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBack, formId }: TriageFormProps) {
+export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBack, formId, onValidationChange }: TriageFormProps) {
     const [answers, setAnswers] = useState<TriageAnswers>({});
 
     const filteredQuestions = subset
@@ -51,6 +52,11 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
         e.preventDefault();
         if (canSubmit) onComplete(answers);
     };
+
+    // Notify parent about validation status
+    useEffect(() => {
+        onValidationChange?.(canSubmit);
+    }, [canSubmit, onValidationChange]);
 
     return (
         <form id={formId} onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">

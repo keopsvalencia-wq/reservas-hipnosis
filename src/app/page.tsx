@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookingWizard } from '@/components/BookingWizard';
 import { TriageForm } from '@/components/TriageForm';
@@ -41,6 +41,13 @@ export default function Home() {
   const [triageData, setTriageData] = useState<TriageAnswers>({});
   const [contactData, setContactData] = useState({ name: '', lastName: '', email: '', phone: '' });
   const [isBlocked, setIsBlocked] = useState(false);
+  const [isStepValid, setIsStepValid] = useState(true);
+
+  // Reset validation on screen change — default to true (informative)
+  // Forms will override this to false upon mount if invalid
+  useEffect(() => {
+    setIsStepValid(true);
+  }, [screen]);
 
   const TOTAL = 10;
   const progress = ((screen + 1) / TOTAL) * 100;
@@ -226,6 +233,7 @@ export default function Home() {
             onOtherTextChange={(txt) => setTriageData(prev => ({ ...prev, motivo_otro: txt }))}
             hideFooter
             formId={`step-form-${screen}`}
+            onValidationChange={setIsStepValid}
           />
         );
 
@@ -244,6 +252,7 @@ export default function Home() {
                 onBack={back}
                 buttonLabel="SIGUIENTE PASO"
                 formId="step-form-3"
+                onValidationChange={setIsStepValid}
               />
             </div>
           </StepLayout>
@@ -266,6 +275,7 @@ export default function Home() {
             onOtherTextChange={(txt) => setTriageData(prev => ({ ...prev, impacto_otro: txt }))}
             hideFooter
             formId={`step-form-${screen}`}
+            onValidationChange={setIsStepValid}
           />
         );
 
@@ -277,6 +287,7 @@ export default function Home() {
             onComplete={(answers) => { setTriageData(prev => ({ ...prev, ...answers })); next(); }}
             onBack={back}
             formId={`step-form-${screen}`}
+            onValidationChange={setIsStepValid}
           />
         );
 
@@ -300,6 +311,7 @@ export default function Home() {
                 onBack={back}
                 buttonLabel="SIGUIENTE PASO"
                 formId="step-form-6"
+                onValidationChange={setIsStepValid}
               />
             </div>
           </StepLayout>
@@ -320,6 +332,7 @@ export default function Home() {
                 onBack={back}
                 buttonLabel="Confirmar mi compromiso y ver agenda"
                 formId="step-form-7"
+                onValidationChange={setIsStepValid}
               />
             </div>
           </StepLayout>
@@ -340,6 +353,7 @@ export default function Home() {
                 onSubmit={(data) => { setContactData(data); next(); }}
                 onBack={back}
                 formId={`step-form-${screen}`}
+                onValidationChange={setIsStepValid}
               />
             </div>
           </StepLayout>
@@ -379,6 +393,7 @@ export default function Home() {
         <StepNav
           onBack={back}
           onNext={isInformative ? next : undefined}
+          nextDisabled={!isStepValid}
           type={isInformative ? "button" : "submit"}
           formId={isInformative ? undefined : `step-form-${screen}`}
         />
@@ -588,6 +603,7 @@ function ContrastScreen({
   onComplete,
   onBack,
   formId,
+  onValidationChange,
   hideFooter = true,
 }: {
   triageData: Record<string, unknown>;
@@ -595,6 +611,7 @@ function ContrastScreen({
   onBack: () => void;
   hideFooter?: boolean;
   formId?: string;
+  onValidationChange?: (isValid: boolean) => void;
 }) {
   const [tagsActual, setTagsActual] = useState<string[]>(
     Array.isArray(triageData.situacion_tags) ? (triageData.situacion_tags as string[]) : []
@@ -605,16 +622,20 @@ function ContrastScreen({
   );
   const [deseadaText, setDeseadaText] = useState((triageData.situacion_deseada as string) || '');
 
+  const isValid =
+    (tagsActual.length > 0 || actualText.trim().length > 0) &&
+    (tagsDeseada.length > 0 || deseadaText.trim().length > 0);
+
+  useEffect(() => {
+    onValidationChange?.(isValid);
+  }, [isValid, onValidationChange]);
+
   const toggleActual = (tag: string) => {
     setTagsActual(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
   };
   const toggleDeseada = (tag: string) => {
     setTagsDeseada(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
   };
-
-  const isValid =
-    (tagsActual.length > 0 || actualText.trim().length > 0) &&
-    (tagsDeseada.length > 0 || deseadaText.trim().length > 0);
 
   const handleSubmit = () => {
     if (!isValid) return;
@@ -715,6 +736,7 @@ function ChoiceCardScreen({
   onOtherTextChange,
   hideFooter = false,
   formId,
+  onValidationChange,
 }: {
   step: string;
   title: string;
@@ -729,6 +751,7 @@ function ChoiceCardScreen({
   onOtherTextChange?: (text: string) => void;
   hideFooter?: boolean;
   formId?: string;
+  onValidationChange?: (isValid: boolean) => void;
 }) {
   const [choices, setChoices] = useState<string[]>(() => {
     if (multi) {
@@ -747,6 +770,10 @@ function ChoiceCardScreen({
 
   const otherIsSelected = otherLabel ? choices.includes(otherLabel) : false;
   const isValid = choices.length > 0 && (!otherIsSelected || (otherText?.trim().length ?? 0) > 0);
+
+  useEffect(() => {
+    onValidationChange?.(isValid);
+  }, [isValid, onValidationChange]);
 
   const handleNext = () => {
     if (!isValid) return;
@@ -830,18 +857,24 @@ function ContactForm({
   onSubmit,
   onBack,
   formId,
+  onValidationChange,
 }: {
   contactData: { name: string; lastName: string; email: string; phone: string };
   onSubmit: (data: { name: string; lastName: string; email: string; phone: string }) => void;
   onBack: () => void;
   formId?: string;
+  onValidationChange?: (isValid: boolean) => void;
 }) {
   const [name, setName] = useState(contactData.name);
   const [lastName, setLastName] = useState(contactData.lastName);
   const [email, setEmail] = useState(contactData.email);
   const [phone, setPhone] = useState(contactData.phone);
 
-  const isValid = name.trim() && lastName.trim() && email.trim() && phone.trim();
+  const isValid = !!(name.trim() && lastName.trim() && email.trim() && phone.trim());
+
+  useEffect(() => {
+    onValidationChange?.(isValid);
+  }, [isValid, onValidationChange]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

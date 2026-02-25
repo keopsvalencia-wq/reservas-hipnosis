@@ -176,7 +176,8 @@ body {
 }
 
 .btn-primary:disabled {
-  opacity: 0.3;
+  background-color: var(--color-border);
+  color: var(--color-text-muted);
   cursor: not-allowed;
   transform: none;
 }
