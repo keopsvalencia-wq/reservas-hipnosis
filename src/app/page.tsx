@@ -137,7 +137,7 @@ export default function Home() {
                     src="/images/salva-autoridad.png"
                     alt="Salva Vera"
                     className="w-full h-auto block rounded-3xl"
-                    style={{ display: 'block', maxHeight: '400px', objectFit: 'cover' }}
+                    style={{ display: 'block', maxHeight: '400px', objectFit: 'cover', objectPosition: 'top' }}
                   />
                   <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
                 </div>
