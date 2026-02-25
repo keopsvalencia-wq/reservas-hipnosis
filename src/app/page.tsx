@@ -155,17 +155,13 @@ export default function Home() {
       // ─── P1: REGALOS ─────────────────────────
       case 1:
         return (
-          <StepLayout
-            footer={
-              <StepNav onBack={back} onNext={next} nextLabel="Siguiente paso" />
-            }
-          >
-            <div className="space-y-8 max-w-5xl mx-auto">
-              <div className="text-center space-y-3">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
+          <StepLayout>
+            <div className="space-y-12 py-4">
+              <div className="text-center space-y-4 max-w-2xl mx-auto">
+                <h2 className="text-4xl md:text-5xl font-black text-[var(--color-secondary)] leading-tight">
                   Tus 3 Regalos de Claridad.
                 </h2>
-                <p className="text-base md:text-lg text-[var(--color-text-muted)] font-medium leading-relaxed max-w-2xl mx-auto">
+                <p className="text-lg text-[var(--color-text-muted)] font-medium">
                   Solo por asistir a tu evaluación, te llevarás 3 revelaciones que liberarán la presión de tu cabeza:
                 </p>
               </div>
