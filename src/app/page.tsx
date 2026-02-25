@@ -782,7 +782,7 @@ function ChoiceCardScreen({
             );
           })}
         </div>
-      </div>
+      </form>
     </StepLayout>
   );
 }
