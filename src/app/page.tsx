@@ -345,16 +345,24 @@ export default function Home() {
 
   // Determine footer content for the current screen
   const renderFooter = () => {
-    // These screens handle their own internal navigation (like TriageForm or BookingWizard)
-    // because they need complex logic or are in a different flow.
-    // However, to make them "feel" fixed, we'll need to move their buttons here eventually
-    // For now, let's start with the basic ones.
+    // Screens 1 to 8 should have navigation
+    if (screen >= 1 && screen <= 8) {
+      const isWizard = screen === 7;
+      const isConfirmation = screen === 8;
 
-    // Screens that use standard StepNav
-    if (screen === 1) return <StepNav onBack={back} onNext={next} />;
-    if (screen === 2) return <StepNav onBack={back} onNext={next} />;
-    if (screen === 4) return <StepNav onBack={back} onNext={next} />;
-    if (screen === 5) return <StepNav onBack={back} />; // Contrast has its own internal next
+      // The Success state of Step 8 doesn't need navigation buttons as it has the WhatsApp button
+      if (isConfirmation && isBlocked) return null; // Logic for success handled elsewhere? No, isBlocked is for triage.
+
+      return (
+        <StepNav
+          onBack={back}
+          // Link the button to the internal form via ID
+          onNext={() => { }} // This is handled by type="submit" and form="step-form"
+          type="submit"
+          formId="step-form"
+        />
+      );
+    }
 
     return null;
   };
@@ -480,6 +488,8 @@ function StepNav({
   nextDisabled = false,
   nextLoading = false,
   subtitle,
+  type = 'button',
+  formId,
 }: {
   onBack?: () => void;
   onNext?: () => void;
@@ -487,10 +497,12 @@ function StepNav({
   nextDisabled?: boolean;
   nextLoading?: boolean;
   subtitle?: string;
+  type?: 'button' | 'submit';
+  formId?: string;
 }) {
   return (
-    <div className="space-y-2">
-      <div className="step-layout__nav">
+    <div className="w-full flex flex-col items-center gap-2">
+      <div className="w-full flex items-center justify-between">
         {onBack ? (
           <button type="button" onClick={onBack} className="btn-back">
             <span className="material-icons-outlined">arrow_back</span>
@@ -498,27 +510,26 @@ function StepNav({
           </button>
         ) : <div />}
 
-        {onNext && (
-          <motion.button
-            type="button"
-            onClick={onNext}
-            disabled={nextDisabled || nextLoading}
-            className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black"
-            whileHover={!nextDisabled ? { scale: 1.03 } : {}}
-            whileTap={!nextDisabled ? { scale: 0.97 } : {}}
-          >
-            {nextLoading ? (
-              <>
-                <span className="material-icons-outlined animate-spin text-lg">hourglass_empty</span>
-                Procesando...
-              </>
-            ) : (
-              nextLabel
-            )}
-          </motion.button>
-        )}
+        <motion.button
+          type={type}
+          form={formId}
+          onClick={onNext}
+          disabled={nextDisabled || nextLoading}
+          className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed"
+          whileHover={!nextDisabled ? { scale: 1.03 } : {}}
+          whileTap={!nextDisabled ? { scale: 0.97 } : {}}
+        >
+          {nextLoading ? (
+            <>
+              <span className="material-icons-outlined animate-spin text-lg mr-2">hourglass_empty</span>
+              Procesando...
+            </>
+          ) : (
+            nextLabel
+          )}
+        </motion.button>
       </div>
-      {subtitle && <p className="text-xs text-gray-400 text-center">{subtitle}</p>}
+      {subtitle && <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{subtitle}</p>}
     </div>
   );
 }
@@ -615,7 +626,7 @@ function ContrastScreen({
 
   return (
     <StepLayout>
-      <div className="space-y-5 max-w-3xl mx-auto w-full">
+      <form id="step-form" onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-5 max-w-3xl mx-auto w-full">
         {/* Header */}
         <div className="text-center space-y-2">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
@@ -649,7 +660,7 @@ function ContrastScreen({
             onChange={(e) => setDeseadaText(e.target.value)}
           />
         </div>
-      </div>
+      </form>
     </StepLayout>
   );
 }
@@ -710,7 +721,7 @@ function ChoiceCardScreen({
 
   return (
     <StepLayout>
-      <div className="space-y-6 max-w-3xl mx-auto w-full">
+      <form id="step-form" onSubmit={(e) => { e.preventDefault(); handleNext(); }} className="space-y-6 max-w-3xl mx-auto w-full">
         {/* Header */}
         <div className="text-center space-y-2">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">{step}</p>
@@ -802,7 +813,7 @@ function ContactForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+    <form id="step-form" onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
       {/* Scrollable inputs */}
       <div className="flex-1 overflow-y-auto pr-1 space-y-4" style={{ scrollbarWidth: 'thin' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
