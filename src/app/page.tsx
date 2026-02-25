@@ -1,65 +1,72 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TriageAnswers, BookingData } from '@/lib/types';
-import { TriageForm } from '@/components/TriageForm';
 import { BookingWizard } from '@/components/BookingWizard';
-import { GATE_BLOCKED_NOTE } from '@/lib/booking-rules';
+import { TriageForm } from '@/components/TriageForm';
+import { GATE_BLOCKED_VALUE, GATE_BLOCKED_NOTE } from '@/data/triage-questions';
+import { TriageAnswers } from '@/lib/types';
 
 // ──────────────────────────────────────────────────
-// OPTIONS FOR CHOICE CARDS
+// EMBUDO 10 PANTALLAS — Re-ingeniería v5 (MasterScreen)
+// P0: Bienvenida        P1: Regalos         P2: Motivo (cards)
+// P3: Perfil            P4: Impacto (cards) P5: Contraste
+// P6: Compromiso        P7: Inversión (gate)
+// P8: Datos contacto    P9: Booking
 // ──────────────────────────────────────────────────
+
 const MOTIVO_OPTIONS = [
-  { id: 'ansiedad_estres', label: 'Ansiedad y Estrés', icon: 'psychology' },
-  { id: 'fobias_miedos', label: 'Fobias y Miedos', icon: 'warning' },
-  { id: 'autoestima_seguridad', label: 'Autoestima y Seguridad', icon: 'verified' },
-  { id: 'habitos_adicciones', label: 'Hábitos y Adicciones', icon: 'smoke_free' },
-  { id: 'dolor_psicosomatico', label: 'Dolor Psicosomático', icon: 'medical_services' },
-  { id: 'insomnio_descanso', label: 'Insomnio y Descanso', icon: 'bedtime' },
+  'Ansiedad',
+  'Estrés',
+  'Depresión',
+  'Bloqueos Emocionales',
+  'Adicciones (Tabaco, Alcohol, etc.)',
+  'Fobias y Miedos específicos',
+  'Tristeza, Duelo y Pérdida',
+  'Trastornos del Sueño',
+  'Otros',
 ];
 
 const IMPACTO_OPTIONS = [
-  { id: 'bajo', label: 'Bajo — Me molesta a veces', icon: 'sentiment_neutral' },
-  { id: 'medio', label: 'Medio — Me limita en mi día a día', icon: 'sentiment_dissatisfied' },
-  { id: 'alto', label: 'Alto — Es una prioridad resolverlo ya', icon: 'priority_high' },
+  'Enfermar físicamente por el estrés',
+  'Perder a mi familia o pareja',
+  'Arruinarme o perder mi trabajo',
+  'Quedarme solo/a para siempre',
+  'No volver a ser yo mismo/a nunca',
+  'Otro miedo diferente',
 ];
 
-const COMPROMISO_OPTIONS = [
-  { id: 'curioso', label: 'Solo curiosidad', icon: 'search' },
-  { id: 'decidido', label: 'Decidido a cambiar', icon: 'rocket_launch' },
-  { id: 'total', label: 'Compromiso Total 100%', icon: 'bolt' },
-];
-
-// ──────────────────────────────────────────────────
-// HOME COMPONENT
-// ──────────────────────────────────────────────────
 export default function Home() {
   const [screen, setScreen] = useState(0);
   const [triageData, setTriageData] = useState<TriageAnswers>({});
   const [contactData, setContactData] = useState({ name: '', lastName: '', email: '', phone: '' });
   const [isBlocked, setIsBlocked] = useState(false);
 
-  const totalScreens = 9;
-  const progress = (screen / (totalScreens - 1)) * 100;
-
   const next = () => setScreen(s => s + 1);
   const back = () => setScreen(s => Math.max(0, s - 1));
 
-  const handleChoice = (key: keyof TriageAnswers, value: string | string[]) => {
-    setTriageData(prev => ({ ...prev, [key]: value }) as TriageAnswers);
+  // Triage steps handler
+  const handleTriageStep = (answers: TriageAnswers) => {
+    const merged = { ...triageData, ...answers };
+    setTriageData(merged);
+
+    if (merged.inversion === GATE_BLOCKED_VALUE) {
+      setIsBlocked(true);
+      return;
+    }
     next();
   };
 
-  const handleTriageStep = (data: Partial<TriageAnswers>) => {
-    setTriageData(prev => ({ ...prev, ...data }) as TriageAnswers);
+  // Choice card handler (single or multi)
+  const handleChoice = (key: string, value: string | string[]) => {
+    setTriageData(prev => ({ ...prev, [key]: value }));
     next();
   };
 
   // ─── Blocked screen ───────────────────────────────
   if (isBlocked) {
     return (
-      <MasterScreen progress={100}>
+      <MasterScreen>
         <StepLayout>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center space-y-6">
             <div className="w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center mx-auto">
@@ -76,70 +83,107 @@ export default function Home() {
     );
   }
 
+  // ─── Screen renderer ──────────────────────────────
   const renderScreen = () => {
     switch (screen) {
-      // ─── P0: INTRO ──────────────────────────────────
+      // ─── P0: BIENVENIDA ──────────────────────
       case 0:
         return (
           <StepLayout
             footer={
-              <button onClick={next} className="btn-primary w-full py-5 text-lg">
-                COMENZAR EVALUACIÓN GRATUITA
-                <span className="material-icons-outlined">arrow_forward</span>
-              </button>
+              <div className="space-y-3">
+                <motion.button
+                  onClick={next}
+                  className="btn-primary w-full text-lg py-5 uppercase tracking-wider font-black"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  RESERVAR MI PLAZA AHORA
+                </motion.button>
+                <p className="text-xs text-gray-400 text-center">Pulsa para ver disponibilidad y responder al formulario de compromiso.</p>
+              </div>
             }
           >
-            <div className="max-w-xl mx-auto text-center space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--color-primary-soft)] rounded-full text-[var(--color-primary)] font-bold text-xs uppercase tracking-widest border border-[var(--color-primary)]/10">
-                <span className="material-icons-outlined text-sm">auto_awesome</span>
-                Hipnosis Profesional
-              </div>
-              <div className="space-y-4">
-                <h1 className="text-4xl md:text-5xl font-black text-[var(--color-secondary)] leading-tight">
-                  Evaluación Diagnóstica <br />
-                  <span className="text-[var(--color-primary)]">Personalizada</span>
+            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 max-w-6xl mx-auto">
+              {/* Left: Content */}
+              <div className="flex-1 text-center lg:text-left space-y-6 order-2 lg:order-1 max-w-2xl">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
+                  Solicita tu Evaluación Diagnóstica.
                 </h1>
-                <p className="text-lg text-[var(--color-text-muted)] leading-relaxed font-medium">
-                  Para poder ayudarte de forma eficaz, necesito entender qué te ocurre y cómo te afecta.
-                  Responde a estas preguntas y encontraremos el mejor camino para tu cambio.
-                </p>
+
+                <div className="space-y-4">
+                  <p className="text-lg md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
+                    Solo de 3 a 5 plazas disponibles cada mes.
+                  </p>
+                  <p className="text-base text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
+                    Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo de forma definitiva.
+                  </p>
+                </div>
+
+                <div className="bg-white border border-gray-100 rounded-2xl p-5 w-full">
+                  <p className="text-base text-[var(--color-secondary)] font-bold leading-relaxed lg:text-justify">
+                    🛡️ Garantía: Si veo que no puedo garantizarte resultados, el coste de la sesión será 0€.
+                  </p>
+                </div>
+              </div>
+
+              {/* Right: Authority Image */}
+              <div className="flex-1 relative order-1 lg:order-2 w-full max-w-md mx-auto lg:mx-0">
+                <div className="relative rounded-3xl overflow-hidden bg-white">
+                  <img
+                    src="/images/salva-autoridad.png"
+                    alt="Salva Vera"
+                    className="w-full h-auto block rounded-3xl"
+                    style={{ display: 'block', maxHeight: '400px', objectFit: 'cover', objectPosition: 'top' }}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
+                </div>
+
+                {/* Authority Badge */}
+                <div className="absolute -top-3 -right-3 bg-white border border-gray-100 px-5 py-2.5 rounded-2xl hidden lg:block z-10">
+                  <p className="text-xs font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
+                  <p className="text-[10px] font-bold text-[var(--color-primary)]">Hipnoterapeuta Profesional</p>
+                </div>
               </div>
             </div>
           </StepLayout>
         );
 
-      // ─── P1: EXPLICACIÓN (lo que lograremos) ─────────
+      // ─── P1: REGALOS ─────────────────────────
       case 1:
         return (
           <StepLayout
             footer={
-              <div className="step-nav-footer">
-                <button onClick={back} className="btn-back">
-                  <span className="material-icons-outlined">arrow_back</span>
-                  Atrás
-                </button>
-                <button onClick={next} className="btn-primary flex-1 py-4">
-                  ES JUSTO LO QUE NECESITO
-                </button>
-              </div>
+              <StepNav onBack={back} onNext={next} nextLabel="Siguiente paso" />
             }
           >
-            <div className="max-w-2xl mx-auto space-y-10">
+            <div className="space-y-8 max-w-5xl mx-auto">
               <div className="text-center space-y-3">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)] opacity-60 font-sans">Hipnoterapia Profesional</p>
-                <h2 className="text-3xl md:text-4xl font-black text-[var(--color-secondary)]">Qué haremos en la Evaluación</h2>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
+                  Tus 3 Regalos de Claridad.
+                </h2>
+                <p className="text-base md:text-lg text-[var(--color-text-muted)] font-medium leading-relaxed max-w-2xl mx-auto">
+                  Solo por asistir a tu evaluación, te llevarás 3 revelaciones que liberarán la presión de tu cabeza:
+                </p>
               </div>
-              <div className="grid gap-4">
+
+              <div className="space-y-4 max-w-4xl mx-auto">
                 {/* Card 01 */}
                 <motion.div
                   whileHover={{ x: 8 }}
                   className="bg-white p-5 md:p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center md:items-start gap-5 group hover:border-[var(--color-primary)] transition-all duration-300"
                 >
                   <div className="text-3xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">01</div>
-                  <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
-                    Analizaremos la <span className="text-[var(--color-primary)]">causa raíz</span> de tu problema, no solo los síntomas.
-                  </p>
+                  <div className="space-y-3">
+                    <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                      Verás tu problema desde una perspectiva que <span className="text-[var(--color-primary)]">NADIE te había contado jamás</span>.
+                    </p>
+                    <p className="text-sm text-[var(--color-text-muted)] leading-relaxed italic border-l-4 border-emerald-50 pl-3">
+                      &quot;Mis pacientes dicen que esto les da más paz en 45 min que años de terapias convencionales.&quot;
+                    </p>
+                  </div>
                 </motion.div>
+
                 {/* Card 02 */}
                 <motion.div
                   whileHover={{ x: 8 }}
@@ -147,9 +191,10 @@ export default function Home() {
                 >
                   <div className="text-3xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">02</div>
                   <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
-                    Veremos cómo la hipnosis puede <span className="text-[var(--color-primary)]">reprogramar tu subconsciente</span> para el cambio.
+                    Entenderás exactamente por qué <span className="text-[var(--color-primary)]">NADA de lo que has intentado</span> hasta hoy ha funcionado.
                   </p>
                 </motion.div>
+
                 {/* Card 03 */}
                 <motion.div
                   whileHover={{ x: 8 }}
@@ -165,7 +210,7 @@ export default function Home() {
           </StepLayout>
         );
 
-      // ─── P2: MOTIVO DE CONSULTA ──────────────────────
+      // ─── P2: MOTIVO DE CONSULTA (choice cards, multi) ──
       case 2:
         return (
           <ChoiceCardScreen
@@ -183,10 +228,10 @@ export default function Home() {
           />
         );
 
-      // ─── P3: PERFIL ─────────────────────────────────
+      // ─── P3: PERFIL (dedicación, ciudad, edad) ────
       case 3:
         return (
-          <StepLayout fill>
+          <StepLayout>
             <div className="space-y-6 max-w-3xl mx-auto w-full">
               <div className="text-center space-y-3">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
@@ -197,88 +242,87 @@ export default function Home() {
           </StepLayout>
         );
 
-      // ─── P4: IMPACTO EMOCIONAL ──────────────────────
+      // ─── P4: IMPACTO EMOCIONAL (choice cards) ──
       case 4:
         return (
           <ChoiceCardScreen
             step="Paso 3 de 7"
-            title="¿Cuánto impacta esto en tu vida?"
+            title="¿Qué es lo que más miedo te da que pase si no solucionas esto ahora?"
             options={IMPACTO_OPTIONS}
-            selected={triageData.impacto_emocional as string}
+            selected={triageData.impacto_emocional as string | string[]}
             onSelect={(val) => handleChoice('impacto_emocional', val)}
+            onBack={back}
+            columns={1}
+            multi
+            otherLabel="Otro miedo diferente"
+            otherText={(triageData.impacto_otro as string) || ''}
+            onOtherTextChange={(txt) => setTriageData(prev => ({ ...prev, impacto_otro: txt }))}
+          />
+        );
+
+      // ─── P5: CONTRASTE (Híbrido: tags + texto) ──
+      case 5:
+        return (
+          <ContrastScreen
+            triageData={triageData}
+            onComplete={(answers) => { setTriageData(prev => ({ ...prev, ...answers })); next(); }}
             onBack={back}
           />
         );
 
-      // ─── P5: ESFUERZOS PREVIOS ──────────────────────
-      case 5:
-        return (
-          <StepLayout fill>
-            <div className="space-y-6 max-w-3xl mx-auto w-full">
-              <div className="text-center space-y-3">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
-                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Experiencias previas</h2>
-              </div>
-              <TriageForm subset={['esfuerzos_previos']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
-            </div>
-          </StepLayout>
-        );
-
-      // ─── P6: EXPECTATIVA ────────────────────────────
+      // ─── P6: COMPROMISO (Triple Inversión) ────
       case 6:
         return (
-          <StepLayout fill>
+          <StepLayout>
             <div className="space-y-6 max-w-3xl mx-auto w-full">
               <div className="text-center space-y-3">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 5 de 7</p>
-                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu meta</h2>
+                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu nivel de compromiso</h2>
               </div>
-              <TriageForm subset={['expectativa']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
+              <div className="bg-white rounded-2xl p-5 border border-gray-100 max-w-xl mx-auto">
+                <p className="text-sm text-[var(--color-text-muted)] leading-relaxed text-center">
+                  Para que el tratamiento funcione, necesitas invertir en <strong className="text-[var(--color-secondary)]">3 áreas</strong>: tu <strong className="text-[var(--color-secondary)]">Compromiso</strong> personal, tu <strong className="text-[var(--color-secondary)]">Tiempo</strong> diario y tu <strong className="text-[var(--color-secondary)]">Dinero</strong>.
+                </p>
+              </div>
+              <TriageForm subset={['compromiso_escala', 'disponibilidad_tiempo']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
             </div>
           </StepLayout>
         );
 
-      // ─── P7: COMPROMISO (GATE) ──────────────────────
+      // ─── P7: INVERSIÓN (Gate) ────────────────
       case 7:
         return (
-          <ChoiceCardScreen
-            step="Paso 6 de 7"
-            title="Nivel de compromiso con tu cambio"
-            options={COMPROMISO_OPTIONS}
-            selected={triageData.compromiso as string}
-            onSelect={(val) => {
-              if (val === 'curioso') {
-                setIsBlocked(true);
-              } else {
-                handleChoice('compromiso', val);
-              }
-            }}
-            onBack={back}
-          />
-        );
-
-      // ─── P8: CONTACTO ───────────────────────────────
-      case 8:
-        return (
-          <StepLayout fill>
+          <StepLayout>
             <div className="space-y-6 max-w-3xl mx-auto w-full">
               <div className="text-center space-y-3">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Último Paso</p>
-                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tus Datos</h2>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 6 de 7</p>
+                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">La inversión</h2>
+              </div>
+              <TriageForm subset={['inversion']} onComplete={handleTriageStep} onBack={back} buttonLabel="Confirmar mi compromiso y ver agenda" />
+            </div>
+          </StepLayout>
+        );
+
+      // ─── P8: DATOS DE CONTACTO ────────────────
+      case 8:
+        return (
+          <StepLayout>
+            <div className="space-y-6 max-w-3xl mx-auto w-full">
+              <div className="text-center space-y-3">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 7 de 7</p>
+                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tus datos de contacto</h2>
+                <p className="text-base text-[var(--color-text-muted)]">Para confirmar tu plaza y enviarte los detalles de la cita.</p>
               </div>
               <ContactForm
                 contactData={contactData}
-                onSubmit={(data) => {
-                  setContactData(data);
-                  next();
-                }}
+                onSubmit={(data) => { setContactData(data); next(); }}
                 onBack={back}
               />
             </div>
           </StepLayout>
         );
 
-      // ─── P9: BOOKING WIZARD (Wizard Steps) ───────────
+      // ─── P9: BOOKING ──────────────────────────
       case 9:
         return (
           <BookingWizard
@@ -299,13 +343,13 @@ export default function Home() {
   };
 
   return (
-    <MasterScreen progress={progress} showProgress={screen > 0 && screen < 9}>
+    <MasterScreen>
       <AnimatePresence mode="wait">
         <motion.div
           key={screen + (isBlocked ? '_blocked' : '')}
-          initial={{ opacity: 0, x: 40 }}
+          initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -40 }}
+          exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.35, ease: 'easeInOut' }}
           className="flex-1 flex flex-col min-h-0"
         >
@@ -317,41 +361,71 @@ export default function Home() {
 }
 
 // ──────────────────────────────────────────────────
-// MASTER SCREEN
+// AUTHORITY PANEL: Fixed info on the left
 // ──────────────────────────────────────────────────
-function MasterScreen({
-  children,
-  progress,
-  showProgress = true,
-}: {
-  children: React.ReactNode;
-  progress: number;
-  showProgress?: boolean;
-}) {
+function AuthorityPanel() {
+  return (
+    <aside className="authority-panel">
+      <div className="flex flex-col gap-6 w-full h-full">
+        {/* Brand Area */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-[var(--color-primary-soft)] rounded-xl flex items-center justify-center">
+            <span className="material-icons-outlined text-[var(--color-primary)]">psychology</span>
+          </div>
+          <span className="font-black text-[10px] uppercase tracking-[0.2em] text-gray-400">Hipnosis</span>
+        </div>
+
+        {/* Profile Area */}
+        <div className="flex md:flex-col items-center md:items-start gap-4 pt-4">
+          <div className="relative w-16 h-16 md:w-24 md:h-24 rounded-2xl overflow-hidden border-2 border-[var(--color-primary-soft)] bg-gray-50 flex-shrink-0">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/SALVA-HIPNOSIS-P-2-6-q3Q6B3Z9Z6Z6Z6Z6Z6Z6Z6Z6Z6Z.png"
+              alt="Salva Vera"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: 'top' }}
+              onError={(e) => {
+                e.currentTarget.src = "https://ui-avatars.com/api/?name=Salva+Vera&background=39DCA8&color=fff";
+              }}
+            />
+          </div>
+          <div>
+            <h2 className="text-lg md:text-xl font-black text-[var(--color-secondary)]">Salva Vera</h2>
+            <p className="text-[10px] md:text-xs font-bold text-[var(--color-primary)] uppercase tracking-wide">Hipnoterapeuta Profesional</p>
+          </div>
+        </div>
+
+        {/* Appointment Meta */}
+        <div className="hidden md:block space-y-4 pt-4 border-t border-gray-50 mt-2">
+          <div className="flex items-center gap-3 text-sm font-semibold text-gray-500">
+            <span className="material-icons-outlined text-[var(--color-primary)] text-lg">schedule</span>
+            <span>45 minutos</span>
+          </div>
+          <div className="flex items-start gap-3 text-sm font-semibold text-gray-500 leading-tight">
+            <span className="material-icons-outlined text-[var(--color-primary)] text-lg">videocam</span>
+            <span>Evaluación Diagnóstica Especializada</span>
+          </div>
+        </div>
+
+        {/* Footer Meta */}
+        <div className="mt-auto hidden md:block opacity-40">
+          <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-relaxed">
+            Reserva Segura <br /> Hipnosis en Terapia
+          </p>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+// ──────────────────────────────────────────────────
+// MASTER SCREEN: 2-Column layout shell
+// ──────────────────────────────────────────────────
+function MasterScreen({ children }: { children: React.ReactNode }) {
   return (
     <div className="master-screen">
       <div className="master-screen__container">
-        {showProgress && (
-          <div className="flex-shrink-0 px-6 md:px-14 lg:px-20 pt-6">
-            <div className="flex justify-between mb-1.5">
-              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--color-primary)]">
-                Progreso
-              </span>
-              <span className="text-[10px] font-semibold text-gray-400">
-                {Math.round(progress)}%
-              </span>
-            </div>
-            <div className="progress-bar">
-              <motion.div
-                className="progress-bar__fill"
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
-              />
-            </div>
-          </div>
-        )}
-        <div className="flex-1 flex flex-col min-h-0">
+        <AuthorityPanel />
+        <div className="content-area">
           {children}
         </div>
       </div>
@@ -359,24 +433,21 @@ function MasterScreen({
   );
 }
 
-// ──────────────────────────────────────────────────
-// STEP LAYOUT
-// ──────────────────────────────────────────────────
 function StepLayout({
   children,
   footer,
-  fill = false,
 }: {
   children: React.ReactNode;
   footer?: React.ReactNode;
-  fill?: boolean;
 }) {
   return (
     <div className="step-layout">
-      <div className={`step-layout__content ${fill ? 'step-layout__content--fill' : ''}`}>
+      {/* Scrollable content area */}
+      <div className="step-layout__content">
         {children}
       </div>
 
+      {/* Anchored footer — always at same Y coordinate */}
       {footer && (
         <div className="step-layout__footer">
           {footer}
@@ -387,9 +458,196 @@ function StepLayout({
 }
 
 // ──────────────────────────────────────────────────
-// HELPER COMPONENTS
+// STEP NAV: Standardized back/next navigation
 // ──────────────────────────────────────────────────
+function StepNav({
+  onBack,
+  onNext,
+  nextLabel = 'SIGUIENTE PASO',
+  nextDisabled = false,
+  nextLoading = false,
+  subtitle,
+}: {
+  onBack?: () => void;
+  onNext?: () => void;
+  nextLabel?: string;
+  nextDisabled?: boolean;
+  nextLoading?: boolean;
+  subtitle?: string;
+}) {
+  return (
+    <div className="space-y-2">
+      <div className="step-layout__nav">
+        {onBack ? (
+          <button type="button" onClick={onBack} className="btn-back">
+            <span className="material-icons-outlined">arrow_back</span>
+            Atrás
+          </button>
+        ) : <div />}
 
+        {onNext && (
+          <motion.button
+            type="button"
+            onClick={onNext}
+            disabled={nextDisabled || nextLoading}
+            className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black"
+            whileHover={!nextDisabled ? { scale: 1.03 } : {}}
+            whileTap={!nextDisabled ? { scale: 0.97 } : {}}
+          >
+            {nextLoading ? (
+              <>
+                <span className="material-icons-outlined animate-spin text-lg">hourglass_empty</span>
+                Procesando...
+              </>
+            ) : (
+              nextLabel
+            )}
+          </motion.button>
+        )}
+      </div>
+      {subtitle && <p className="text-xs text-gray-400 text-center">{subtitle}</p>}
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────
+// CONTRAST SCREEN: Quick tags + dual textareas
+// Uses StepLayout for anchored buttons
+// ──────────────────────────────────────────────────
+const QUICK_TAGS_ACTUAL = [
+  'No duermo bien',
+  'Ansiedad constante',
+  'Me siento paralizado/a',
+  'Problemas de pareja/familia',
+  'Falta de confianza',
+];
+
+const QUICK_TAGS_DESEADA = [
+  'Dormir profundamente',
+  'Sentirme en calma',
+  'Recuperar mi energía',
+  'Mejorar mis relaciones',
+  'Confiar en mí mismo/a',
+];
+
+function ContrastScreen({
+  triageData,
+  onComplete,
+  onBack,
+}: {
+  triageData: Record<string, unknown>;
+  onComplete: (answers: Record<string, string | string[]>) => void;
+  onBack: () => void;
+}) {
+  const [tagsActual, setTagsActual] = useState<string[]>(
+    Array.isArray(triageData.situacion_tags) ? (triageData.situacion_tags as string[]) : []
+  );
+  const [actualText, setActualText] = useState((triageData.situacion_actual as string) || '');
+  const [tagsDeseada, setTagsDeseada] = useState<string[]>(
+    Array.isArray(triageData.situacion_deseada_tags) ? (triageData.situacion_deseada_tags as string[]) : []
+  );
+  const [deseadaText, setDeseadaText] = useState((triageData.situacion_deseada as string) || '');
+
+  const toggleActual = (tag: string) => {
+    setTagsActual(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+  };
+  const toggleDeseada = (tag: string) => {
+    setTagsDeseada(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+  };
+
+  const isValid =
+    (tagsActual.length > 0 || actualText.trim().length > 0) &&
+    (tagsDeseada.length > 0 || deseadaText.trim().length > 0);
+
+  const handleSubmit = () => {
+    if (!isValid) return;
+    onComplete({
+      situacion_tags: tagsActual,
+      situacion_actual: actualText,
+      situacion_deseada_tags: tagsDeseada,
+      situacion_deseada: deseadaText,
+    });
+  };
+
+  /* Shared tag renderer */
+  const renderTags = (
+    list: string[],
+    active: string[],
+    toggle: (t: string) => void,
+  ) => (
+    <div className="flex flex-wrap gap-2">
+      {list.map(tag => {
+        const on = active.includes(tag);
+        return (
+          <motion.button
+            key={tag}
+            type="button"
+            onClick={() => toggle(tag)}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className={`px-3.5 py-2 rounded-xl border-2 text-sm font-semibold transition-all ${on
+              ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white'
+              : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
+              }`}
+          >
+            {on && <span className="mr-1.5">✓</span>}
+            {tag}
+          </motion.button>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <StepLayout
+      footer={
+        <StepNav onBack={onBack} onNext={handleSubmit} nextDisabled={!isValid} />
+      }
+    >
+      <div className="space-y-5 max-w-3xl mx-auto w-full">
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
+          <h2 className="text-xl md:text-2xl font-black text-[var(--color-secondary)] leading-tight">¿Dónde estás y a dónde quieres llegar?</h2>
+        </div>
+
+        {/* ── SITUACIÓN ACTUAL ── */}
+        <div className="space-y-2">
+          <h3 className="text-base font-bold text-[var(--color-secondary)]">
+            Describe brevemente cómo estás ahora.
+          </h3>
+          {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual)}
+          <textarea
+            className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-16 resize-none text-sm"
+            placeholder="¿Qué te impide hacer tu problema?"
+            value={actualText}
+            onChange={(e) => setActualText(e.target.value)}
+          />
+        </div>
+
+        {/* ── SITUACIÓN DESEADA ── */}
+        <div className="space-y-2">
+          <h3 className="text-base font-bold text-[var(--color-secondary)]">
+            ¿Cómo te gustaría estar en un mes <span className="text-[var(--color-primary)]">al solucionar</span> esto?
+          </h3>
+          {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
+          <textarea
+            className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-16 resize-none text-sm"
+            placeholder="¿Cómo te gustaría sentirte?"
+            value={deseadaText}
+            onChange={(e) => setDeseadaText(e.target.value)}
+          />
+        </div>
+      </div>
+    </StepLayout>
+  );
+}
+
+// ──────────────────────────────────────────────────
+// CHOICE CARD SCREEN: Large tactile cards grid
+// Supports single/multi select + dynamic "Otros" textarea
+// Uses StepLayout for anchored buttons
+// ──────────────────────────────────────────────────
 function ChoiceCardScreen({
   step,
   title,
@@ -397,105 +655,122 @@ function ChoiceCardScreen({
   selected,
   onSelect,
   onBack,
-  columns = 3,
+  columns = 2,
   multi = false,
   otherLabel,
   otherText = '',
-  onOtherTextChange
+  onOtherTextChange,
 }: {
   step: string;
   title: string;
-  options: { id: string; label: string; icon: string }[];
-  selected: string | string[];
-  onSelect: (val: string | string[]) => void;
+  options: string[];
+  selected?: string | string[];
+  onSelect: (value: string | string[]) => void;
   onBack: () => void;
-  columns?: number;
+  columns?: 1 | 2;
   multi?: boolean;
   otherLabel?: string;
   otherText?: string;
-  onOtherTextChange?: (txt: string) => void;
+  onOtherTextChange?: (text: string) => void;
 }) {
-  const [internalSelected, setInternalSelected] = useState<string[]>(
-    Array.isArray(selected) ? selected : selected ? [selected] : []
+  const [choices, setChoices] = useState<string[]>(
+    multi
+      ? (Array.isArray(selected) ? selected : selected ? [selected] : [])
+      : (selected && !Array.isArray(selected) ? [selected] : [])
   );
 
-  const toggle = (id: string) => {
+  const toggle = (opt: string) => {
     if (multi) {
-      const next = internalSelected.includes(id)
-        ? internalSelected.filter(i => i !== id)
-        : [...internalSelected, id];
-      setInternalSelected(next);
+      setChoices(prev => prev.includes(opt) ? prev.filter(v => v !== opt) : [...prev, opt]);
     } else {
-      onSelect(id);
+      setChoices([opt]);
     }
+  };
+
+  const otherIsSelected = otherLabel ? choices.includes(otherLabel) : false;
+  const isValid = choices.length > 0 && (!otherIsSelected || (otherText?.trim().length ?? 0) > 0);
+
+  const handleNext = () => {
+    if (!isValid) return;
+    onSelect(multi ? choices : choices[0]);
   };
 
   return (
     <StepLayout
       footer={
-        <div className="step-nav-footer">
-          <button onClick={onBack} className="btn-back">
-            <span className="material-icons-outlined">arrow_back</span>
-            Atrás
-          </button>
-          {multi && (
-            <button
-              onClick={() => onSelect(internalSelected)}
-              disabled={internalSelected.length === 0}
-              className="btn-primary px-8 py-3 disabled:opacity-50"
-            >
-              SIGUIENTE PASO
-            </button>
-          )}
-        </div>
+        <StepNav onBack={onBack} onNext={handleNext} nextDisabled={!isValid} />
       }
     >
-      <div className="max-w-4xl mx-auto w-full space-y-8">
-        <div className="text-center space-y-3">
+      <div className="space-y-6 max-w-3xl mx-auto w-full">
+        {/* Header */}
+        <div className="text-center space-y-2">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">{step}</p>
-          <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">{title}</h2>
+          <h2 className="text-xl md:text-2xl font-black text-[var(--color-secondary)] leading-tight">{title}</h2>
+          {multi && <p className="text-sm text-[var(--color-text-muted)]">Puedes seleccionar varias opciones</p>}
         </div>
 
-        <div className={`grid gap-4 ${columns === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3'}`}>
+        {/* Cards Grid */}
+        <div className={`grid gap-3 ${columns === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
           {options.map((opt) => {
-            const isSel = internalSelected.includes(opt.id);
+            const isSelected = choices.includes(opt);
+            const isOther = otherLabel && opt === otherLabel;
             return (
-              <button
-                key={opt.id}
-                onClick={() => toggle(opt.id)}
-                className={`flex flex-col items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-300 text-center group ${isSel
-                  ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
-                  : 'border-gray-100 bg-white hover:border-[var(--color-primary)] hover:shadow-lg'
-                  }`}
-              >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${isSel ? 'bg-[var(--color-primary)] text-white' : 'bg-gray-50 text-gray-400 group-hover:bg-[var(--color-primary-soft)] group-hover:text-[var(--color-primary)]'
-                  }`}>
-                  <span className="material-icons-outlined">{opt.icon}</span>
-                </div>
-                <span className={`font-bold ${isSel ? 'text-[var(--color-secondary)]' : 'text-gray-600'}`}>
-                  {opt.label}
-                </span>
-              </button>
+              <div key={opt} className={isOther && columns === 2 ? 'md:col-span-2' : ''}>
+                <motion.button
+                  type="button"
+                  onClick={() => toggle(opt)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`
+                    w-full p-4 md:p-5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer
+                    ${isSelected
+                      ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
+                      : 'border-[var(--color-border)] bg-white hover:border-gray-300'
+                    }
+                  `}
+                >
+                  <div className="flex items-center gap-3">
+                    {multi && (
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)]' : 'border-gray-300'}`}>
+                        {isSelected && <span className="text-white text-xs font-bold">✓</span>}
+                      </div>
+                    )}
+                    <span className={`text-sm md:text-base font-semibold leading-snug ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
+                      {opt}
+                    </span>
+                  </div>
+                </motion.button>
+                {/* Dynamic textarea for "Otros" */}
+                {isOther && isSelected && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="mt-2"
+                  >
+                    <textarea
+                      className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-20 resize-none text-sm"
+                      placeholder="Describe brevemente tu situación..."
+                      value={otherText}
+                      onChange={(e) => onOtherTextChange?.(e.target.value)}
+                      autoFocus
+                    />
+                  </motion.div>
+                )}
+              </div>
             );
           })}
         </div>
-
-        {otherLabel && (
-          <div className="max-w-md mx-auto space-y-3 pt-4">
-            <p className="text-sm font-bold text-gray-400 uppercase tracking-widest text-center">{otherLabel}</p>
-            <textarea
-              value={otherText}
-              onChange={(e) => onOtherTextChange?.(e.target.value)}
-              placeholder="Cuéntame un poco más si quieres..."
-              className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-[var(--color-primary)] outline-none min-h-[100px] text-sm resize-none"
-            />
-          </div>
-        )}
       </div>
     </StepLayout>
   );
 }
 
+// ──────────────────────────────────────────────────
+// CONTACT FORM (Nombre, Email, WhatsApp)
+// Uses StepLayout footer pattern via parent StepLayout
+// ──────────────────────────────────────────────────
 function ContactForm({
   contactData,
   onSubmit,
@@ -519,53 +794,49 @@ function ContactForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
-      <div className="flex-1 overflow-y-auto px-1 space-y-6">
+      {/* Scrollable inputs */}
+      <div className="flex-1 overflow-y-auto pr-1 space-y-4" style={{ scrollbarWidth: 'thin' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Nombre</label>
-            <input
-              type="text" value={name} onChange={(e) => setName(e.target.value)} required
-              placeholder="Tu nombre"
-              className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-[var(--color-primary)] outline-none text-sm font-bold"
-            />
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-[var(--color-secondary)]">Nombre *</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">person</span>
+              <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Tu nombre" required
+                className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+            </div>
           </div>
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Apellidos</label>
-            <input
-              type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required
-              placeholder="Tus apellidos"
-              className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-[var(--color-primary)] outline-none text-sm font-bold"
-            />
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-[var(--color-secondary)]">Apellidos *</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">badge</span>
+              <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} placeholder="Tus apellidos" required
+                className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+            </div>
           </div>
         </div>
-        <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Email</label>
-          <input
-            type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
-            placeholder="ejemplo@email.com"
-            className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-[var(--color-primary)] outline-none text-sm font-bold"
-          />
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-[var(--color-secondary)]">Email *</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">email</span>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required
+              className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+          </div>
         </div>
-        <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Teléfono</label>
-          <input
-            type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required
-            placeholder="600 000 000"
-            className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-[var(--color-primary)] outline-none text-sm font-bold"
-          />
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-[var(--color-secondary)]">WhatsApp *</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">phone</span>
+            <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+34 600 000 000" required
+              className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+          </div>
         </div>
       </div>
-
-      <div className="flex-shrink-0 pt-8 flex items-center justify-between gap-4">
+      {/* Anchored navigation */}
+      <div className="flex-shrink-0 flex items-center justify-between pt-6 pb-2">
         <button type="button" onClick={onBack} className="btn-back">
-          <span className="material-icons-outlined">arrow_back</span>
-          Atrás
+          <span className="material-icons-outlined">arrow_back</span> Atrás
         </button>
-        <button
-          type="submit"
-          disabled={!isValid}
-          className="btn-primary px-10 py-4 disabled:opacity-50"
-        >
+        <button type="submit" disabled={!isValid} className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed">
           SIGUIENTE PASO
         </button>
       </div>
