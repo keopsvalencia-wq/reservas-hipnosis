@@ -10,9 +10,10 @@ import { ConfirmationStep } from './ConfirmationStep';
 interface BookingWizardProps {
     preloadedData: Partial<BookingData>;
     onBack: () => void;
+    prefetchedBusySlots: string[];
 }
 
-export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
+export function BookingWizard({ preloadedData, onBack, prefetchedBusySlots }: BookingWizardProps) {
     // Start from step 1 (Location Selection) since Triage is done in page.tsx
     const [step, setStep] = useState<WizardStep>(1);
     const [bookingData, setBookingData] = useState<Partial<BookingData>>(preloadedData);
@@ -107,6 +108,7 @@ export function BookingWizard({ preloadedData, onBack }: BookingWizardProps) {
                                 location={bookingData.location!}
                                 onSelectSlot={handleSlotSelect}
                                 onBack={() => goTo(1)}
+                                initialBusySlots={prefetchedBusySlots}
                             />
                         )}
                         {step === 3 && (

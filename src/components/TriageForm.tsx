@@ -97,38 +97,48 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                             </div>
                         )}
 
-                        {/* SELECT */}
+                        {/* SELECT (Grid for Age or Scale) */}
                         {q.type === 'select' && (
-                            <select
-                                className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all appearance-none cursor-pointer"
-                                onChange={(e) => handleAnswer(q.id, e.target.value)}
-                                value={(answers[q.id] as string) || ''}
-                                required
-                            >
-                                <option value="" disabled>Selecciona una opción...</option>
-                                {q.options?.map(opt => (
-                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                ))}
-                            </select>
+                            <div className={`grid gap-3 ${q.id === 'edad' ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-5 md:grid-cols-10'}`}>
+                                {q.options?.map(opt => {
+                                    const selected = answers[q.id] === opt.value;
+                                    return (
+                                        <button
+                                            key={opt.value}
+                                            type="button"
+                                            onClick={() => handleAnswer(q.id, opt.value)}
+                                            className={`p-3 md:p-4 rounded-xl border-2 font-bold transition-all text-sm md:text-base ${selected
+                                                ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] text-[var(--color-secondary)]'
+                                                : 'border-gray-100 bg-white text-[var(--color-text-muted)] hover:border-gray-300'
+                                                }`}
+                                        >
+                                            {opt.label.split(' — ')[0]}
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         )}
 
-                        {/* RADIO */}
+                        {/* RADIO (Big Buttons) */}
                         {q.type === 'radio' && (
                             <div className="space-y-3">
                                 {q.options?.map(opt => (
-                                    <label
+                                    <button
                                         key={opt.value}
-                                        className={`flex items-start gap-4 p-5 rounded-2xl border-2 transition-all cursor-pointer ${answers[q.id] === opt.value
+                                        type="button"
+                                        onClick={() => handleAnswer(q.id, opt.value)}
+                                        className={`w-full flex items-center text-left gap-4 p-5 rounded-2xl border-2 transition-all group ${answers[q.id] === opt.value
                                             ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
-                                            : 'border-[var(--color-border)] hover:border-gray-400 bg-white'
+                                            : 'border-gray-50 hover:border-gray-300 bg-white shadow-sm'
                                             }`}
                                     >
-                                        <input type="radio" name={q.id} value={opt.value} checked={answers[q.id] === opt.value} onChange={() => handleAnswer(q.id, opt.value)} className="hidden" />
-                                        <div className={`mt-1 h-5 w-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${answers[q.id] === opt.value ? 'border-[var(--color-primary)]' : 'border-gray-300'}`}>
+                                        <div className={`h-6 w-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${answers[q.id] === opt.value ? 'border-[var(--color-primary)] bg-white' : 'border-gray-200'}`}>
                                             {answers[q.id] === opt.value && <div className="h-2.5 w-2.5 rounded-full bg-[var(--color-primary)]" />}
                                         </div>
-                                        <span className="text-base font-medium">{opt.label}</span>
-                                    </label>
+                                        <span className={`text-base font-bold transition-colors ${answers[q.id] === opt.value ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)] group-hover:text-[var(--color-text)]'}`}>
+                                            {opt.label}
+                                        </span>
+                                    </button>
                                 ))}
                             </div>
                         )}

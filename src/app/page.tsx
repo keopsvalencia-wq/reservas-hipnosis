@@ -42,6 +42,21 @@ export default function Home() {
   const [contactData, setContactData] = useState({ name: '', lastName: '', email: '', phone: '' });
   const [isBlocked, setIsBlocked] = useState(false);
   const [isStepValid, setIsStepValid] = useState(true);
+  const [prefetchedBusySlots, setPrefetchedBusySlots] = useState<string[]>([]);
+
+  // Prefetch availability
+  useEffect(() => {
+    const start = new Date().toISOString().split('T')[0];
+    const end = new Date();
+    end.setMonth(end.getMonth() + 2);
+    const endStr = end.toISOString().split('T')[0];
+    fetch(`/api/availability?start=${start}&end=${endStr}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setPrefetchedBusySlots(data.busySlots);
+      })
+      .catch(err => console.error('Availability Prefetch error:', err));
+  }, []);
 
   // Reset validation on screen change — default to true (informative)
   // Forms will override this to false upon mount if invalid
@@ -149,10 +164,10 @@ export default function Home() {
                   <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
                 </div>
 
-                {/* Authority Badge */}
-                <div className="absolute -top-3 -right-3 bg-white border border-gray-100 px-5 py-2.5 rounded-2xl hidden lg:block z-10">
-                  <p className="text-xs font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
-                  <p className="text-[10px] font-bold text-[var(--color-primary)]">Hipnoterapeuta Profesional</p>
+                {/* Authority Badge — Always visible */}
+                <div className="absolute -top-3 -right-3 bg-white border border-gray-100 px-4 py-2 md:px-5 md:py-2.5 rounded-2xl z-10 shadow-sm">
+                  <p className="text-[10px] md:text-xs font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
+                  <p className="text-[8px] md:text-[10px] font-bold text-[var(--color-primary)]">Hipnoterapeuta Profesional</p>
                 </div>
               </div>
             </div>
@@ -371,6 +386,7 @@ export default function Home() {
               phone: contactData.phone
             }}
             onBack={back}
+            prefetchedBusySlots={prefetchedBusySlots}
           />
         );
 

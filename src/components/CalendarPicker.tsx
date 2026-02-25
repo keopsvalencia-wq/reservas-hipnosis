@@ -26,22 +26,32 @@ interface CalendarPickerProps {
     location: Location;
     onSelectSlot: (date: string, time: string) => void;
     onBack: () => void;
+    initialBusySlots?: string[];
 }
 
-export function CalendarPicker({ location, onSelectSlot, onBack }: CalendarPickerProps) {
+export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlots = [] }: CalendarPickerProps) {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
-    const [busySlots, setBusySlots] = useState<string[]>([]);
+    const [busySlots, setBusySlots] = useState<string[]>(initialBusySlots);
     const [loadingBusy, setLoadingBusy] = useState(false);
 
     const today = startOfDay(new Date());
 
     // Fecth busy slots when date changes
     const fetchBusySlots = async (date: Date) => {
-        setLoadingBusy(true);
+        const formattedDate = format(date, 'yyyy-MM-dd');
+
+        // If we already have slots for this day in our initial set, we don't Strictly need to fetch
+        // but we'll do it in background if it was empty or just to refresh.
+        // For "instant" feel, if we have ANY data, we don't show loading.
+        const hasData = busySlots.some(s => s.startsWith(formattedDate));
+
+        if (!hasData) {
+            setLoadingBusy(true);
+        }
+
         try {
-            const formattedDate = format(date, 'yyyy-MM-dd');
             const res = await fetch(`/api/availability?date=${formattedDate}`);
             const data = await res.json();
             if (data.success) {

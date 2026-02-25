@@ -120,10 +120,52 @@ export async function getBusySlots(date: string): Promise<string[]> {
                 });
             }
         }
-
         return busySlots;
     } catch (error: any) {
         console.error('❌ Error getting busy slots:', error.message);
+        return [];
+    }
+}
+
+/**
+ * Obtiene todos los huecos ocupados para un rango dado.
+ */
+export async function getBusyRange(startDate: string, endDate: string): Promise<string[]> {
+    const auth = getAuthClient();
+    const calendar = google.calendar({ version: 'v3', auth });
+
+    const items = [
+        { id: calendarId },
+        { id: personalCalendarId },
+        ...extraCalendars.map(id => ({ id }))
+    ];
+
+    try {
+        const response = await calendar.freebusy.query({
+            requestBody: {
+                timeMin: `${startDate}T00:00:00Z`,
+                timeMax: `${endDate}T23:59:59Z`,
+                items,
+                timeZone: 'Europe/Madrid',
+            },
+        });
+
+        const busySlots: string[] = [];
+        const calendars = response.data.calendars;
+
+        if (calendars) {
+            for (const id in calendars) {
+                const busyList = calendars[id].busy || [];
+                busyList.forEach((period) => {
+                    if (period.start && period.end) {
+                        busySlots.push(`${period.start}|${period.end}`);
+                    }
+                });
+            }
+        }
+        return busySlots;
+    } catch (error: any) {
+        console.error('❌ Error getting busy range:', error.message);
         return [];
     }
 }

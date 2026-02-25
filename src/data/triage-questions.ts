@@ -93,7 +93,7 @@ export const triageQuestions: TriageQuestionDef[] = [
         type: 'radio',
         options: [
             { value: 'sin_tiempo', label: '🔴 No tengo tiempo, mi día a día me come.' },
-            { value: '2h_dia', label: '🟡 Podría sacar unas 2 horas al día.' },
+            { value: '2h_dia', label: '🟡 2 horas al día.' },
             { value: 'lo_que_haga_falta', label: '🟢 El tiempo que haga falta. Mi salud mental es ahora mismo mi prioridad absoluta.' },
         ],
         group: 'compromiso',
@@ -101,10 +101,10 @@ export const triageQuestions: TriageQuestionDef[] = [
     // ─── P6: Inversión (GATE) ─────────────────────────
     {
         id: 'inversion',
-        text: 'Tu compromiso con la inversión',
+        text: '¿Cuánto estás dispuesto a invertir económicamente en tu salud mental si yo te doy la solución?',
         type: 'radio',
         options: [
-            { value: 'con_recursos', label: '🟢 Cuento con los recursos (700€ - 1.000€). Estoy list@ para invertir en mi tranquilidad y reservar mi plaza.' },
+            { value: 'con_recursos', label: '🟢 De 700€ a 1.000€. Estoy list@ para invertir en mi tranquilidad y reservar mi plaza.' },
             { value: 'dispuesto', label: '🟢 Estoy dispuest@ a invertir lo necesario. Invertiré lo que haga falta para resolver mi problema definitivamente.' },
             { value: 'sin_recursos', label: '🔴 No tengo recursos ni intención de invertir dinero en mi salud mental.' },
         ],
