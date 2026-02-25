@@ -17,13 +17,17 @@ const transporter = nodemailer.createTransport({
 });
 
 interface EmailData {
-  name: string;
+  fullName: string;
   email: string;
   phone: string;
   date: string;        // "Martes 4 de marzo de 2026"
   time: string;        // "11:00"
   location: string;    // "Valencia (Picanya)"
   motivo?: string;
+  compromiso?: string;
+  tiempo?: string;
+  inversion?: string;
+  ciudad?: string;
 }
 
 /**
@@ -55,7 +59,7 @@ export async function sendPatientConfirmation(data: EmailData) {
             <p style="color: #8888a0; font-size: 12px; margin-top: 8px; text-transform: uppercase; letter-spacing: 2px;">Confirmación de Cita</p>
           </div>
           <div class="divider"></div>
-          <p style="font-size: 14px;">Hola <strong>${data.name}</strong>,</p>
+          <p style="font-size: 14px;">Hola <strong>${data.fullName}</strong>,</p>
           <p style="font-size: 14px; color: #a0a0b0;">Tu sesión de valoración diagnóstica con <strong>Salva Vera</strong> ha sido confirmada:</p>
           <div style="background: #0a0a0f; border-radius: 12px; padding: 16px; margin: 16px 0;">
             <div class="detail">📅 <strong>${data.date}</strong></div>
@@ -109,15 +113,21 @@ export async function sendTherapistNotification(data: EmailData) {
           <h2 style="font-size: 18px; font-weight: 400; margin-top: 16px;">Sesión de Valoración Diagnóstica</h2>
           <div style="background: #0a0a0f; border-radius: 12px; padding: 16px; margin: 16px 0;">
             <p class="label">Paciente</p>
-            <div class="detail"><strong>${data.name}</strong></div>
+            <div class="detail"><strong>${data.fullName}</strong></div>
             <div class="detail">📧 ${data.email}</div>
             <div class="detail">📱 ${data.phone}</div>
+            ${data.ciudad ? `<div class="detail">🏙️ Ciudad: ${data.ciudad}</div>` : ''}
             <div style="height: 1px; background: #1f1f30; margin: 12px 0;"></div>
             <p class="label">Cita</p>
             <div class="detail">📅 ${data.date}</div>
             <div class="detail">🕒 ${data.time}h</div>
             <div class="detail">📍 ${data.location}</div>
-            ${data.motivo ? `<div style="height: 1px; background: #1f1f30; margin: 12px 0;"></div><p class="label">Motivo</p><div class="detail">${data.motivo}</div>` : ''}
+            <div style="height: 1px; background: #1f1f30; margin: 12px 0;"></div>
+            <p class="label">Datos Filtro</p>
+            <div class="detail">🧠 Motivo: ${data.motivo || '—'}</div>
+            <div class="detail">💪 Compromiso: ${data.compromiso || '—'}/10</div>
+            <div class="detail">⏳ Tiempo: ${data.tiempo || '—'}</div>
+            <div class="detail">💰 Inversión: ${data.inversion || '—'}</div>
           </div>
         </div>
       </body>
@@ -127,7 +137,7 @@ export async function sendTherapistNotification(data: EmailData) {
     const res = await transporter.sendMail({
       from: `"Sistema de Reservas" <${process.env.SMTP_USER}>`,
       to: process.env.NOTIFICATION_EMAIL,
-      subject: `🔔 Nueva reserva: ${data.name} — ${data.date} ${data.time}h`,
+      subject: `🔔 Nueva reserva: ${data.fullName} — ${data.date} ${data.time}h`,
       html,
     });
     console.log('📧 Email enviado al terapeuta:', res.messageId);

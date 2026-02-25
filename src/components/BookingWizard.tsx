@@ -36,7 +36,7 @@ export function BookingWizard({ preloadedData, onBack, prefetchedBusySlots }: Bo
         goTo(3);
     };
 
-    const handleConfirmationSubmit = (info: { name: string; lastName: string; email: string; phone: string; acceptPrivacy: boolean }) => {
+    const handleConfirmationSubmit = (info: { fullName: string; email: string; phone: string; acceptPrivacy: boolean }) => {
         setBookingData((prev) => ({ ...prev, ...info }));
     };
 

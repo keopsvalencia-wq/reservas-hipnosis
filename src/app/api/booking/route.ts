@@ -11,7 +11,7 @@ export async function POST(request: Request) {
         const data: BookingData = await request.json();
 
         // ─── Validation ──────────────────────────────
-        if (!data.name || !data.email || !data.phone || !data.date || !data.time || !data.location) {
+        if (!data.fullName || !data.email || !data.phone || !data.date || !data.time || !data.location) {
             return NextResponse.json(
                 { success: false, message: 'Faltan campos obligatorios' },
                 { status: 400 }
@@ -56,7 +56,10 @@ export async function POST(request: Request) {
         // ─── Extract triage data ────────────────────
         const triage = data.triageAnswers || {};
         const motivo = (triage.motivo_consulta || triage.motivo || '') as string;
-        const situacion = (triage.situacion_actual || '') as string;
+        const compromiso = (triage.compromiso || '') as string;
+        const tiempo = (triage.disponibilidad_tiempo || '') as string;
+        const inversion = (triage.inversion || '') as string;
+        const ciudad = (triage.ciudad || '') as string;
 
         if (hasGoogleCredentials) {
             try {
@@ -69,13 +72,19 @@ export async function POST(request: Request) {
                 }
 
                 eventId = await createCalendarEvent({
-                    name: data.name,
+                    fullName: data.fullName,
                     email: data.email,
                     phone: data.phone,
                     date: data.date,
                     time: data.time,
                     location: data.location,
-                    motivo: motivo || situacion,
+                    triageInfo: {
+                        motivo,
+                        compromiso,
+                        tiempo,
+                        inversion,
+                        ciudad
+                    }
                 });
                 console.log('✅ Evento creado en GCalendar:', eventId);
             } catch (calErr: any) {
@@ -100,13 +109,17 @@ export async function POST(request: Request) {
         const locationLabel = LOCATION_LABELS[data.location] || data.location;
 
         const emailData = {
-            name: data.name,
+            fullName: data.fullName,
             email: data.email,
             phone: data.phone,
             date: dateFormatted,
             time: data.time,
             location: locationLabel,
-            motivo: motivo || situacion,
+            motivo,
+            compromiso,
+            tiempo,
+            inversion,
+            ciudad
         };
 
         const hasSmtpCredentials = process.env.SMTP_USER && process.env.SMTP_PASS;

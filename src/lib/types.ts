@@ -23,8 +23,7 @@ export interface BookingData {
   date: string;        // ISO date string "2026-03-04"
   time: string;        // "11:00"
   // Personal info
-  name: string;
-  lastName: string;
+  fullName: string;
   email: string;
   phone: string;
   acceptPrivacy: boolean;

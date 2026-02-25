@@ -174,13 +174,19 @@ export async function getBusyRange(startDate: string, endDate: string): Promise<
  * Crea un evento en Google Calendar.
  */
 export async function createCalendarEvent(data: {
-    name: string;
+    fullName: string;
     email: string;
     phone: string;
     date: string;
     time: string;
     location: string;
-    motivo?: string;
+    triageInfo?: {
+        motivo?: string;
+        compromiso?: string;
+        tiempo?: string;
+        inversion?: string;
+        ciudad?: string;
+    };
 }): Promise<string> {
     const auth = getAuthClient();
     const calendar = google.calendar({ version: 'v3', auth });
@@ -190,25 +196,32 @@ export async function createCalendarEvent(data: {
 
     const locationLabel =
         data.location === 'valencia'
-            ? 'Valencia (Picanya)'
+            ? 'Picanya (Sede Presencial)'
             : data.location === 'motilla'
-                ? 'Motilla del Palancar'
-                : 'Online';
+                ? 'Motilla (Sede Presencial)'
+                : 'Online (Videollamada)';
 
     try {
         const event = await calendar.events.insert({
             calendarId,
             requestBody: {
-                summary: `Valoración — ${data.name}`,
+                summary: `Sesión Evaluación: ${data.fullName}`,
                 description: [
-                    `📋 Sesión de Valoración Diagnóstica`,
+                    `🚨 NUEVA SOLICITUD DE EVALUACIÓN 🚨`,
                     ``,
-                    `👤 Nombre: ${data.name}`,
-                    `📧 Email: ${data.email}`,
-                    `📱 Teléfono: ${data.phone}`,
-                    `📍 Ubicación: ${locationLabel}`,
-                    data.motivo ? `🎯 Motivo: ${data.motivo}` : '',
+                    `👤 CLIENTE: ${data.fullName}`,
+                    `📧 EMAIL: ${data.email}`,
+                    `📱 WHATSAPP: ${data.phone}`,
+                    `📍 UBICACIÓN: ${locationLabel}`,
+                    data.triageInfo?.ciudad ? `🏙️ CIUDAD: ${data.triageInfo.ciudad}` : '',
                     ``,
+                    `📋 DATOS DEL FILTRO (TRIAGE):`,
+                    `🧠 MOTIVO: ${data.triageInfo?.motivo || 'No especificado'}`,
+                    `💪 COMPROMISO: ${data.triageInfo?.compromiso || '—'}/10`,
+                    `⏳ TIEMPO DISPONIBLE: ${data.triageInfo?.tiempo || '—'}`,
+                    `💰 INVERSIÓN: ${data.triageInfo?.inversion || '—'}`,
+                    ``,
+                    `---`,
                     `Reserva automática desde reservas.hipnosisenterapia.com`,
                 ]
                     .filter(Boolean)
