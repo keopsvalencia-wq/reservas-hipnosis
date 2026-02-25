@@ -276,6 +276,7 @@ export default function Home() {
             triageData={triageData}
             onComplete={(answers) => { setTriageData(prev => ({ ...prev, ...answers })); next(); }}
             onBack={back}
+            formId={`step-form-${screen}`}
           />
         );
 
@@ -578,12 +579,14 @@ function ContrastScreen({
   triageData,
   onComplete,
   onBack,
-  hideFooter = true, // Default to true as it's now managed by MasterScreen
+  formId,
+  hideFooter = true,
 }: {
   triageData: Record<string, unknown>;
   onComplete: (answers: Record<string, string | string[]>) => void;
   onBack: () => void;
   hideFooter?: boolean;
+  formId?: string;
 }) {
   const [tagsActual, setTagsActual] = useState<string[]>(
     Array.isArray(triageData.situacion_tags) ? (triageData.situacion_tags as string[]) : []
@@ -646,7 +649,7 @@ function ContrastScreen({
 
   return (
     <StepLayout>
-      <form id={`step-form-${screen}`} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-5 max-w-3xl mx-auto w-full">
+      <form id={formId} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-5 max-w-3xl mx-auto w-full">
         {/* Header */}
         <div className="text-center space-y-2">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
