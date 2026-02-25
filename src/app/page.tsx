@@ -614,9 +614,7 @@ function ContrastScreen({
   );
 
   return (
-    <StepLayout
-      footer={!hideFooter ? <StepNav onBack={onBack} onNext={handleSubmit} nextDisabled={!isValid} /> : null}
-    >
+    <StepLayout>
       <div className="space-y-5 max-w-3xl mx-auto w-full">
         {/* Header */}
         <div className="text-center space-y-2">
@@ -711,11 +709,7 @@ function ChoiceCardScreen({
   };
 
   return (
-    <StepLayout
-      footer={
-        <StepNav onBack={onBack} onNext={handleNext} nextDisabled={!isValid} />
-      }
-    >
+    <StepLayout>
       <div className="space-y-6 max-w-3xl mx-auto w-full">
         {/* Header */}
         <div className="text-center space-y-2">
@@ -845,15 +839,6 @@ function ContactForm({
               className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
           </div>
         </div>
-      </div>
-      {/* Anchored navigation */}
-      <div className="flex-shrink-0 flex items-center justify-between pt-6 pb-2">
-        <button type="button" onClick={onBack} className="btn-back">
-          <span className="material-icons-outlined">arrow_back</span> Atrás
-        </button>
-        <button type="submit" disabled={!isValid} className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed">
-          SIGUIENTE PASO
-        </button>
       </div>
     </form>
   );
