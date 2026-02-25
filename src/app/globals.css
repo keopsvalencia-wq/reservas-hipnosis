@@ -7,6 +7,7 @@
   --color-bg: #FFFFFF;
   --color-bg-card: #FFFFFF;
   --color-primary: #39DCA8;
+  --color-primary-hover: #2bc493;
   --color-secondary: #0A2833;
   --color-primary-soft: rgba(57, 220, 168, 0.08);
   --color-border: #E1E8ED;
@@ -14,8 +15,7 @@
   --color-text-muted: #64748B;
   --color-error: #EF4444;
   --color-shadow-mint: rgba(57, 220, 168, 0.15);
-  --max-width-wide: 1024px;
-  /* Wide design reference */
+  --master-screen-height: 850px;
 }
 
 .dark {
@@ -47,49 +47,109 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar custom */
+/* ─── Scrollbar Seamless ──────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-border);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-muted);
 }
 
-/* Stitch card */
-.stitch-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: 1.5rem;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05),
-    0 8px 10px -6px rgba(0, 0, 0, 0.05);
+/* ─── Master Screen 850px ─────────────────────── */
+.master-screen {
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  max-width: var(--max-width-wide);
-  margin: 0 auto;
+  min-height: 100vh;
+  padding: 0;
 }
 
-/* Mint glow */
-.mint-glow {
-  box-shadow: 0 4px 14px 0 var(--color-shadow-mint);
+.master-screen__container {
+  width: 100%;
+  max-width: 72rem;
+  /* 1152px - matches max-w-6xl */
+  height: var(--master-screen-height);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-/* Primary button */
+/* ─── Step Layout ─────────────────────────────── */
+.step-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-height: 0;
+}
+
+.step-layout__content {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 1.5rem;
+  scrollbar-width: thin;
+}
+
+@media (min-width: 768px) {
+  .step-layout__content {
+    padding: 2rem 3.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .step-layout__content {
+    padding: 2rem 5rem;
+  }
+}
+
+.step-layout__footer {
+  flex-shrink: 0;
+  padding: 1rem 1.5rem 2rem;
+  background: var(--color-bg);
+}
+
+@media (min-width: 768px) {
+  .step-layout__footer {
+    padding: 1rem 3.5rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .step-layout__footer {
+    padding: 1rem 5rem 2rem;
+  }
+}
+
+.step-layout__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* ─── Primary Button — No external shadow ─────── */
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-secondary);
   font-weight: 700;
   padding: 0.875rem 2rem;
   border-radius: 9999px;
-  box-shadow: 0 4px 14px 0 var(--color-shadow-mint);
+  border: none;
+  cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -108,13 +168,57 @@ body {
   transform: none;
 }
 
-/* Selection style */
+/* ─── Back Button ─────────────────────────────── */
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  font-size: 0.875rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.btn-back:hover {
+  color: var(--color-secondary);
+}
+
+.btn-back .material-icons-outlined {
+  font-size: 20px;
+  transition: transform 0.2s ease;
+}
+
+.btn-back:hover .material-icons-outlined {
+  transform: translateX(-3px);
+}
+
+/* ─── Progress Bar — Seamless ─────────────────── */
+.progress-bar {
+  height: 3px;
+  background: #F3F4F6;
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 2px;
+  transition: width 0.5s ease-out;
+}
+
+/* ─── Selection Style ─────────────────────────── */
 ::selection {
   background: var(--color-primary-soft);
   color: var(--color-text);
 }
 
-/* Material Icons support */
+/* ─── Material Icons Support ──────────────────── */
 .material-icons-outlined {
   font-family: 'Material Icons Outlined';
   font-weight: normal;
@@ -129,4 +233,23 @@ body {
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Responsive Master Screen ────────────────── */
+@media (max-height: 900px) {
+  .master-screen__container {
+    height: 100vh;
+    height: 100dvh;
+  }
+}
+
+@media (max-width: 768px) {
+  .master-screen__container {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .master-screen {
+    min-height: auto;
+  }
 }

@@ -60,7 +60,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                     </label>
 
                     {q.id === GATE_QUESTION_ID && (
-                        <p className="text-sm text-[var(--color-text-muted)] bg-gray-50 p-4 rounded-xl border border-gray-100 italic">
+                        <p className="text-sm text-[var(--color-text-muted)] bg-white p-4 rounded-xl border border-gray-100 italic">
                             {GATE_INTRO_TEXT}
                         </p>
                     )}
@@ -91,7 +91,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                     {/* SELECT */}
                     {q.type === 'select' && (
                         <select
-                            className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all appearance-none cursor-pointer"
+                            className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all appearance-none cursor-pointer"
                             onChange={(e) => handleAnswer(q.id, e.target.value)}
                             value={(answers[q.id] as string) || ''}
                             required
@@ -128,7 +128,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                     {q.type === 'text' && (
                         <input
                             type="text"
-                            className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all"
+                            className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all"
                             placeholder={q.placeholder}
                             onChange={(e) => handleAnswer(q.id, e.target.value)}
                             value={(answers[q.id] as string) || ''}
@@ -139,7 +139,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                     {/* TEXTAREA */}
                     {q.type === 'textarea' && (
                         <textarea
-                            className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-32 resize-none"
+                            className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-32 resize-none"
                             placeholder={q.placeholder}
                             onChange={(e) => handleAnswer(q.id, e.target.value)}
                             value={(answers[q.id] as string) || ''}
@@ -160,7 +160,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
             {/* Navigation */}
             <div className="flex items-center justify-between pt-4">
                 {onBack ? (
-                    <button type="button" onClick={onBack} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
+                    <button type="button" onClick={onBack} className="btn-back">
                         <span className="material-icons-outlined">arrow_back</span> Atrás
                     </button>
                 ) : <div />}

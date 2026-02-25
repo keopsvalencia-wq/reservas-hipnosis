@@ -4,15 +4,15 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookingWizard } from '@/components/BookingWizard';
 import { TriageForm } from '@/components/TriageForm';
-import { GATE_INTRO_TEXT, GATE_BLOCKED_VALUE, GATE_BLOCKED_NOTE } from '@/data/triage-questions';
+import { GATE_BLOCKED_VALUE, GATE_BLOCKED_NOTE } from '@/data/triage-questions';
 import { TriageAnswers } from '@/lib/types';
 
 // ──────────────────────────────────────────────────
-// EMBUDO 10 PANTALLAS — Re-ingeniería v4
-// P1: Bienvenida        P2: Regalos         P3: Perfil
-// P4: Motivo (cards)    P5: Impacto (cards) P6: Contraste
-// P7: Compromiso        P8: Inversión (gate)
-// P9: Datos contacto    P10: Booking
+// EMBUDO 10 PANTALLAS — Re-ingeniería v5 (MasterScreen)
+// P0: Bienvenida        P1: Regalos         P2: Motivo (cards)
+// P3: Perfil            P4: Impacto (cards) P5: Contraste
+// P6: Compromiso        P7: Inversión (gate)
+// P8: Datos contacto    P9: Booking
 // ──────────────────────────────────────────────────
 
 const MOTIVO_OPTIONS = [
@@ -69,158 +69,151 @@ export default function Home() {
   // ─── Blocked screen ───────────────────────────────
   if (isBlocked) {
     return (
-      <Shell progress={100}>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center space-y-6 py-10">
-          <div className="w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center mx-auto">
-            <span className="material-icons-outlined text-amber-500 text-4xl">favorite</span>
-          </div>
-          <h2 className="text-2xl font-bold text-[var(--color-secondary)]">Gracias por tu sinceridad</h2>
-          <p className="text-[var(--color-text-muted)] max-w-md mx-auto leading-relaxed">{GATE_BLOCKED_NOTE}</p>
-          <button onClick={() => { setIsBlocked(false); setScreen(7); }} className="text-sm text-[var(--color-primary)] underline">
-            Cambiar mi respuesta
-          </button>
-        </motion.div>
-      </Shell>
+      <MasterScreen progress={100}>
+        <StepLayout>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center space-y-6">
+            <div className="w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center mx-auto">
+              <span className="material-icons-outlined text-amber-500 text-4xl">favorite</span>
+            </div>
+            <h2 className="text-2xl font-bold text-[var(--color-secondary)]">Gracias por tu sinceridad</h2>
+            <p className="text-[var(--color-text-muted)] max-w-md mx-auto leading-relaxed">{GATE_BLOCKED_NOTE}</p>
+            <button onClick={() => { setIsBlocked(false); setScreen(7); }} className="text-sm text-[var(--color-primary)] underline">
+              Cambiar mi respuesta
+            </button>
+          </motion.div>
+        </StepLayout>
+      </MasterScreen>
     );
   }
 
   // ─── Screen renderer ──────────────────────────────
   const renderScreen = () => {
     switch (screen) {
-      // ─── P1: BIENVENIDA ──────────────────────
+      // ─── P0: BIENVENIDA ──────────────────────
       case 0:
         return (
-          <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16 py-4 lg:py-10 max-w-6xl mx-auto">
-            {/* Left: Content */}
-            <div className="flex-1 text-center lg:text-left space-y-8 order-2 lg:order-1 max-w-2xl">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
-                Solicita tu Evaluación Diagnóstica.
-              </h1>
-
-              <div className="space-y-6">
-                <p className="text-xl md:text-2xl text-[var(--color-primary)] font-bold tracking-tight">
-                  Solo de 3 a 5 plazas disponibles cada mes.
-                </p>
-
-                <p className="text-lg text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
-                  Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo de forma definitiva.
-                </p>
-              </div>
-
-              <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 shadow-sm w-full">
-                <p className="text-base text-[var(--color-secondary)] font-bold leading-relaxed lg:text-justify">
-                  🛡️ Garantía: Si veo que no puedo garantizarte resultados, el coste de la sesión será 0€.
-                </p>
-              </div>
-
-              <div className="space-y-4 pt-4">
+          <StepLayout
+            footer={
+              <div className="space-y-3">
                 <motion.button
                   onClick={next}
-                  className="btn-primary w-full lg:w-auto text-xl py-6 px-14 uppercase tracking-wider font-black shadow-xl shadow-emerald-100/50"
+                  className="btn-primary w-full text-lg py-5 uppercase tracking-wider font-black"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
                   RESERVAR MI PLAZA AHORA
                 </motion.button>
-                <p className="text-xs text-gray-400">Pulsa para ver disponibilidad y responder al formulario de compromiso.</p>
+                <p className="text-xs text-gray-400 text-center">Pulsa para ver disponibilidad y responder al formulario de compromiso.</p>
               </div>
-            </div>
+            }
+          >
+            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 max-w-6xl mx-auto">
+              {/* Left: Content */}
+              <div className="flex-1 text-center lg:text-left space-y-6 order-2 lg:order-1 max-w-2xl">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
+                  Solicita tu Evaluación Diagnóstica.
+                </h1>
 
-            {/* Right: Authority Image */}
-            <div className="flex-1 relative order-1 lg:order-2 w-full max-w-xl mx-auto lg:mx-0">
-              <div className="relative rounded-3xl overflow-hidden bg-white">
-                <img
-                  src="/images/salva-autoridad.png"
-                  alt="Salva Vera"
-                  className="w-full h-auto block rounded-3xl shadow-xl"
-                  style={{ display: 'block', minHeight: '300px' }}
-                />
-                {/* Visual Treatment: Fading Gradient */}
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" />
-              </div>
-
-              {/* Authority Badge */}
-              <div className="absolute -top-4 -right-4 bg-white shadow-xl border border-emerald-50 px-6 py-3 rounded-2xl hidden lg:block z-10">
-                <p className="text-xs font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
-                <p className="text-[10px] font-bold text-[var(--color-primary)]">Hipnoterapeuta Profesional</p>
-              </div>
-            </div>
-          </div>
-        );
-
-      // ─── P2: REGALOS ─────────────────────────
-      case 1:
-        return (
-          <div className="space-y-12 py-6 max-w-5xl mx-auto">
-            <div className="text-center space-y-4">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
-                Tus 3 Regalos de Claridad.
-              </h2>
-              <p className="text-lg md:text-xl text-[var(--color-text-muted)] font-medium leading-relaxed max-w-2xl mx-auto">
-                Solo por asistir a tu evaluación, te llevarás 3 revelaciones que liberarán la presión de tu cabeza:
-              </p>
-            </div>
-
-            <div className="space-y-6 max-w-4xl mx-auto">
-              {/* Card 01 */}
-              <motion.div
-                whileHover={{ x: 10 }}
-                className="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] flex flex-col md:flex-row items-center md:items-start gap-6 group hover:border-[var(--color-primary)] transition-all duration-300"
-              >
-                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">01</div>
                 <div className="space-y-4">
-                  <p className="text-lg lg:text-xl text-[var(--color-secondary)] leading-relaxed font-bold">
-                    Verás tu problema desde una perspectiva que <span className="text-[var(--color-primary)]">NADIE te había contado jamás</span>.
+                  <p className="text-lg md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
+                    Solo de 3 a 5 plazas disponibles cada mes.
                   </p>
-                  <p className="text-sm lg:text-base text-[var(--color-text-muted)] leading-relaxed italic border-l-4 border-emerald-50 pl-4">
-                    "Mis pacientes dicen que esto les da más paz en 45 min que años de terapias convencionales."
+                  <p className="text-base text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
+                    Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo de forma definitiva.
                   </p>
                 </div>
-              </motion.div>
 
-              {/* Card 02 */}
-              <motion.div
-                whileHover={{ x: 10 }}
-                className="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] flex flex-col md:flex-row items-center md:items-start gap-6 group hover:border-[var(--color-primary)] transition-all duration-300"
-              >
-                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">02</div>
-                <p className="text-lg lg:text-xl text-[var(--color-secondary)] leading-relaxed font-bold">
-                  Entenderás exactamente por qué <span className="text-[var(--color-primary)]">NADA de lo que has intentado</span> hasta hoy ha funcionado.
-                </p>
-              </motion.div>
-
-              {/* Card 03 */}
-              <motion.div
-                whileHover={{ x: 10 }}
-                className="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] flex flex-col md:flex-row items-center md:items-start gap-6 group hover:border-[var(--color-primary)] transition-all duration-300"
-              >
-                <div className="text-4xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">03</div>
-                <p className="text-lg lg:text-xl text-[var(--color-secondary)] leading-relaxed font-bold">
-                  Descubrirás la <span className="text-[var(--color-primary)]">ÚNICA y verdadera solución definitiva</span> a tu situación.
-                </p>
-              </motion.div>
-            </div>
-
-            <div className="text-center space-y-4 pt-6">
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <button onClick={back} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)] group order-2 sm:order-1">
-                  <span className="material-icons-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span> Atrás
-                </button>
-                <motion.button
-                  onClick={next}
-                  className="btn-primary w-full sm:w-auto text-lg py-5 px-12 uppercase tracking-wider font-black shadow-xl shadow-emerald-100/50 order-1 sm:order-2"
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                >
-                  Siguiente paso
-                </motion.button>
+                <div className="bg-white border border-gray-100 rounded-2xl p-5 w-full">
+                  <p className="text-base text-[var(--color-secondary)] font-bold leading-relaxed lg:text-justify">
+                    🛡️ Garantía: Si veo que no puedo garantizarte resultados, el coste de la sesión será 0€.
+                  </p>
+                </div>
               </div>
-              <p className="text-xs text-gray-400">Pulsa para completar tu perfil de compromiso.</p>
+
+              {/* Right: Authority Image */}
+              <div className="flex-1 relative order-1 lg:order-2 w-full max-w-md mx-auto lg:mx-0">
+                <div className="relative rounded-3xl overflow-hidden bg-white">
+                  <img
+                    src="/images/salva-autoridad.png"
+                    alt="Salva Vera"
+                    className="w-full h-auto block rounded-3xl"
+                    style={{ display: 'block', maxHeight: '400px', objectFit: 'cover' }}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
+                </div>
+
+                {/* Authority Badge */}
+                <div className="absolute -top-3 -right-3 bg-white border border-gray-100 px-5 py-2.5 rounded-2xl hidden lg:block z-10">
+                  <p className="text-xs font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
+                  <p className="text-[10px] font-bold text-[var(--color-primary)]">Hipnoterapeuta Profesional</p>
+                </div>
+              </div>
             </div>
-          </div>
+          </StepLayout>
         );
 
-      // ─── P3: MOTIVO DE CONSULTA (choice cards, multi) ──
+      // ─── P1: REGALOS ─────────────────────────
+      case 1:
+        return (
+          <StepLayout
+            footer={
+              <StepNav onBack={back} onNext={next} nextLabel="Siguiente paso" />
+            }
+          >
+            <div className="space-y-8 max-w-5xl mx-auto">
+              <div className="text-center space-y-3">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
+                  Tus 3 Regalos de Claridad.
+                </h2>
+                <p className="text-base md:text-lg text-[var(--color-text-muted)] font-medium leading-relaxed max-w-2xl mx-auto">
+                  Solo por asistir a tu evaluación, te llevarás 3 revelaciones que liberarán la presión de tu cabeza:
+                </p>
+              </div>
+
+              <div className="space-y-4 max-w-4xl mx-auto">
+                {/* Card 01 */}
+                <motion.div
+                  whileHover={{ x: 8 }}
+                  className="bg-white p-5 md:p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center md:items-start gap-5 group hover:border-[var(--color-primary)] transition-all duration-300"
+                >
+                  <div className="text-3xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">01</div>
+                  <div className="space-y-3">
+                    <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                      Verás tu problema desde una perspectiva que <span className="text-[var(--color-primary)]">NADIE te había contado jamás</span>.
+                    </p>
+                    <p className="text-sm text-[var(--color-text-muted)] leading-relaxed italic border-l-4 border-emerald-50 pl-3">
+                      &quot;Mis pacientes dicen que esto les da más paz en 45 min que años de terapias convencionales.&quot;
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Card 02 */}
+                <motion.div
+                  whileHover={{ x: 8 }}
+                  className="bg-white p-5 md:p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center md:items-start gap-5 group hover:border-[var(--color-primary)] transition-all duration-300"
+                >
+                  <div className="text-3xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">02</div>
+                  <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                    Entenderás exactamente por qué <span className="text-[var(--color-primary)]">NADA de lo que has intentado</span> hasta hoy ha funcionado.
+                  </p>
+                </motion.div>
+
+                {/* Card 03 */}
+                <motion.div
+                  whileHover={{ x: 8 }}
+                  className="bg-white p-5 md:p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center md:items-start gap-5 group hover:border-[var(--color-primary)] transition-all duration-300"
+                >
+                  <div className="text-3xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">03</div>
+                  <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                    Descubrirás la <span className="text-[var(--color-primary)]">ÚNICA y verdadera solución definitiva</span> a tu situación.
+                  </p>
+                </motion.div>
+              </div>
+            </div>
+          </StepLayout>
+        );
+
+      // ─── P2: MOTIVO DE CONSULTA (choice cards, multi) ──
       case 2:
         return (
           <ChoiceCardScreen
@@ -238,19 +231,21 @@ export default function Home() {
           />
         );
 
-      // ─── P4: PERFIL (dedicación, ciudad, edad) ────
+      // ─── P3: PERFIL (dedicación, ciudad, edad) ────
       case 3:
         return (
-          <div className="space-y-6 max-w-3xl mx-auto">
-            <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
-              <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
+          <StepLayout>
+            <div className="space-y-6 max-w-3xl mx-auto w-full">
+              <div className="text-center space-y-3">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
+                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
+              </div>
+              <TriageForm subset={['dedicacion', 'ciudad', 'edad']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
             </div>
-            <TriageForm subset={['dedicacion', 'ciudad', 'edad']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
-          </div>
+          </StepLayout>
         );
 
-      // ─── P5: IMPACTO EMOCIONAL (choice cards) ──
+      // ─── P4: IMPACTO EMOCIONAL (choice cards) ──
       case 4:
         return (
           <ChoiceCardScreen
@@ -268,7 +263,7 @@ export default function Home() {
           />
         );
 
-      // ─── P6: CONTRASTE (Híbrido: tags + texto) ──
+      // ─── P5: CONTRASTE (Híbrido: tags + texto) ──
       case 5:
         return (
           <ContrastScreen
@@ -278,53 +273,59 @@ export default function Home() {
           />
         );
 
-      // ─── P7: COMPROMISO (Triple Inversión) ────
+      // ─── P6: COMPROMISO (Triple Inversión) ────
       case 6:
         return (
-          <div className="space-y-6 max-w-3xl mx-auto">
-            <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 5 de 7</p>
-              <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu nivel de compromiso</h2>
+          <StepLayout>
+            <div className="space-y-6 max-w-3xl mx-auto w-full">
+              <div className="text-center space-y-3">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 5 de 7</p>
+                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu nivel de compromiso</h2>
+              </div>
+              <div className="bg-white rounded-2xl p-5 border border-gray-100 max-w-xl mx-auto">
+                <p className="text-sm text-[var(--color-text-muted)] leading-relaxed text-center">
+                  Para que el tratamiento funcione, necesitas invertir en <strong className="text-[var(--color-secondary)]">3 áreas</strong>: tu <strong className="text-[var(--color-secondary)]">Compromiso</strong> personal, tu <strong className="text-[var(--color-secondary)]">Tiempo</strong> diario y tu <strong className="text-[var(--color-secondary)]">Dinero</strong>.
+                </p>
+              </div>
+              <TriageForm subset={['compromiso_escala', 'disponibilidad_tiempo']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
             </div>
-            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 max-w-xl mx-auto">
-              <p className="text-sm text-[var(--color-text-muted)] leading-relaxed text-center">
-                Para que el tratamiento funcione, necesitas invertir en <strong className="text-[var(--color-secondary)]">3 áreas</strong>: tu <strong className="text-[var(--color-secondary)]">Compromiso</strong> personal, tu <strong className="text-[var(--color-secondary)]">Tiempo</strong> diario y tu <strong className="text-[var(--color-secondary)]">Dinero</strong>.
-              </p>
-            </div>
-            <TriageForm subset={['compromiso_escala', 'disponibilidad_tiempo']} onComplete={handleTriageStep} onBack={back} buttonLabel="SIGUIENTE PASO" />
-          </div>
+          </StepLayout>
         );
 
-      // ─── P8: INVERSIÓN (Gate) ────────────────
+      // ─── P7: INVERSIÓN (Gate) ────────────────
       case 7:
         return (
-          <div className="space-y-6 max-w-3xl mx-auto">
-            <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 6 de 7</p>
-              <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">La inversión</h2>
+          <StepLayout>
+            <div className="space-y-6 max-w-3xl mx-auto w-full">
+              <div className="text-center space-y-3">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 6 de 7</p>
+                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">La inversión</h2>
+              </div>
+              <TriageForm subset={['inversion']} onComplete={handleTriageStep} onBack={back} buttonLabel="Confirmar mi compromiso y ver agenda" />
             </div>
-            <TriageForm subset={['inversion']} onComplete={handleTriageStep} onBack={back} buttonLabel="Confirmar mi compromiso y ver agenda" />
-          </div>
+          </StepLayout>
         );
 
-      // ─── P9: DATOS DE CONTACTO ────────────────
+      // ─── P8: DATOS DE CONTACTO ────────────────
       case 8:
         return (
-          <div className="space-y-6 max-w-3xl mx-auto">
-            <div className="text-center space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 7 de 7</p>
-              <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tus datos de contacto</h2>
-              <p className="text-base text-[var(--color-text-muted)]">Para confirmar tu plaza y enviarte los detalles de la cita.</p>
+          <StepLayout>
+            <div className="space-y-6 max-w-3xl mx-auto w-full">
+              <div className="text-center space-y-3">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 7 de 7</p>
+                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tus datos de contacto</h2>
+                <p className="text-base text-[var(--color-text-muted)]">Para confirmar tu plaza y enviarte los detalles de la cita.</p>
+              </div>
+              <ContactForm
+                contactData={contactData}
+                onSubmit={(data) => { setContactData(data); next(); }}
+                onBack={back}
+              />
             </div>
-            <ContactForm
-              contactData={contactData}
-              onSubmit={(data) => { setContactData(data); next(); }}
-              onBack={back}
-            />
-          </div>
+          </StepLayout>
         );
 
-      // ─── P10: BOOKING ──────────────────────────
+      // ─── P9: BOOKING ──────────────────────────
       case 9:
         return (
           <BookingWizard
@@ -339,7 +340,7 @@ export default function Home() {
   };
 
   return (
-    <Shell progress={progress} showProgress={screen > 0 && screen < 9}>
+    <MasterScreen progress={progress} showProgress={screen > 0 && screen < 9}>
       <AnimatePresence mode="wait">
         <motion.div
           key={screen + (isBlocked ? '_blocked' : '')}
@@ -347,16 +348,145 @@ export default function Home() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -40 }}
           transition={{ duration: 0.35, ease: 'easeInOut' }}
+          className="flex-1 flex flex-col min-h-0"
         >
           {renderScreen()}
         </motion.div>
       </AnimatePresence>
-    </Shell>
+    </MasterScreen>
+  );
+}
+
+// ──────────────────────────────────────────────────
+// MASTER SCREEN: Fixed 850px container
+// Buttons anchored at bottom via StepLayout
+// ──────────────────────────────────────────────────
+function MasterScreen({
+  children,
+  progress,
+  showProgress = true,
+}: {
+  children: React.ReactNode;
+  progress: number;
+  showProgress?: boolean;
+}) {
+  return (
+    <div className="master-screen">
+      <div className="master-screen__container">
+        {/* Progress bar — thin, seamless */}
+        {showProgress && (
+          <div className="flex-shrink-0 px-6 md:px-14 lg:px-20 pt-6">
+            <div className="flex justify-between mb-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--color-primary)]">
+                Progreso
+              </span>
+              <span className="text-[10px] font-semibold text-gray-400">
+                {Math.round(progress)}%
+              </span>
+            </div>
+            <div className="progress-bar">
+              <motion.div
+                className="progress-bar__fill"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Content area — flex column, fills remaining space */}
+        <div className="flex-1 flex flex-col min-h-0">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────
+// STEP LAYOUT: Content + anchored footer
+// ──────────────────────────────────────────────────
+function StepLayout({
+  children,
+  footer,
+}: {
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+}) {
+  return (
+    <div className="step-layout">
+      {/* Scrollable, vertically centered content */}
+      <div className="step-layout__content">
+        {children}
+      </div>
+
+      {/* Anchored footer — always at same Y coordinate */}
+      {footer && (
+        <div className="step-layout__footer">
+          {footer}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────
+// STEP NAV: Standardized back/next navigation
+// ──────────────────────────────────────────────────
+function StepNav({
+  onBack,
+  onNext,
+  nextLabel = 'SIGUIENTE PASO',
+  nextDisabled = false,
+  nextLoading = false,
+  subtitle,
+}: {
+  onBack?: () => void;
+  onNext?: () => void;
+  nextLabel?: string;
+  nextDisabled?: boolean;
+  nextLoading?: boolean;
+  subtitle?: string;
+}) {
+  return (
+    <div className="space-y-2">
+      <div className="step-layout__nav">
+        {onBack ? (
+          <button type="button" onClick={onBack} className="btn-back">
+            <span className="material-icons-outlined">arrow_back</span>
+            Atrás
+          </button>
+        ) : <div />}
+
+        {onNext && (
+          <motion.button
+            type="button"
+            onClick={onNext}
+            disabled={nextDisabled || nextLoading}
+            className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black"
+            whileHover={!nextDisabled ? { scale: 1.03 } : {}}
+            whileTap={!nextDisabled ? { scale: 0.97 } : {}}
+          >
+            {nextLoading ? (
+              <>
+                <span className="material-icons-outlined animate-spin text-lg">hourglass_empty</span>
+                Procesando...
+              </>
+            ) : (
+              nextLabel
+            )}
+          </motion.button>
+        )}
+      </div>
+      {subtitle && <p className="text-xs text-gray-400 text-center">{subtitle}</p>}
+    </div>
   );
 }
 
 // ──────────────────────────────────────────────────
 // CONTRAST SCREEN: Quick tags + dual textareas
+// Uses StepLayout for anchored buttons
 // ──────────────────────────────────────────────────
 const QUICK_TAGS_ACTUAL = [
   'No duermo bien',
@@ -403,8 +533,7 @@ function ContrastScreen({
     (tagsActual.length > 0 || actualText.trim().length > 0) &&
     (tagsDeseada.length > 0 || deseadaText.trim().length > 0);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (!isValid) return;
     onComplete({
       situacion_tags: tagsActual,
@@ -420,7 +549,7 @@ function ContrastScreen({
     active: string[],
     toggle: (t: string) => void,
   ) => (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-wrap gap-2">
       {list.map(tag => {
         const on = active.includes(tag);
         return (
@@ -430,8 +559,8 @@ function ContrastScreen({
             onClick={() => toggle(tag)}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
-            className={`px-4 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all ${on
-              ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white shadow-sm'
+            className={`px-3.5 py-2 rounded-xl border-2 text-sm font-semibold transition-all ${on
+              ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white'
               : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
               }`}
           >
@@ -444,86 +573,54 @@ function ContrastScreen({
   );
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
-        <h2 className="text-xl md:text-2xl font-black text-[var(--color-secondary)] leading-tight">¿Dónde estás y a dónde quieres llegar?</h2>
-      </div>
+    <StepLayout
+      footer={
+        <StepNav onBack={onBack} onNext={handleSubmit} nextDisabled={!isValid} />
+      }
+    >
+      <div className="space-y-5 max-w-3xl mx-auto w-full">
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
+          <h2 className="text-xl md:text-2xl font-black text-[var(--color-secondary)] leading-tight">¿Dónde estás y a dónde quieres llegar?</h2>
+        </div>
 
-      {/* ── SITUACIÓN ACTUAL ── */}
-      <div className="space-y-3">
-        <h3 className="text-base md:text-lg font-bold text-[var(--color-secondary)]">
-          Describe brevemente cómo estás ahora.
-        </h3>
-        {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual)}
-        <textarea
-          className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-20 resize-none text-sm"
-          placeholder="¿Qué te impide hacer tu problema?"
-          value={actualText}
-          onChange={(e) => setActualText(e.target.value)}
-        />
-      </div>
+        {/* ── SITUACIÓN ACTUAL ── */}
+        <div className="space-y-2">
+          <h3 className="text-base font-bold text-[var(--color-secondary)]">
+            Describe brevemente cómo estás ahora.
+          </h3>
+          {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual)}
+          <textarea
+            className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-16 resize-none text-sm"
+            placeholder="¿Qué te impide hacer tu problema?"
+            value={actualText}
+            onChange={(e) => setActualText(e.target.value)}
+          />
+        </div>
 
-      {/* ── SITUACIÓN DESEADA ── */}
-      <div className="space-y-3">
-        <h3 className="text-base md:text-lg font-bold text-[var(--color-secondary)]">
-          ¿Cómo te gustaría estar en un mes <span className="text-[var(--color-primary)]">al solucionar</span> esto?
-        </h3>
-        {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
-        <textarea
-          className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-20 resize-none text-sm"
-          placeholder="¿Cómo te gustaría sentirte?"
-          value={deseadaText}
-          onChange={(e) => setDeseadaText(e.target.value)}
-        />
-      </div>
-
-      {/* Navigation */}
-      <div className="flex items-center justify-between pt-2">
-        <button type="button" onClick={onBack} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
-          <span className="material-icons-outlined">arrow_back</span> Atrás
-        </button>
-        <motion.button
-          type="submit"
-          disabled={!isValid}
-          className="btn-primary py-3 px-8 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed"
-          whileHover={isValid ? { scale: 1.03 } : {}}
-          whileTap={isValid ? { scale: 0.97 } : {}}
-        >
-          SIGUIENTE PASO
-        </motion.button>
-      </div>
-    </form>
-  );
-}
-
-// ──────────────────────────────────────────────────
-// SHELL: White card + optional progress bar
-// ──────────────────────────────────────────────────
-function Shell({ children, progress, showProgress = true }: { children: React.ReactNode; progress: number; showProgress?: boolean }) {
-  return (
-    <div className="min-h-screen bg-white flex flex-col items-center p-0">
-      <div className="w-full max-w-6xl flex flex-col">
-        {showProgress && (
-          <div className="px-6 md:px-14 lg:px-20 pt-8">
-            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-              <motion.div className="h-full bg-[var(--color-primary)] rounded-full" initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.5, ease: 'easeOut' }} />
-            </div>
-          </div>
-        )}
-        {/* Main Card Container with fixed min-height and vertical centering */}
-        <div className="flex-1 flex flex-col justify-center min-h-[850px] p-6 md:p-14 lg:p-20 overflow-hidden">
-          {children}
+        {/* ── SITUACIÓN DESEADA ── */}
+        <div className="space-y-2">
+          <h3 className="text-base font-bold text-[var(--color-secondary)]">
+            ¿Cómo te gustaría estar en un mes <span className="text-[var(--color-primary)]">al solucionar</span> esto?
+          </h3>
+          {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
+          <textarea
+            className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-16 resize-none text-sm"
+            placeholder="¿Cómo te gustaría sentirte?"
+            value={deseadaText}
+            onChange={(e) => setDeseadaText(e.target.value)}
+          />
         </div>
       </div>
-    </div>
+    </StepLayout>
   );
 }
 
 // ──────────────────────────────────────────────────
 // CHOICE CARD SCREEN: Large tactile cards grid
 // Supports single/multi select + dynamic "Otros" textarea
+// Uses StepLayout for anchored buttons
 // ──────────────────────────────────────────────────
 function ChoiceCardScreen({
   step,
@@ -573,89 +670,80 @@ function ChoiceCardScreen({
   };
 
   return (
-    <div className="space-y-8 max-w-3xl mx-auto">
-      {/* Header */}
-      <div className="text-center space-y-3">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">{step}</p>
-        <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)] leading-tight">{title}</h2>
-        {multi && <p className="text-sm text-[var(--color-text-muted)]">Puedes seleccionar varias opciones</p>}
-      </div>
+    <StepLayout
+      footer={
+        <StepNav onBack={onBack} onNext={handleNext} nextDisabled={!isValid} />
+      }
+    >
+      <div className="space-y-6 max-w-3xl mx-auto w-full">
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">{step}</p>
+          <h2 className="text-xl md:text-2xl font-black text-[var(--color-secondary)] leading-tight">{title}</h2>
+          {multi && <p className="text-sm text-[var(--color-text-muted)]">Puedes seleccionar varias opciones</p>}
+        </div>
 
-      {/* Cards Grid */}
-      <div className={`grid gap-4 ${columns === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
-        {options.map((opt) => {
-          const isSelected = choices.includes(opt);
-          const isOther = otherLabel && opt === otherLabel;
-          return (
-            <div key={opt} className={isOther && columns === 2 ? 'md:col-span-2' : ''}>
-              <motion.button
-                type="button"
-                onClick={() => toggle(opt)}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`
-                  w-full p-5 md:p-6 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer
-                  ${isSelected
-                    ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] shadow-md'
-                    : 'border-[var(--color-border)] bg-white hover:border-gray-300 hover:shadow-sm'
-                  }
-                `}
-              >
-                <div className="flex items-center gap-3">
-                  {multi && (
-                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)]' : 'border-gray-300'}`}>
-                      {isSelected && <span className="text-white text-xs font-bold">✓</span>}
-                    </div>
-                  )}
-                  <span className={`text-base md:text-lg font-semibold leading-snug ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
-                    {opt}
-                  </span>
-                </div>
-              </motion.button>
-              {/* Dynamic textarea for "Otros" */}
-              {isOther && isSelected && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="mt-3"
+        {/* Cards Grid */}
+        <div className={`grid gap-3 ${columns === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
+          {options.map((opt) => {
+            const isSelected = choices.includes(opt);
+            const isOther = otherLabel && opt === otherLabel;
+            return (
+              <div key={opt} className={isOther && columns === 2 ? 'md:col-span-2' : ''}>
+                <motion.button
+                  type="button"
+                  onClick={() => toggle(opt)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`
+                    w-full p-4 md:p-5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer
+                    ${isSelected
+                      ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
+                      : 'border-[var(--color-border)] bg-white hover:border-gray-300'
+                    }
+                  `}
                 >
-                  <textarea
-                    className="w-full p-4 rounded-xl border border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-24 resize-none text-base"
-                    placeholder="Describe brevemente tu situación..."
-                    value={otherText}
-                    onChange={(e) => onOtherTextChange?.(e.target.value)}
-                    autoFocus
-                  />
-                </motion.div>
-              )}
-            </div>
-          );
-        })}
+                  <div className="flex items-center gap-3">
+                    {multi && (
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)]' : 'border-gray-300'}`}>
+                        {isSelected && <span className="text-white text-xs font-bold">✓</span>}
+                      </div>
+                    )}
+                    <span className={`text-sm md:text-base font-semibold leading-snug ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
+                      {opt}
+                    </span>
+                  </div>
+                </motion.button>
+                {/* Dynamic textarea for "Otros" */}
+                {isOther && isSelected && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="mt-2"
+                  >
+                    <textarea
+                      className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-20 resize-none text-sm"
+                      placeholder="Describe brevemente tu situación..."
+                      value={otherText}
+                      onChange={(e) => onOtherTextChange?.(e.target.value)}
+                      autoFocus
+                    />
+                  </motion.div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
-
-      {/* Navigation */}
-      <div className="flex items-center justify-between pt-2">
-        <button onClick={onBack} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
-          <span className="material-icons-outlined">arrow_back</span> Atrás
-        </button>
-        <motion.button
-          onClick={handleNext}
-          disabled={!isValid}
-          className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed"
-          whileHover={isValid ? { scale: 1.03 } : {}}
-          whileTap={isValid ? { scale: 0.97 } : {}}
-        >
-          SIGUIENTE PASO
-        </motion.button>
-      </div>
-    </div>
+    </StepLayout>
   );
 }
 
 // ──────────────────────────────────────────────────
 // CONTACT FORM (Nombre, Email, WhatsApp)
+// Uses StepLayout footer pattern via parent StepLayout
 // ──────────────────────────────────────────────────
 function ContactForm({
   contactData,
@@ -678,13 +766,13 @@ function ContactForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div className="space-y-1.5">
         <label className="text-sm font-medium text-[var(--color-secondary)]">Nombre completo *</label>
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">person</span>
           <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Tu nombre completo" required
-            className="w-full pl-10 pr-4 py-4 text-base border-2 border-[var(--color-border)] rounded-xl bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+            className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
         </div>
       </div>
       <div className="space-y-1.5">
@@ -692,7 +780,7 @@ function ContactForm({
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">email</span>
           <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required
-            className="w-full pl-10 pr-4 py-4 text-base border-2 border-[var(--color-border)] rounded-xl bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+            className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
         </div>
       </div>
       <div className="space-y-1.5">
@@ -700,11 +788,12 @@ function ContactForm({
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 material-icons-outlined text-gray-400 text-lg">phone</span>
           <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+34 600 000 000" required
-            className="w-full pl-10 pr-4 py-4 text-base border-2 border-[var(--color-border)] rounded-xl bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
+            className="w-full pl-10 pr-4 py-3.5 text-sm border-2 border-[var(--color-border)] rounded-xl bg-white focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] outline-none transition-colors" />
         </div>
       </div>
-      <div className="flex items-center justify-between pt-4">
-        <button type="button" onClick={onBack} className="text-[var(--color-text-muted)] font-bold flex items-center gap-2 hover:text-[var(--color-secondary)]">
+      {/* Navigation inside form for submit behavior */}
+      <div className="flex items-center justify-between pt-3">
+        <button type="button" onClick={onBack} className="btn-back">
           <span className="material-icons-outlined">arrow_back</span> Atrás
         </button>
         <button type="submit" disabled={!isValid} className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black">

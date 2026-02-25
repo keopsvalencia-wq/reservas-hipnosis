@@ -84,7 +84,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                         Recibirás recordatorios 24h y 1h antes de tu sesión.
                     </p>
                 </div>
-                <div className="bg-[var(--color-bg)] rounded-xl border border-[var(--color-border)] p-5 max-w-sm mx-auto text-left space-y-3">
+                <div className="bg-white rounded-xl border border-[var(--color-border)] p-5 max-w-sm mx-auto text-left space-y-3">
                     <div className="flex items-center gap-2 text-sm">
                         <span className="material-icons-outlined text-[var(--color-primary)] text-lg">event</span>
                         <span className="text-[var(--color-secondary)] font-medium">{formatDate(data.date)} — {data.time}h</span>
@@ -106,7 +106,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
         <div className="grid lg:grid-cols-5 gap-6">
             {/* ── Sidebar: resumen de reserva ── */}
             <div className="lg:col-span-2 order-2 lg:order-1">
-                <div className="sticky top-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] overflow-hidden">
+                <div className="sticky top-6 rounded-xl border border-[var(--color-border)] bg-white overflow-hidden">
                     {/* Accent bar */}
                     <div className="h-1.5 bg-[var(--color-primary)]" />
                     <div className="p-5 space-y-5">
@@ -214,7 +214,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                             onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
                             placeholder="Tu nombre completo"
                             className="w-full pl-10 pr-4 py-3 text-sm border-2 border-[var(--color-border)] rounded-xl
-                                bg-[var(--color-bg-card)] text-[var(--color-text)] placeholder-gray-400
+                                bg-white text-[var(--color-text)] placeholder-gray-400
                                 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]
                                 transition-colors"
                         />
@@ -239,7 +239,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                             onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
                             placeholder="tu@email.com"
                             className="w-full pl-10 pr-4 py-3 text-sm border-2 border-[var(--color-border)] rounded-xl
-                                bg-[var(--color-bg-card)] text-[var(--color-text)] placeholder-gray-400
+                                bg-white text-[var(--color-text)] placeholder-gray-400
                                 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]
                                 transition-colors"
                         />
@@ -261,7 +261,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                             onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))}
                             placeholder="+34 600 000 000"
                             className="w-full pl-10 pr-4 py-3 text-sm border-2 border-[var(--color-border)] rounded-xl
-                                bg-[var(--color-bg-card)] text-[var(--color-text)] placeholder-gray-400
+                                bg-white text-[var(--color-text)] placeholder-gray-400
                                 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]
                                 transition-colors"
                         />

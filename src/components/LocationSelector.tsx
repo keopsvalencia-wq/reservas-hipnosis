@@ -50,10 +50,10 @@ export function LocationSelector({ onSelect }: LocationSelectorProps) {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.1, duration: 0.3 }}
-                    className="group w-full text-left p-6 rounded-3xl border-2 border-[var(--color-border)]
+                    className="group w-full text-left p-5 rounded-2xl border-2 border-[var(--color-border)]
                         hover:border-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] 
                         transition-all duration-300 bg-white relative overflow-hidden"
-                    whileHover={{ x: 8 }}
+                    whileHover={{ x: 6 }}
                 >
                     <div className="flex items-center gap-6">
                         {/* Icon - Circular like in Stitch's design */}
