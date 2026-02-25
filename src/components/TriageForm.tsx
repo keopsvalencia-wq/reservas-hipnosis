@@ -161,16 +161,17 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
             </div>
 
             {/* ── ANCHORED NAVIGATION ── */}
-            <div className="flex-shrink-0 flex items-center justify-between pt-6 pb-2">
-                {onBack ? (
-                    <button type="button" onClick={onBack} className="btn-back">
-                        <span className="material-icons-outlined">arrow_back</span> Atrás
+            <div className="step-layout__footer -mx-9 -mb-10">
+                <div className="flex items-center justify-between gap-4 w-full">
+                    {onBack ? (
+                        <button type="button" onClick={onBack} className="btn-back">
+                            <span className="material-icons-outlined">arrow_back</span> Atrás
+                        </button>
+                    ) : <div />}
+                    <button type="submit" disabled={!canSubmit} className="btn-primary flex-1">
+                        {buttonLabel}
                     </button>
-                ) : <div />}
-                <button type="submit" disabled={!canSubmit} className="btn-primary py-4 px-8 text-base disabled:opacity-40 disabled:cursor-not-allowed">
-                    {buttonLabel}
-                    <span className="material-icons-outlined">arrow_forward</span>
-                </button>
+                </div>
             </div>
         </form>
     );
