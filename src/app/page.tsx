@@ -347,19 +347,18 @@ export default function Home() {
   const renderFooter = () => {
     // Screens 1 to 8 should have navigation
     if (screen >= 1 && screen <= 8) {
-      const isWizard = screen === 7;
+      const isInformative = screen === 1; // Step 1 just shows info, no form
       const isConfirmation = screen === 8;
 
-      // The Success state of Step 8 doesn't need navigation buttons as it has the WhatsApp button
-      if (isConfirmation && isBlocked) return null; // Logic for success handled elsewhere? No, isBlocked is for triage.
+      // The Success state of Step 8 doesn't need navigation buttons
+      if (isConfirmation && isBlocked) return null;
 
       return (
         <StepNav
           onBack={back}
-          // Link the button to the internal form via ID
-          onNext={() => { }} // This is handled by type="submit" and form="step-form"
-          type="submit"
-          formId="step-form"
+          onNext={isInformative ? next : undefined}
+          type={isInformative ? "button" : "submit"}
+          formId={isInformative ? undefined : "step-form"}
         />
       );
     }
