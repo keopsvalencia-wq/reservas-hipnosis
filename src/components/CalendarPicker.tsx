@@ -163,7 +163,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
                             className="w-10 h-10 rounded-full flex items-center justify-center
                                 hover:bg-gray-100 transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
                         >
-                            <span className="material-icons-outlined">chevron_left</span>
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
                         </button>
                         <h4 className="text-base font-semibold capitalize text-[var(--color-secondary)]">
                             {format(currentMonth, 'MMMM yyyy', { locale: es })}
@@ -173,7 +173,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
                             className="w-10 h-10 rounded-full flex items-center justify-center
                                 hover:bg-gray-100 transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
                         >
-                            <span className="material-icons-outlined">chevron_right</span>
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
                         </button>
                     </div>
 
@@ -251,7 +251,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
                             </motion.div>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-center p-8 bg-gray-50 rounded-2xl border border-dashed border-gray-300 opacity-60">
-                                <span className="material-icons-outlined text-4xl text-gray-400 mb-2">event</span>
+                                <svg className="w-10 h-10 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 <p className="text-sm text-gray-500">Selecciona un día para ver los horarios disponibles</p>
                             </div>
                         )}
@@ -263,9 +263,9 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
             <div className="flex items-center justify-between pt-2">
                 <button
                     onClick={onBack}
-                    className="flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors font-medium"
+                    className="flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors font-medium group"
                 >
-                    <span className="material-icons-outlined mr-1 text-[18px]">arrow_back</span>
+                    <svg className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     Anterior
                 </button>
                 <button
@@ -274,7 +274,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
                     className="btn-primary text-sm"
                 >
                     Siguiente Paso
-                    <span className="material-icons-outlined text-[18px]">arrow_forward</span>
+                    <svg className="w-5 h-5 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                 </button>
             </div>
         </div>

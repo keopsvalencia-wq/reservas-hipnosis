@@ -13,7 +13,7 @@ export function TimeSlotGrid({ slots, selectedTime, onSelectTime }: TimeSlotGrid
     if (slots.length === 0) {
         return (
             <div className="text-center py-8 space-y-2">
-                <span className="material-icons-outlined text-gray-300 text-4xl">event_busy</span>
+                <svg className="w-10 h-10 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zM10 14l4 4m0-4l-4 4" /></svg>
                 <p className="text-sm text-[var(--color-text-muted)]">
                     No hay horarios disponibles para este día
                 </p>
@@ -24,7 +24,7 @@ export function TimeSlotGrid({ slots, selectedTime, onSelectTime }: TimeSlotGrid
     return (
         <div className="space-y-3">
             <p className="text-xs text-[var(--color-text-muted)] uppercase tracking-wide font-semibold flex items-center gap-1">
-                <span className="material-icons-outlined text-[14px]">schedule</span>
+                <svg className="w-4 h-4 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Horarios disponibles
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -52,7 +52,7 @@ export function TimeSlotGrid({ slots, selectedTime, onSelectTime }: TimeSlotGrid
                         >
                             <div className="flex items-center justify-center gap-2">
                                 {isSelected && (
-                                    <span className="material-icons-outlined text-[16px]">check_circle</span>
+                                    <svg className="w-4 h-4 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 )}
                                 <span className="text-base">{slot.time}</span>
                             </div>

@@ -29,12 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-          rel="stylesheet"
-        />
-      </head>
+      <head />
       <body className={`${montserrat.variable} ${montserrat.className} antialiased`}>
         {children}
       </body>

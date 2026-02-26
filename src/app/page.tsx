@@ -94,8 +94,8 @@ export default function Home() {
       <MasterScreen progress={100}>
         <StepLayout>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center space-y-6">
-            <div className="w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center mx-auto">
-              <span className="material-icons-outlined text-amber-500 text-4xl">favorite</span>
+            <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mx-auto border-2 border-amber-100 mb-2">
+              <svg className="w-8 h-8 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" /></svg>
             </div>
             <h2 className="text-2xl font-bold text-[var(--color-secondary)]">Gracias por tu sinceridad</h2>
             <p className="text-[var(--color-text-muted)] max-w-md mx-auto leading-relaxed">{GATE_BLOCKED_NOTE}</p>
@@ -555,8 +555,8 @@ function StepNav({
     <div className="w-full flex flex-col items-center gap-2">
       <div className="w-full flex items-center justify-between">
         {onBack ? (
-          <button type="button" onClick={onBack} className="btn-back">
-            <span className="material-icons-outlined">arrow_back</span>
+          <button type="button" onClick={onBack} className="btn-back group">
+            <svg className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
             Atrás
           </button>
         ) : <div />}
@@ -580,7 +580,7 @@ function StepNav({
         >
           {nextLoading ? (
             <>
-              <span className="material-icons-outlined animate-spin text-lg mr-2">hourglass_empty</span>
+              <svg className="w-5 h-5 animate-spin mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
               Procesando...
             </>
           ) : (

@@ -63,9 +63,9 @@ export function BookingWizard({ preloadedData, onBack, prefetchedBusySlots }: Bo
                 <div className="flex items-center justify-between">
                     <button
                         onClick={() => step === 1 ? onBack() : goTo((step - 1) as WizardStep)}
-                        className="btn-back"
+                        className="btn-back group"
                     >
-                        <span className="material-icons-outlined">arrow_back</span>
+                        <svg className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                         Atrás
                     </button>
                     <div className="flex gap-3">
