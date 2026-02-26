@@ -7,12 +7,12 @@ import nodemailer from 'nodemailer';
 // ───────────────────────────────────────────────────
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.hostinger.com',
-  port: parseInt(process.env.SMTP_PORT || '465'),
-  secure: process.env.SMTP_SECURE !== 'false', // true by default (SSL for Hostinger)
+  host: 'smtp.hostinger.com',
+  port: 465,
+  secure: true, // SSL for Hostinger
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    user: 'info@hipnosisenterapia.com',
+    pass: '$ah>yYMP>7Ru',
   },
 });
 

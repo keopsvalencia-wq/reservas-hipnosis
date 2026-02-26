@@ -64,7 +64,7 @@ export default function Home() {
     setIsStepValid(true);
   }, [screen]);
 
-  const TOTAL = 9;
+  const TOTAL = 10;
   const progress = ((screen + 1) / TOTAL) * 100;
 
   const next = () => setScreen(s => s + 1);
@@ -338,7 +338,7 @@ export default function Home() {
           <StepLayout fill>
             <div className="space-y-6 max-w-3xl mx-auto w-full">
               <div className="text-center space-y-3">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 7 de 7</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 6 de 7</p>
                 <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">La inversión</h2>
               </div>
               <TriageForm
@@ -353,15 +353,36 @@ export default function Home() {
           </StepLayout>
         );
 
-      // ─── P8: BOOKING ──────────────────────────
+      // ─── P8: DATOS DE CONTACTO ────────────────
       case 8:
+        return (
+          <StepLayout fill>
+            <div className="space-y-6 max-w-3xl mx-auto w-full">
+              <div className="text-center space-y-3">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 7 de 7</p>
+                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tus datos de contacto</h2>
+                <p className="text-base text-[var(--color-text-muted)]">Para confirmar tu plaza y enviarte los detalles de la cita.</p>
+              </div>
+              <ContactForm
+                contactData={contactData}
+                onSubmit={(data) => { setContactData(data); next(); }}
+                onBack={back}
+                formId={`step-form-${screen}`}
+                onValidationChange={setIsStepValid}
+              />
+            </div>
+          </StepLayout>
+        );
+
+      // ─── P9: BOOKING ──────────────────────────
+      case 9:
         return (
           <BookingWizard
             preloadedData={{
               triageAnswers: triageData,
-              fullName: '',
-              email: '',
-              phone: ''
+              fullName: contactData.fullName,
+              email: contactData.email,
+              phone: contactData.phone
             }}
             onBack={back}
             prefetchedBusySlots={prefetchedBusySlots}
@@ -375,8 +396,8 @@ export default function Home() {
 
   // Determine footer content for the current screen
   const renderFooter = () => {
-    // Screens 1 to 7 should have navigation (since 8 is BookingWizard which handles its own nav)
-    if (screen >= 1 && screen <= 7) {
+    // Screens 1 to 8 should have navigation
+    if (screen >= 1 && screen <= 8) {
       const isInformative = screen === 1; // Step 1 just shows info, no form
 
       // The Success state doesn't need navigation buttons
@@ -399,7 +420,7 @@ export default function Home() {
   return (
     <MasterScreen
       progress={progress}
-      showProgress={screen > 0 && screen < 8}
+      showProgress={screen > 0 && screen < 9}
       footer={renderFooter()}
     >
       <div className="flex-1 flex flex-col min-h-0 relative">

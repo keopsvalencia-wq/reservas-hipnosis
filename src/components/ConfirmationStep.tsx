@@ -58,52 +58,31 @@ const IconCity = () => (
 );
 
 export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepProps) {
-    const [name, setName] = useState(data.fullName || '');
-    const [email, setEmail] = useState(data.email || '');
-    const [phone, setPhone] = useState(data.phone || '');
-    const [ciudad, setCiudad] = useState((data.triageAnswers?.ciudad as string) || '');
     const [acceptPrivacy, setAcceptPrivacy] = useState(false);
-    
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isSuccess, setIsSuccess] = useState(false);
 
-    const dateFormatted = data.date
-        ? format(parse(data.date, 'yyyy-MM-dd', new Date()), "EEEE d 'de' MMMM", { locale: es })
-        : '';
+    const dateFormatted = format(
+        parse(data.date as string, 'yyyy-MM-dd', new Date()),
+        "EEEE d 'de' MMMM",
+        { locale: es }
+    );
 
     const getWhatsAppUrl = () => {
-        const nombreComp = name;
-        const ciudadRes = ciudad || 'no especificada';
-        const motivo = (data.triageAnswers?.motivo_consulta || data.triageAnswers?.motivo || 'motivo de consulta') as string;
-        const dia = dateFormatted;
-        const hora = data.time || '—';
-        const ubiKey = data.location || 'online';
+        const adminPhone = process.env.NEXT_PUBLIC_ADMIN_PHONE || '34661073837';
 
-        const labels: Record<string, string> = {
-            valencia: 'Sede Picanya (Presencial)',
-            motilla: 'Sede Motilla (Presencial)',
-            online: 'Online (Videollamada)',
-        };
+        // Usamos emojis nativos raw, sin codificar individualmente, y codificamos TODO el string final de una pasada.
+        const mot = data.triageAnswers?.motivo_consulta || data.triageAnswers?.motivo || 'No especificado';
+        const loc = LOCATION_LABELS[data.location as Location] || 'No especificada';
+        const rawText = `🔸 NUEVA SOLICITUD DE EVALUACIÓN 🔸\n\nHola Salva, soy *${data.fullName}* de *${data.triageAnswers?.ciudad || '---'}*.\n*He agendado una sesión de evaluación contigo.*\n\n🔹 Día: ${dateFormatted}\n🔹 Hora: ${data.time}\n🔹 Ubicación: ${loc}\n🔹 Motivo: ${mot}\n\n#Sede${data.location === 'valencia' ? 'Picanya' : data.location === 'motilla' ? 'Motilla' : 'Online'}\n(Ahora pulsa enviar para confirmar)`;
 
-        const triggers: Record<string, string> = {
-            valencia: '#SedePicanya',
-            motilla: '#SedeMotilla',
-            online: '#SedeOnline',
-        };
-
-        const ubicacion = labels[ubiKey];
-        const trigger = triggers[ubiKey];
-
-        // Emojis passados como puntos unicode (escapados) garantizan decodifición infalible
-        const text = `\u{1F6A8} *NUEVA SOLICITUD DE EVALUACIÓN* \u{1F6A8}\n\nHola Salva, soy *${nombreComp}* de *${ciudadRes}*.\n*He agendado una sesión de evaluación contigo.*\n\n\u{1F4C5} *Día:* ${dia}\n\u{1F552} *Hora:* ${hora}\n\u{1F4CD} *Ubicación:* ${ubicacion}\n\u{1F9E0} *Motivo:* ${motivo}\n\n${trigger}\n(Ahora pulsa enviar para confirmar)`;
-
-        return `https://wa.me/34656839568?text=${encodeURIComponent(text)}`;
+        return `https://wa.me/${adminPhone}?text=${encodeURIComponent(rawText)}`;
     };
 
     const handleSubmit = async () => {
-        if (!name || !email || !phone || !ciudad || !acceptPrivacy) {
-            setError('Por favor, completa todos los campos para poder confirmar.');
+        if (!data.fullName || !data.email || !data.phone || !data.triageAnswers?.ciudad || !acceptPrivacy) {
+            setError('Por favor, acepta la política de privacidad para poder confirmar.');
             return;
         }
 
@@ -112,14 +91,10 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
 
         try {
             const formData = {
-                ...data,
-                fullName: name,
-                email,
-                phone,
+                ...data, // includes fullName, email, phone from Step 8
                 acceptPrivacy,
                 triageAnswers: {
-                    ...(data.triageAnswers || {}),
-                    ciudad // Merge city so it enters properly
+                    ...(data.triageAnswers || {})
                 }
             };
 
@@ -133,7 +108,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
 
             if (result.success) {
                 setIsSuccess(true);
-                onSubmit({ fullName: name, email, phone, acceptPrivacy });
+                onSubmit({ fullName: data.fullName!, email: data.email!, phone: data.phone!, acceptPrivacy });
             } else {
                 setError(result.message || 'Error al procesar la reserva. Intenta de nuevo.');
             }
@@ -164,7 +139,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                     </p>
                 </div>
 
-                <div className="bg-gray-50/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-100 max-w-sm mx-auto w-full space-y-4 shadow-sm">
+                <div className="bg-gray-50/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-100 max-w-sm mx-auto w-full space-y-4 shadow-sm z-10 relative">
                     <div className="flex justify-between items-center text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] pb-2 border-b border-gray-200">
                         <span>Resumen cita</span>
                         <span className="text-green-600 font-bold">Pendiente confirmación</span>
@@ -175,12 +150,12 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                     </div>
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 p-4 pb-8 bg-gradient-to-t from-white via-white to-transparent">
+                <div className="mt-6">
                     <a
                         href={getWhatsAppUrl()}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn-primary w-full bg-[#25D366] hover:bg-[#128C7E] text-white border-none text-base font-black shadow-xl shadow-green-100 py-6 transform transition-transform hover:scale-[1.02]"
+                        className="btn-primary w-full max-w-sm mx-auto flex items-center justify-center bg-[#25D366] hover:bg-[#128C7E] text-white border-none text-base font-black shadow-xl shadow-green-100 py-6 transform transition-transform hover:scale-[1.02] z-20 relative"
                     >
                         PASO FINAL: ENVIAR WHATSAPP
                     </a>
@@ -242,10 +217,10 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                     <div className="bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-6 md:p-8">
                         <div className="mb-8">
                             <h3 className="text-xl md:text-2xl font-black text-[var(--color-secondary)] mb-2">
-                                Finalizar Reserva
+                                Tus Datos
                             </h3>
                             <p className="text-[var(--color-text-muted)] text-sm font-medium">
-                                Completa tus datos para confirmar tu plaza de evaluación. La información que aportes es 100% confidencial.
+                                Por favor, revisa que tus datos sean correctos antes de confirmar la cita.
                             </p>
                         </div>
 
@@ -253,101 +228,35 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Nombre Completo */}
                                 <div className="space-y-1">
-                                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500" htmlFor="name">
-                                        Nombre Completo
-                                    </label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                            <IconPerson />
-                                        </div>
-                                        <input
-                                            type="text"
-                                            id="name"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            placeholder="Tu nombre y apellidos"
-                                            className="block w-full pl-10 pr-3 py-3.5 text-sm font-medium border-2 border-gray-100
-                                                rounded-xl bg-gray-50/30 text-[var(--color-secondary)]
-                                                placeholder-gray-400
-                                                focus:bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-4 focus:ring-primary/10
-                                                transition-all"
-                                        />
+                                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">Nombre Completo</label>
+                                    <div className="p-3 bg-gray-50 border border-gray-100 rounded-xl text-sm font-bold text-[var(--color-secondary)] flex items-center gap-3">
+                                        <IconPerson />
+                                        {data.fullName}
                                     </div>
                                 </div>
                                 {/* Ciudad */}
                                 <div className="space-y-1">
-                                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500" htmlFor="ciudad">
-                                        Ciudad
-                                    </label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                            <IconCity />
-                                        </div>
-                                        <input
-                                            type="text"
-                                            id="ciudad"
-                                            value={ciudad}
-                                            onChange={(e) => setCiudad(e.target.value)}
-                                            placeholder="¿En qué ciudad vives?"
-                                            className="block w-full pl-10 pr-3 py-3.5 text-sm font-medium border-2 border-gray-100
-                                                rounded-xl bg-gray-50/30 text-[var(--color-secondary)]
-                                                placeholder-gray-400
-                                                focus:bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-4 focus:ring-primary/10
-                                                transition-all"
-                                        />
+                                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">Ciudad</label>
+                                    <div className="p-3 bg-gray-50 border border-gray-100 rounded-xl text-sm font-bold text-[var(--color-secondary)] flex items-center gap-3">
+                                        <IconCity />
+                                        {data.triageAnswers?.ciudad || 'No especificada'}
                                     </div>
                                 </div>
                                 {/* WhatsApp */}
                                 <div className="space-y-1">
-                                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500" htmlFor="phone">
-                                        Teléfono/WhatsApp
-                                    </label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                            <IconPhone />
-                                        </div>
-                                        <input
-                                            type="tel"
-                                            id="phone"
-                                            value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}
-                                            placeholder="Móvil con WhatsApp"
-                                            className="block w-full pl-10 pr-3 py-3.5 text-sm font-medium border-2 border-gray-100
-                                                rounded-xl bg-gray-50/30 text-[var(--color-secondary)]
-                                                placeholder-gray-400
-                                                focus:bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-4 focus:ring-primary/10
-                                                transition-all"
-                                        />
+                                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">Teléfono/WhatsApp</label>
+                                    <div className="p-3 bg-gray-50 border border-gray-100 rounded-xl text-sm font-bold text-[var(--color-secondary)] flex items-center gap-3">
+                                        <IconPhone />
+                                        {data.phone}
                                     </div>
-                                    <p className="text-[10px] text-[var(--color-text-muted)] font-medium mt-1.5 ml-1">
-                                        Confirmaremos tu cita por WhatsApp.
-                                    </p>
                                 </div>
                                 {/* Email */}
                                 <div className="space-y-1">
-                                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500" htmlFor="email">
-                                        Correo Electrónico
-                                    </label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                            <IconMail />
-                                        </div>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="ejemplo@correo.com"
-                                            className="block w-full pl-10 pr-3 py-3.5 text-sm font-medium border-2 border-gray-100
-                                                rounded-xl bg-gray-50/30 text-[var(--color-secondary)]
-                                                placeholder-gray-400
-                                                focus:bg-white focus:outline-none focus:border-[var(--color-primary)] focus:ring-4 focus:ring-primary/10
-                                                transition-all"
-                                        />
+                                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">Correo Electrónico</label>
+                                    <div className="p-3 bg-gray-50 border border-gray-100 rounded-xl text-sm font-bold text-[var(--color-secondary)] flex items-center gap-3">
+                                        <IconMail />
+                                        {data.email}
                                     </div>
-                                    <p className="text-[10px] text-[var(--color-text-muted)] font-medium mt-1.5 ml-1">
-                                        Para enviar el justificante de la Cita.
-                                    </p>
                                 </div>
                             </div>
 
@@ -397,9 +306,9 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                         </button>
                         <button
                             onClick={handleSubmit}
-                            disabled={!name || !email || !phone || !ciudad || !acceptPrivacy || isSubmitting}
+                            disabled={!data.fullName || !data.email || !data.phone || !data.triageAnswers?.ciudad || !acceptPrivacy || isSubmitting}
                             className={`w-full sm:w-auto text-sm uppercase tracking-wider font-black py-4 px-8 rounded-full flex items-center justify-center gap-2 transition-all shadow-xl
-                                ${name && email && phone && ciudad && acceptPrivacy && !isSubmitting
+                                ${data.fullName && data.email && data.phone && data.triageAnswers?.ciudad && acceptPrivacy && !isSubmitting
                                     ? 'bg-[var(--color-primary)] hover:bg-[#2bc493] hover:scale-105 hover:shadow-primary/30 text-[var(--color-secondary)] border-none'
                                     : 'bg-gray-200 text-gray-400 shadow-none cursor-not-allowed border-none'}`}
                         >

@@ -64,42 +64,44 @@ export async function POST(request: Request) {
         const inversion = parseTriageValue(triage.inversion);
         const ciudad = parseTriageValue(triage.ciudad);
 
-        if (hasGoogleCredentials) {
-            try {
-                const isAvailable = await checkAvailability(data.date, data.time);
-                if (!isAvailable) {
-                    return NextResponse.json(
-                        { success: false, message: 'Lo sentimos, este horario ya no está disponible.' },
-                        { status: 409 }
-                    );
-                }
+        if (!hasGoogleCredentials) {
+            return NextResponse.json(
+                { success: false, message: 'Falta configurar las variables de entorno de Google Calendar en Vercel (GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, GOOGLE_CALENDAR_ID).' },
+                { status: 500 }
+            );
+        }
 
-                eventId = await createCalendarEvent({
-                    fullName: data.fullName,
-                    email: data.email,
-                    phone: data.phone,
-                    date: data.date,
-                    time: data.time,
-                    location: data.location,
-                    triageInfo: {
-                        motivo,
-                        compromiso,
-                        tiempo,
-                        inversion,
-                        ciudad
-                    }
-                });
-                console.log('✅ Evento creado en GCalendar:', eventId);
-            } catch (calErr: any) {
-                console.error('❌ Error en Google Calendar:', calErr.message);
+        try {
+            const isAvailable = await checkAvailability(data.date, data.time);
+            if (!isAvailable) {
                 return NextResponse.json(
-                    { success: false, message: `Error GCalendar: ${calErr.message}. Contacta por WhatsApp.` },
-                    { status: 500 }
+                    { success: false, message: 'Lo sentimos, este horario ya no está disponible.' },
+                    { status: 409 }
                 );
             }
-        } else {
-            eventId = `mock_${Date.now()}`;
-            console.log('⚠️ Modo mock activo (Calendar).');
+
+            eventId = await createCalendarEvent({
+                fullName: data.fullName,
+                email: data.email,
+                phone: data.phone,
+                date: data.date,
+                time: data.time,
+                location: data.location,
+                triageInfo: {
+                    motivo,
+                    compromiso,
+                    tiempo,
+                    inversion,
+                    ciudad
+                }
+            });
+            console.log('✅ Evento creado en GCalendar:', eventId);
+        } catch (calErr: any) {
+            console.error('❌ Error en Google Calendar:', calErr.message);
+            return NextResponse.json(
+                { success: false, message: `Error GCalendar: ${calErr.message}. Verifica los permisos y el formato de la Private Key en Vercel.` },
+                { status: 500 }
+            );
         }
 
         // ─── Send emails ─────────────────────────────
@@ -125,19 +127,15 @@ export async function POST(request: Request) {
             ciudad
         };
 
-        const hasSmtpCredentials = process.env.SMTP_USER && process.env.SMTP_PASS;
-
-        if (hasSmtpCredentials) {
-            try {
-                // Enviamos correos. Si fallan, logueamos pero NO bloqueamos al usuario si el evento ya se creó
-                await Promise.all([
-                    sendPatientConfirmation(emailData),
-                    sendTherapistNotification(emailData),
-                ]);
-                console.log('📧 Emails enviados correctamente');
-            } catch (mailErr: any) {
-                console.error('⚠️ Error enviando emails (pero reserva creada):', mailErr.message);
-            }
+        try {
+            // Enviamos correos sin chequear env (están hardcodeados en mailer.ts para este proyecto)
+            await Promise.all([
+                sendPatientConfirmation(emailData),
+                sendTherapistNotification(emailData),
+            ]);
+            console.log('📧 Emails enviados correctamente');
+        } catch (mailErr: any) {
+            console.error('⚠️ Error enviando emails (pero reserva creada):', mailErr.message);
         }
 
         // ─── Success ─────────────────────────────────
