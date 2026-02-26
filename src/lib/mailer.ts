@@ -92,9 +92,14 @@ export async function sendPatientConfirmation(data: EmailData) {
 
 /**
  * Envía email de notificación al terapeuta (Salva Vera).
+ * Diferencia entre "Aviso Director" (Presencial) y "Aviso Online".
  */
 export async function sendTherapistNotification(data: EmailData) {
   try {
+    const isOnline = data.location.toLowerCase().includes('online');
+    const badgeText = isOnline ? 'Aviso Online' : 'Aviso Director';
+    const ubicacionInfo = isOnline ? 'Sesión Online (Videollamada)' : `Sesión Presencial en ${data.location}`;
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -102,32 +107,37 @@ export async function sendTherapistNotification(data: EmailData) {
         <style>
           body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #0a0a0f; color: #f0f0f5; margin: 0; padding: 20px; }
           .container { max-width: 500px; margin: 0 auto; background: #12121e; border-radius: 16px; padding: 32px; border: 1px solid #1f1f30; }
-          .badge { display: inline-block; background: #c9a84c; color: #0a0a0f; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+          .badge { display: inline-block; background: ${isOnline ? '#4b6cb7' : '#c9a84c'}; color: ${isOnline ? '#fff' : '#0a0a0f'}; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
           .detail { margin: 8px 0; font-size: 14px; }
           .label { color: #8888a0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
         </style>
       </head>
       <body>
         <div class="container">
-          <span class="badge">Nueva Reserva</span>
-          <h2 style="font-size: 18px; font-weight: 400; margin-top: 16px;">Sesión de Valoración Diagnóstica</h2>
+          <span class="badge">${badgeText}</span>
+          <h2 style="font-size: 18px; font-weight: 400; margin-top: 16px;">Nueva Solicitud: ${ubicacionInfo}</h2>
+          
           <div style="background: #0a0a0f; border-radius: 12px; padding: 16px; margin: 16px 0;">
-            <p class="label">Paciente</p>
+            <p class="label">Datos del Cliente</p>
             <div class="detail"><strong>${data.fullName}</strong></div>
             <div class="detail">📧 ${data.email}</div>
             <div class="detail">📱 ${data.phone}</div>
             ${data.ciudad ? `<div class="detail">🏙️ Ciudad: ${data.ciudad}</div>` : ''}
+            
             <div style="height: 1px; background: #1f1f30; margin: 12px 0;"></div>
-            <p class="label">Cita</p>
+            
+            <p class="label">Resumen de la Cita</p>
             <div class="detail">📅 ${data.date}</div>
             <div class="detail">🕒 ${data.time}h</div>
             <div class="detail">📍 ${data.location}</div>
+            
             <div style="height: 1px; background: #1f1f30; margin: 12px 0;"></div>
-            <p class="label">Datos Filtro</p>
+            
+            <p class="label">Datos de Triaje</p>
             <div class="detail">🧠 Motivo: ${data.motivo || '—'}</div>
-            <div class="detail">💪 Compromiso: ${data.compromiso || '—'}/10</div>
-            <div class="detail">⏳ Tiempo: ${data.tiempo || '—'}</div>
-            <div class="detail">💰 Inversión: ${data.inversion || '—'}</div>
+            <div class="detail">💪 Compromiso: ${data.compromiso || '—'} / 10</div>
+            <div class="detail">⏳ Tiempo disp.: ${data.tiempo || '—'}</div>
+            <div class="detail">💰 Inversión disp.: ${data.inversion || '—'}</div>
           </div>
         </div>
       </body>
@@ -137,10 +147,10 @@ export async function sendTherapistNotification(data: EmailData) {
     const res = await transporter.sendMail({
       from: `"Sistema de Reservas" <${process.env.SMTP_USER}>`,
       to: process.env.NOTIFICATION_EMAIL,
-      subject: `🔔 Nueva reserva: ${data.fullName} — ${data.date} ${data.time}h`,
+      subject: `🔔 ${badgeText}: ${data.fullName} — ${data.date} ${data.time}h`,
       html,
     });
-    console.log('📧 Email enviado al terapeuta:', res.messageId);
+    console.log('📧 Email enviado al terapeuta (Notificación):', res.messageId);
   } catch (err: any) {
     console.error('❌ Error enviando email al terapeuta:', err.message);
     throw err;

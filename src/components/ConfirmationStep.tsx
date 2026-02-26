@@ -173,116 +173,127 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                 <p className="text-sm text-[var(--color-text-muted)] font-medium">Verifica tu cita antes de solicitar la reserva.</p>
             </div>
 
-            <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                    {/* CITA (IZQUIERDA) */}
-                    <div className="space-y-4">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-primary)] flex items-center gap-2">
-                            <span className="w-4 h-[2px] bg-[var(--color-primary)] opacity-30" />
-                            Tu Cita
-                        </h4>
+            <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar pb-6">
+                <div className="bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 md:p-8 mx-auto w-full border border-gray-100">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
+                        {/* CITA (IZQUIERDA) */}
+                        <div className="space-y-4">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-primary)] flex items-center gap-2">
+                                <span className="w-4 h-[2px] bg-[var(--color-primary)] opacity-30" />
+                                Tu Cita
+                            </h4>
 
-                        <div className="space-y-3">
-                            <div className="p-5 rounded-3xl border-2 border-transparent bg-gray-50/50 flex items-center gap-4 transition-all hover:bg-white hover:border-[var(--color-primary)] hover:shadow-lg hover:shadow-primary/5 group">
-                                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
-                                    <IconCalendar />
+                            <div className="space-y-3">
+                                <div className="p-5 rounded-3xl border-2 border-transparent bg-gray-50/50 flex items-center gap-4 transition-all hover:bg-white hover:border-[var(--color-primary)] hover:shadow-lg hover:shadow-primary/5 group">
+                                    <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                        <IconCalendar />
+                                    </div>
+                                    <div className="text-left">
+                                        <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Fecha y Hora</p>
+                                        <p className="text-sm font-black text-[var(--color-secondary)] leading-tight">{formatDate(data.date)}<br />{data.time}h</p>
+                                    </div>
                                 </div>
-                                <div className="text-left">
-                                    <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Fecha y Hora</p>
-                                    <p className="text-sm font-black text-[var(--color-secondary)] leading-tight">{formatDate(data.date)}<br />{data.time}h</p>
+
+                                <div className="p-5 rounded-3xl border-2 border-transparent bg-gray-50/50 flex items-center gap-4 transition-all hover:bg-white hover:border-[var(--color-primary)] hover:shadow-lg hover:shadow-primary/5 group">
+                                    <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                        <IconLocation />
+                                    </div>
+                                    <div className="text-left">
+                                        <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Lugar</p>
+                                        <p className="text-sm font-black text-[var(--color-secondary)] leading-tight">{data.location ? LOCATION_LABELS[data.location] : '—'}</p>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div className="p-5 rounded-3xl border-2 border-transparent bg-gray-50/50 flex items-center gap-4 transition-all hover:bg-white hover:border-[var(--color-primary)] hover:shadow-lg hover:shadow-primary/5 group">
-                                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
-                                    <IconLocation />
+                        {/* DATOS (DERECHA) */}
+                        <div className="space-y-4">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-primary)] flex items-center gap-2">
+                                <span className="w-4 h-[2px] bg-[var(--color-primary)] opacity-30" />
+                                Tus Datos
+                            </h4>
+
+                            <div className="space-y-2.5">
+                                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm transition-all hover:border-gray-200">
+                                    <div className="shrink-0"><IconPerson /></div>
+                                    <div className="flex flex-col">
+                                        <span className="text-[9px] uppercase font-bold text-gray-400">Nombre Completo</span>
+                                        <span className="text-sm font-bold text-[var(--color-secondary)]">{form.fullName}</span>
+                                    </div>
                                 </div>
-                                <div className="text-left">
-                                    <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Lugar</p>
-                                    <p className="text-sm font-black text-[var(--color-secondary)] leading-tight">{data.location ? LOCATION_LABELS[data.location] : '—'}</p>
+                                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm transition-all hover:border-gray-200">
+                                    <div className="shrink-0">
+                                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-[9px] uppercase font-bold text-gray-400">Ciudad</span>
+                                        <span className="text-sm font-bold text-[var(--color-secondary)]">{(data.triageAnswers?.ciudad as string) || 'No especificada'}</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm transition-all hover:border-gray-200">
+                                    <div className="shrink-0"><IconMail /></div>
+                                    <div className="flex flex-col">
+                                        <span className="text-[9px] uppercase font-bold text-gray-400">Email</span>
+                                        <span className="text-sm font-bold text-[var(--color-secondary)]">{form.email}</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm transition-all hover:border-gray-200">
+                                    <div className="shrink-0"><IconPhone /></div>
+                                    <div className="flex flex-col">
+                                        <span className="text-[9px] uppercase font-bold text-gray-400">Teléfono/WhatsApp</span>
+                                        <span className="text-sm font-bold text-[var(--color-secondary)]">{form.phone}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* DATOS (DERECHA) */}
-                    <div className="space-y-4">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-primary)] flex items-center gap-2">
-                            <span className="w-4 h-[2px] bg-[var(--color-primary)] opacity-30" />
-                            Tus Datos
-                        </h4>
-
-                        <div className="space-y-2.5">
-                            <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm transition-all hover:border-gray-200">
-                                <div className="shrink-0"><IconPerson /></div>
-                                <div className="flex flex-col">
-                                    <span className="text-[9px] uppercase font-bold text-gray-400">Nombre Completo</span>
-                                    <span className="text-sm font-bold text-[var(--color-secondary)]">{form.fullName}</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm transition-all hover:border-gray-200">
-                                <div className="shrink-0"><IconMail /></div>
-                                <div className="flex flex-col">
-                                    <span className="text-[9px] uppercase font-bold text-gray-400">Email</span>
-                                    <span className="text-sm font-bold text-[var(--color-secondary)]">{form.email}</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm transition-all hover:border-gray-200">
-                                <div className="shrink-0"><IconPhone /></div>
-                                <div className="flex flex-col">
-                                    <span className="text-[9px] uppercase font-bold text-gray-400">Teléfono/WhatsApp</span>
-                                    <span className="text-sm font-bold text-[var(--color-secondary)]">{form.phone}</span>
-                                </div>
-                            </div>
+                    <div className="mt-8 p-5 bg-amber-50/40 rounded-3xl border border-amber-100/50 flex gap-4 items-center">
+                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm">
+                            <span className="text-xl">📧</span>
                         </div>
+                        <p className="text-[11px] text-amber-900 leading-relaxed font-semibold text-left">
+                            Al pulsar "Finalizar", recibirás una confirmación inmediata por email. Asegúrate de tener acceso a {form.email}.
+                        </p>
+                    </div>
+
+                    <div className="mt-8 flex flex-col gap-5 pb-4">
+                        <label className="flex items-center gap-4 cursor-pointer group">
+                            <input
+                                type="checkbox"
+                                checked={form.acceptPrivacy}
+                                onChange={(e) => setForm((prev) => ({ ...prev, acceptPrivacy: e.target.checked }))}
+                                className="h-6 w-6 rounded-lg border-2 border-gray-200 text-[var(--color-primary)] focus:ring-[var(--color-primary)] transition-all cursor-pointer"
+                            />
+                            <span className="text-[11px] md:text-xs text-[var(--color-text-muted)] leading-relaxed font-bold group-hover:text-[var(--color-secondary)] text-left transition-colors">
+                                Confirmo que mis datos son correctos y acepto la Política de Privacidad.*
+                            </span>
+                        </label>
+
+                        {error && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="bg-red-50 text-red-600 text-xs font-black p-4 rounded-2xl border-2 border-red-100 flex items-center gap-3"
+                            >
+                                <span className="material-icons-outlined text-sm">error</span>
+                                {error}
+                            </motion.div>
+                        )}
                     </div>
                 </div>
 
-                <div className="mt-10 p-5 bg-amber-50/40 rounded-3xl border border-amber-100/50 flex gap-4 items-center">
-                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm">
-                        <span className="text-xl">📧</span>
-                    </div>
-                    <p className="text-[11px] text-amber-900 leading-relaxed font-semibold text-left">
-                        Al pulsar "Finalizar", recibirás una confirmación inmediata por email. Asegúrate de tener acceso a {form.email}.
-                    </p>
-                </div>
-
-                <div className="mt-8 flex flex-col gap-5 pb-4">
-                    <label className="flex items-center gap-4 cursor-pointer group">
-                        <input
-                            type="checkbox"
-                            checked={form.acceptPrivacy}
-                            onChange={(e) => setForm((prev) => ({ ...prev, acceptPrivacy: e.target.checked }))}
-                            className="h-6 w-6 rounded-lg border-2 border-gray-200 text-[var(--color-primary)] focus:ring-[var(--color-primary)] transition-all cursor-pointer"
-                        />
-                        <span className="text-[11px] md:text-xs text-[var(--color-text-muted)] leading-relaxed font-bold group-hover:text-[var(--color-secondary)] text-left transition-colors">
-                            Confirmo que mis datos son correctos y acepto la Política de Privacidad.*
-                        </span>
-                    </label>
-
-                    {error && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="bg-red-50 text-red-600 text-xs font-black p-4 rounded-2xl border-2 border-red-100 flex items-center gap-3"
+                <div className="step-layout__footer -mx-8 -mb-10">
+                    <div className="flex items-center justify-between gap-4 w-full">
+                        <button onClick={onBack} className="btn-back">Atrás</button>
+                        <button
+                            onClick={handleSubmit}
+                            disabled={!form.acceptPrivacy || loading}
+                            className="btn-primary flex-1 shadow-2xl shadow-primary/20 hover:shadow-primary/30 py-5"
                         >
-                            <span className="material-icons-outlined text-sm">error</span>
-                            {error}
-                        </motion.div>
-                    )}
-                </div>
-            </div>
-
-            <div className="step-layout__footer -mx-8 -mb-10">
-                <div className="flex items-center justify-between gap-4 w-full">
-                    <button onClick={onBack} className="btn-back">Atrás</button>
-                    <button
-                        onClick={handleSubmit}
-                        disabled={!form.acceptPrivacy || loading}
-                        className="btn-primary flex-1 shadow-2xl shadow-primary/20 hover:shadow-primary/30 py-5"
-                    >
-                        {loading ? 'RESERVANDO...' : 'SOLICITAR SESIÓN'}
-                    </button>
+                            {loading ? 'RESERVANDO...' : 'SOLICITAR SESIÓN'}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
