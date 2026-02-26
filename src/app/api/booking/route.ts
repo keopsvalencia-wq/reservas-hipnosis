@@ -55,11 +55,14 @@ export async function POST(request: Request) {
 
         // ─── Extract triage data ────────────────────
         const triage = data.triageAnswers || {};
-        const motivo = (triage.motivo_consulta || triage.motivo || '') as string;
-        const compromiso = (triage.compromiso || '') as string;
-        const tiempo = (triage.disponibilidad_tiempo || '') as string;
-        const inversion = (triage.inversion || '') as string;
-        const ciudad = (triage.ciudad || '') as string;
+
+        const parseTriageValue = (val: any) => Array.isArray(val) ? val.join(', ') : String(val || '');
+
+        const motivo = parseTriageValue(triage.motivo_consulta || triage.motivo);
+        const compromiso = parseTriageValue(triage.compromiso);
+        const tiempo = parseTriageValue(triage.disponibilidad_tiempo);
+        const inversion = parseTriageValue(triage.inversion);
+        const ciudad = parseTriageValue(triage.ciudad);
 
         if (hasGoogleCredentials) {
             try {
