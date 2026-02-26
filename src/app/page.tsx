@@ -552,7 +552,10 @@ function StepNav({
             }
           }}
           disabled={nextDisabled || nextLoading}
-          className="btn-primary py-4 px-10 text-base uppercase tracking-wider font-black disabled:opacity-40 disabled:cursor-not-allowed"
+          className={`btn-primary py-4 px-10 text-base uppercase tracking-wider font-black transition-all ${nextDisabled
+            ? '!bg-gray-200 !text-gray-400 !shadow-none cursor-not-allowed'
+            : ''
+            }`}
           whileHover={!nextDisabled ? { scale: 1.03 } : {}}
           whileTap={!nextDisabled ? { scale: 0.97 } : {}}
         >
