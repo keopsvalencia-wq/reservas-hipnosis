@@ -123,7 +123,7 @@ export async function getBusySlots(date: string): Promise<string[]> {
         return busySlots;
     } catch (error: any) {
         console.error('❌ Error getting busy slots:', error.message);
-        return [];
+        throw error; // Throw so frontend knows API failed and doesn't assume all slots are free
     }
 }
 
@@ -166,7 +166,7 @@ export async function getBusyRange(startDate: string, endDate: string): Promise<
         return busySlots;
     } catch (error: any) {
         console.error('❌ Error getting busy range:', error.message);
-        return [];
+        throw error;
     }
 }
 

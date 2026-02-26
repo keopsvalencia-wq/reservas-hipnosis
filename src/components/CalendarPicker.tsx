@@ -35,6 +35,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [busySlots, setBusySlots] = useState<string[]>(initialBusySlots);
     const [loadingBusy, setLoadingBusy] = useState(false);
+    const [apiError, setApiError] = useState<string | null>(null);
 
     const today = startOfDay(new Date());
 
@@ -50,16 +51,24 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
         if (!hasData) {
             setLoadingBusy(true);
         }
+        setApiError(null);
 
         try {
             const res = await fetch(`/api/availability?date=${formattedDate}`);
             const data = await res.json();
             if (data.success) {
                 console.log(`[DEBUG] Agenda GCal para ${formattedDate}:`, data.busySlots);
-                setBusySlots(data.busySlots);
+                // merge missing slots or just replace
+                setBusySlots(prev => {
+                    const others = prev.filter(p => !p.startsWith(formattedDate));
+                    return [...others, ...data.busySlots];
+                });
+            } else {
+                setApiError(data.message || 'Error al conectar con Google Calendar (Revisa configuraciones)');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error fetching busy slots:', error);
+            setApiError('Error de red al consultar disponibilidad');
         } finally {
             setLoadingBusy(false);
         }
@@ -239,6 +248,12 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
                                         <div className="h-full flex flex-col items-center justify-center space-y-3">
                                             <div className="w-8 h-8 border-4 border-[var(--color-primary-soft)] border-t-[var(--color-primary)] rounded-full animate-spin" />
                                             <p className="text-xs text-[var(--color-text-muted)] animate-pulse">Sincronizando agenda...</p>
+                                        </div>
+                                    ) : apiError ? (
+                                        <div className="h-full flex flex-col items-center justify-center text-center p-6 bg-red-50 rounded-2xl border border-red-200">
+                                            <svg className="w-10 h-10 text-red-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                            <p className="text-sm font-bold text-red-600 mb-2">Error de Sincronización</p>
+                                            <p className="text-xs text-red-500 font-medium">{apiError}</p>
                                         </div>
                                     ) : (
                                         <TimeSlotGrid

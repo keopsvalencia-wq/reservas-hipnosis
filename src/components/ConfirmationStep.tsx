@@ -269,16 +269,24 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
                             </div>
 
                             <div className="flex flex-col gap-4">
-                                <label className="flex items-center gap-4 cursor-pointer group mt-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={acceptPrivacy}
-                                        onChange={(e) => setAcceptPrivacy(e.target.checked)}
-                                        className="h-5 w-5 rounded-md border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)] transition-all cursor-pointer"
-                                    />
-                                    <span className="text-xs text-[var(--color-text-muted)] leading-relaxed font-bold group-hover:text-[var(--color-secondary)] cursor-pointer">
-                                        Tus datos son 100% seguros y acepto su tratamiento para contactar conmigo acerca de mi reserva.*
-                                    </span>
+                                <label className="flex items-start gap-4 cursor-pointer group mt-2 p-4 bg-red-50 hover:bg-red-100/50 border border-red-100 rounded-xl transition-colors">
+                                    <div className="pt-0.5">
+                                        <input
+                                            type="checkbox"
+                                            checked={acceptPrivacy}
+                                            onChange={(e) => setAcceptPrivacy(e.target.checked)}
+                                            className="h-6 w-6 rounded-md border-red-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)] shadow-sm transition-all cursor-pointer"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-black text-red-600 uppercase tracking-widest mb-1 flex items-center gap-1">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                            Paso Obligatorio
+                                        </span>
+                                        <span className="text-xs text-[var(--color-text-muted)] leading-relaxed font-bold group-hover:text-[var(--color-secondary)]">
+                                            Marca esta casilla para aceptar la política de privacidad y poder pulsar el botón de continuar.*
+                                        </span>
+                                    </div>
                                 </label>
 
                                 {error && (
