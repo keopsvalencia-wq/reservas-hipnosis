@@ -93,7 +93,16 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
         const loc = LOCATION_LABELS[data.location as Location] || 'No especificada';
         const city = data.triageAnswers?.ciudad || '---';
 
-        const rawText = `NUEVA SOLICITUD DE EVALUACIÓN\n\nHola Salva, soy *${data.fullName}* de *${city}*.\n*He agendado una sesión de evaluación contigo.*\n\n- Día: ${dateFormatted}\n- Hora: ${data.time}\n- Ubicación: ${loc}\n- Motivo: ${mot}`;
+        let hashtag = '';
+        if (data.location === 'valencia') {
+            hashtag = '#SedePicanya';
+        } else if (data.location === 'motilla') {
+            hashtag = '#SedeMotilla';
+        } else if (data.location === 'online') {
+            hashtag = '#SedeOnline';
+        }
+
+        const rawText = `NUEVA SOLICITUD DE EVALUACIÓN\n\nHola Salva, soy *${data.fullName}* de *${city}*.\n*He agendado una sesión de evaluación contigo.*\n\n- Día: ${dateFormatted}\n- Hora: ${data.time}\n- Ubicación: ${loc}\n- Motivo: ${mot}\n\n${hashtag}\n(Ahora pulsa enviar para confirmar)`;
 
         return `https://wa.me/${adminPhone}?text=${encodeURIComponent(rawText)}`;
     };

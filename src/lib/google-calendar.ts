@@ -219,6 +219,7 @@ export async function createCalendarEvent(data: {
     try {
         const event = await calendar.events.insert({
             calendarId,
+            sendUpdates: 'all', // This forces Google Calendar to send an email immediately
             requestBody: {
                 summary: `Evaluación: ${data.fullName}`,
                 description: [
@@ -227,6 +228,7 @@ export async function createCalendarEvent(data: {
                     data.triageInfo?.ciudad ? `Ciudad: ${data.triageInfo.ciudad}` : '',
                     data.triageInfo?.dedicacion ? `Dedicación: ${data.triageInfo.dedicacion}` : '',
                     `Motivo: ${data.triageInfo?.motivo || 'No especificado'}`,
+                    ``,
                     ``,
                     `--- TRIPLE INVERSION ---`,
                     `Compromiso: ${data.triageInfo?.compromiso || '—'}`,
@@ -244,10 +246,14 @@ export async function createCalendarEvent(data: {
                     timeZone: 'Europe/Madrid',
                 },
                 location: locationLabel,
+                attendees: [
+                    { email: 'keopsvalencia@gmail.com' },
+                    { email: 'info@hipnosisenterapia.com' }
+                ],
                 reminders: {
                     useDefault: false,
                     overrides: [
-                        { method: 'popup', minutes: 30 },      // Push notification en el movil 30 min antes
+                        { method: 'popup', minutes: 10 },      // Push notification en el movil 10 min antes
                         { method: 'email', minutes: 60 * 24 }, // 24h antes por email (al admin)
                         { method: 'email', minutes: 60 },      // 1h antes por email (al admin)
                     ],
