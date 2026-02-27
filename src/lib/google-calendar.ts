@@ -31,6 +31,23 @@ const extraCalendars: string[] = [
 ];
 
 /**
+ * Helper para obtener el timestamp RFC3339 correcto en la zona horaria de Madrid.
+ */
+function getMadridRFC3339(dateStr: string, timeStr: string): string {
+    const d = new Date(`${dateStr}T12:00:00Z`);
+    const formatter = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Madrid', timeZoneName: 'shortOffset' });
+    const parts = formatter.formatToParts(d);
+    let offset = '+01:00';
+    const tzPart = parts.find(p => p.type === 'timeZoneName')?.value;
+    if (tzPart) {
+        if (tzPart.includes('+2')) offset = '+02:00';
+        else if (tzPart.includes('+1')) offset = '+01:00';
+        else if (tzPart.includes('0')) offset = '+00:00'; // Canarias? (por si acaso)
+    }
+    return `${dateStr}T${timeStr}${offset}`;
+}
+
+/**
  * Verifica disponibilidad en Google Calendar (Precisión estricta).
  */
 export async function checkAvailability(
@@ -40,8 +57,14 @@ export async function checkAvailability(
     const auth = getAuthClient();
     const calendar = google.calendar({ version: 'v3', auth });
 
-    const startDate = new Date(`${date}T${time}:00`);
-    const endDate = new Date(startDate.getTime() + SESSION_DURATION_MINUTES * 60 * 1000);
+    const startRFC = getMadridRFC3339(date, `${time}:00`);
+    
+    // Calcular endDate sumando los minutos a un objeto date
+    const startObj = new Date(`${date}T${time}:00`);
+    const endObj = new Date(startObj.getTime() + SESSION_DURATION_MINUTES * 60 * 1000);
+    const endHour = endObj.getHours().toString().padStart(2, '0');
+    const endMinute = endObj.getMinutes().toString().padStart(2, '0');
+    const endRFC = getMadridRFC3339(date, `${endHour}:${endMinute}:00`);
 
     const items = [
         { id: calendarId },
@@ -52,8 +75,8 @@ export async function checkAvailability(
     try {
         const response = await calendar.freebusy.query({
             requestBody: {
-                timeMin: startDate.toISOString(),
-                timeMax: endDate.toISOString(),
+                timeMin: startRFC,
+                timeMax: endRFC,
                 items,
                 timeZone: 'Europe/Madrid',
             },
@@ -82,8 +105,8 @@ export async function getBusySlots(date: string): Promise<string[]> {
     const auth = getAuthClient();
     const calendar = google.calendar({ version: 'v3', auth });
 
-    const timeMin = `${date}T00:00:00+01:00`;
-    const timeMax = `${date}T23:59:59+01:00`;
+    const timeMin = getMadridRFC3339(date, '00:00:00');
+    const timeMax = getMadridRFC3339(date, '23:59:59');
 
     const items = [
         { id: calendarId },

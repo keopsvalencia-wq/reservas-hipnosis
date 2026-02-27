@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     format,
@@ -36,6 +36,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
     const [busySlots, setBusySlots] = useState<string[]>(initialBusySlots);
     const [loadingBusy, setLoadingBusy] = useState(false);
     const [apiError, setApiError] = useState<string | null>(null);
+    const slotsContainerRef = useRef<HTMLDivElement>(null);
 
     const today = startOfDay(new Date());
 
@@ -136,6 +137,12 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
         setSelectedDate(date);
         setSelectedTime(null);
         fetchBusySlots(date);
+
+        if (typeof window !== 'undefined' && window.innerWidth < 768) {
+            setTimeout(() => {
+                slotsContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
     };
 
     const handleTimeSelect = (time: string) => {
@@ -162,9 +169,9 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
             </div>
 
             {/* Horizontal Layout for Calendar and Slots */}
-            <div className="flex flex-col lg:flex-row gap-8 items-start">
+            <div className="flex flex-col md:flex-row gap-5 md:gap-8 items-start">
                 {/* Calendar Column */}
-                <div className="flex-1 w-full space-y-6">
+                <div className="flex-1 w-full space-y-4 md:space-y-6">
                     {/* Month Navigator */}
                     <div className="flex items-center justify-between px-1">
                         <button
@@ -230,7 +237,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
                 </div>
 
                 {/* Slots Column */}
-                <div className="w-full lg:w-80 h-full min-h-[400px]">
+                <div ref={slotsContainerRef} className="w-full md:w-80 h-full flex-shrink-0 min-h-[220px] md:min-h-[400px]">
                     <AnimatePresence mode="wait">
                         {selectedDate ? (
                             <motion.div
@@ -243,7 +250,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
                                 <p className="text-sm font-bold text-[var(--color-secondary)] uppercase tracking-wider">
                                     {format(selectedDate, "EEEE d 'de' MMMM", { locale: es })}
                                 </p>
-                                <div className="h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                <div className="h-[220px] md:h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                                     {loadingBusy ? (
                                         <div className="h-full flex flex-col items-center justify-center space-y-3">
                                             <div className="w-8 h-8 border-4 border-[var(--color-primary-soft)] border-t-[var(--color-primary)] rounded-full animate-spin" />
