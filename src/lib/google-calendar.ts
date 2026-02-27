@@ -187,6 +187,8 @@ export async function createCalendarEvent(data: {
         tiempo?: string;
         inversion?: string;
         ciudad?: string;
+        situacion_actual?: string;
+        situacion_deseada?: string;
     };
 }): Promise<string> {
     const auth = getAuthClient();
@@ -221,21 +223,18 @@ export async function createCalendarEvent(data: {
             calendarId,
             requestBody: {
                 summary: `Evaluación: ${data.fullName}`,
-                description: [
-                    `--- DATOS CLIENTE ---`,
-                    `Nombre: ${data.fullName}`,
-                    data.triageInfo?.ciudad ? `Ciudad: ${data.triageInfo.ciudad}` : '',
-                    data.triageInfo?.dedicacion ? `Dedicación: ${data.triageInfo.dedicacion}` : '',
-                    `Motivo: ${data.triageInfo?.motivo || 'No especificado'}`,
-                    ``,
-                    ``,
-                    `--- TRIPLE INVERSION ---`,
-                    `Compromiso: ${data.triageInfo?.compromiso || '—'}`,
-                    `Tiempo: ${data.triageInfo?.tiempo || '—'}`,
-                    `Dinero: ${data.triageInfo?.inversion || '—'}`,
-                ]
-                    .filter(Boolean)
-                    .join('\n'),
+                description: `--- DATOS CLIENTE ---\n` +
+                    `Nombre: ${data.fullName}\n` +
+                    (data.triageInfo?.ciudad ? `Ciudad: ${data.triageInfo.ciudad}\n` : '') +
+                    (data.triageInfo?.dedicacion ? `Dedicación: ${data.triageInfo.dedicacion}\n` : '') +
+                    `Motivo: ${data.triageInfo?.motivo || 'No especificado'}\n` +
+                    (data.triageInfo?.situacion_actual ? `Situación actual: ${data.triageInfo.situacion_actual}\n` : '') +
+                    (data.triageInfo?.situacion_deseada ? `Situación deseada: ${data.triageInfo.situacion_deseada}\n` : '') +
+                    `\n\n` +
+                    `--- TRIPLE INVERSION ---\n` +
+                    `Compromiso: ${data.triageInfo?.compromiso || '—'}\n` +
+                    `Tiempo: ${data.triageInfo?.tiempo || '—'}\n` +
+                    `Dinero: ${data.triageInfo?.inversion ? data.triageInfo.inversion.split('.')[0] : '—'}`,
                 start: {
                     dateTime: startDateTime,
                     timeZone: 'Europe/Madrid',
@@ -249,8 +248,6 @@ export async function createCalendarEvent(data: {
                     useDefault: false,
                     overrides: [
                         { method: 'popup', minutes: 10 },      // Push notification en el movil 10 min antes
-                        { method: 'email', minutes: 60 * 24 }, // 24h antes por email
-                        { method: 'email', minutes: 60 },      // 1h antes por email
                     ],
                 },
             },

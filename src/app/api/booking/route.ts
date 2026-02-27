@@ -89,6 +89,8 @@ export async function POST(request: Request) {
         const tiempo = parseTriageLabel('disponibilidad_tiempo', triage.disponibilidad_tiempo);
         const inversion = parseTriageLabel('inversion', triage.inversion);
         const ciudad = parseTriageValue(triage.ciudad);
+        const situacion_actual = parseTriageValue(triage.situacion_actual);
+        const situacion_deseada = parseTriageValue(triage.situacion_deseada);
 
         if (!hasGoogleCredentials) {
             return NextResponse.json(
@@ -119,7 +121,9 @@ export async function POST(request: Request) {
                     compromiso,
                     tiempo,
                     inversion,
-                    ciudad
+                    ciudad,
+                    situacion_actual,
+                    situacion_deseada
                 }
             });
             console.log('✅ Evento creado en GCalendar:', eventId);
@@ -152,7 +156,9 @@ export async function POST(request: Request) {
             compromiso,
             tiempo,
             inversion,
-            ciudad
+            ciudad,
+            situacion_actual,
+            situacion_deseada
         };
 
         try {
