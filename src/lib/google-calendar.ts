@@ -182,7 +182,9 @@ export async function createCalendarEvent(data: {
     location: string;
     triageInfo?: {
         dedicacion?: string;
+        edad?: string;
         motivo?: string;
+        impacto_emocional?: string;
         compromiso?: string;
         tiempo?: string;
         inversion?: string;
@@ -226,12 +228,13 @@ export async function createCalendarEvent(data: {
                 description: `--- DATOS CLIENTE ---\n` +
                     `Nombre: ${data.fullName}\n` +
                     (data.triageInfo?.ciudad ? `Ciudad: ${data.triageInfo.ciudad}\n` : '') +
+                    (data.triageInfo?.edad ? `Edad: ${data.triageInfo.edad}\n` : '') +
                     (data.triageInfo?.dedicacion ? `Dedicación: ${data.triageInfo.dedicacion}\n` : '') +
                     `Motivo: ${data.triageInfo?.motivo || 'No especificado'}\n` +
-                    (data.triageInfo?.situacion_actual ? `Situación actual: ${data.triageInfo.situacion_actual}\n` : '') +
-                    (data.triageInfo?.situacion_deseada ? `Situación deseada: ${data.triageInfo.situacion_deseada}\n` : '') +
-                    `\n\n` +
-                    `--- TRIPLE INVERSION ---\n` +
+                    (data.triageInfo?.impacto_emocional ? `Consecuencias (miedos): ${data.triageInfo.impacto_emocional}\n` : '') +
+                    (data.triageInfo?.situacion_actual ? `Situación actual:\n${data.triageInfo.situacion_actual}\n` : '') +
+                    (data.triageInfo?.situacion_deseada ? `\nSituación deseada:\n${data.triageInfo.situacion_deseada}\n` : '') +
+                    `\n--- TRIPLE INVERSION ---\n` +
                     `Compromiso: ${data.triageInfo?.compromiso || '—'}\n` +
                     `Tiempo: ${data.triageInfo?.tiempo || '—'}\n` +
                     `Dinero: ${data.triageInfo?.inversion ? data.triageInfo.inversion.split('.')[0] : '—'}`,

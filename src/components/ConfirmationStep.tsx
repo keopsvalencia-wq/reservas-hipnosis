@@ -102,7 +102,7 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
             hashtag = '#SedeOnline';
         }
 
-        const rawText = `NUEVA SOLICITUD DE EVALUACIÓN\n\nHola Salva, soy *${data.fullName}* de *${city}*.\n*He agendado una sesión de evaluación contigo.*\n\n- Día: ${dateFormatted}\n- Hora: ${data.time}\n- Ubicación: ${loc}\n- Motivo: ${mot}\n\n${hashtag}\n(Ahora pulsa enviar para confirmar) 👉`;
+        const rawText = `NUEVA SOLICITUD DE EVALUACIÓN\n\nHola Salva, soy *${data.fullName}* de *${city}*.\n*He agendado una sesión de evaluación contigo.*\n\n- Día: ${dateFormatted}\n- Hora: ${data.time}\n- Ubicación: ${loc}\n- Motivo: ${mot}\n\n${hashtag}\n(Ahora pulsa enviar para confirmar) \uD83D\uDC49`;
 
         return `https://wa.me/${adminPhone}?text=${encodeURIComponent(rawText)}`;
     };

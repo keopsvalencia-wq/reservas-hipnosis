@@ -14,7 +14,7 @@
   --color-text: #1F2937;
   --color-text-muted: #64748B;
   --color-error: #EF4444;
-  --color-shadow-mint: rgba(57, 220, 168, 0.15);
+  --color-page-bg: #F3F4F6;
   --master-screen-height: 850px;
 }
 
@@ -38,7 +38,7 @@ html {
 }
 
 body {
-  background-color: var(--color-bg);
+  background-color: var(--color-page-bg);
   color: var(--color-text);
   font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
   margin: 0;
@@ -74,14 +74,14 @@ body {
 
 /* ─── Master Screen — Full visibility for iframes ───── */
 .master-screen {
-  background: var(--color-bg);
+  background: var(--color-page-bg);
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   min-height: 100vh;
   /* Ensure it takes full height but doesn't overflow hidden if not needed */
-  padding: 8px;
+  padding: 16px;
   /* Slightly tighter on mobile to maximize content */
   overflow-x: hidden;
   overflow-y: auto;

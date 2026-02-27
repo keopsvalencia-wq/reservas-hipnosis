@@ -77,6 +77,7 @@ export async function POST(request: Request) {
         };
 
         const dedicacion = parseTriageValue(triage.dedicacion);
+        const edad = parseTriageLabel('edad', triage.edad);
 
         // Handling 'motivo_otro' 
         let rawMotivo = parseTriageValue(triage.motivo_consulta || triage.motivo);
@@ -85,12 +86,26 @@ export async function POST(request: Request) {
         }
         const motivo = rawMotivo;
 
+        // Handling 'impacto_otro'
+        let rawImpacto = parseTriageValue(triage.impacto_emocional);
+        if (rawImpacto.includes('Otro miedo diferente') && triage.impacto_otro) {
+            rawImpacto = rawImpacto.replace('Otro miedo diferente', `Otro (${triage.impacto_otro})`);
+        }
+        const impacto_emocional = rawImpacto;
+
         const compromiso = parseTriageLabel('compromiso_escala', triage.compromiso_escala || triage.compromiso);
         const tiempo = parseTriageLabel('disponibilidad_tiempo', triage.disponibilidad_tiempo);
         const inversion = parseTriageLabel('inversion', triage.inversion);
         const ciudad = parseTriageValue(triage.ciudad);
-        const situacion_actual = parseTriageValue(triage.situacion_actual);
-        const situacion_deseada = parseTriageValue(triage.situacion_deseada);
+
+        // Handling Tags & text for situacion_actual and deseada
+        const actTags = parseTriageValue(triage.situacion_tags);
+        const actText = parseTriageValue(triage.situacion_actual);
+        const situacion_actual = [actTags, actText].filter(Boolean).join('.\nAmpliación: ');
+
+        const desTags = parseTriageValue(triage.situacion_deseada_tags);
+        const desText = parseTriageValue(triage.situacion_deseada);
+        const situacion_deseada = [desTags, desText].filter(Boolean).join('.\nAmpliación: ');
 
         if (!hasGoogleCredentials) {
             return NextResponse.json(
@@ -117,7 +132,9 @@ export async function POST(request: Request) {
                 location: data.location,
                 triageInfo: {
                     dedicacion,
+                    edad,
                     motivo,
+                    impacto_emocional,
                     compromiso,
                     tiempo,
                     inversion,
@@ -152,7 +169,9 @@ export async function POST(request: Request) {
             time: data.time,
             location: locationLabel,
             dedicacion,
+            edad,
             motivo,
+            impacto_emocional,
             compromiso,
             tiempo,
             inversion,

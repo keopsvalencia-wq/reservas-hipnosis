@@ -31,6 +31,8 @@ interface EmailData {
   dedicacion?: string;
   situacion_actual?: string;
   situacion_deseada?: string;
+  impacto_emocional?: string;
+  edad?: string;
 }
 
 /**
@@ -58,7 +60,7 @@ export async function sendPatientConfirmation(data: EmailData) {
       finalLocationHTML = `<strong>${data.location}</strong>`;
     }
 
-    const cancelText = encodeURIComponent(`Hola Salva, necesito cancelar/modificar mi reserva del ${data.date} a las ${data.time}.`);
+    const cancelText = encodeURIComponent(`Hola Salva, necesito modificar o cancelar mi reserva del ${data.date} a las ${data.time}.`);
     const whatsappLink = `https://wa.me/34656839568?text=${cancelText}`;
 
     const html = `
@@ -92,7 +94,7 @@ export async function sendPatientConfirmation(data: EmailData) {
       <body>
         <div class="container">
           <div class="header">
-            <img src="https://reservas.hipnosisenterapia.com/images/Logo-Hipnosis-en-Terapia-24.png" alt="Hipnosis en Terapia" />
+            <img src="https://reservas.hipnosisenterapia.com/images/logo.png" alt="Hipnosis en Terapia" />
             <p>Evaluación Confirmada</p>
           </div>
           
@@ -182,7 +184,7 @@ export async function sendTherapistNotification(data: EmailData) {
       <body>
         <div class="container">
           <div style="text-align: center; margin-bottom: 24px;">
-            <img src="https://reservas.hipnosisenterapia.com/images/Logo-Hipnosis-en-Terapia-24.png" alt="Hipnosis en Terapia" style="max-width: 160px;" />
+            <img src="https://reservas.hipnosisenterapia.com/images/logo.png" alt="Hipnosis en Terapia" style="max-width: 160px;" />
           </div>
           
           <div style="text-align: center;">
@@ -202,17 +204,19 @@ export async function sendTherapistNotification(data: EmailData) {
 
           <div class="section">
             <span class="label">TRIAJE: Contexto Clínico</span>
+            <div class="detail"><strong>⏳ Edad:</strong> ${data.edad || '—'}</div>
             <div class="detail"><strong>💼 Ocupación:</strong> ${data.dedicacion || '—'}</div>
             <div class="detail"><strong>🎯 Motivo (Ppal):</strong> ${data.motivo || '—'}</div>
+            ${data.impacto_emocional ? `<div class="detail" style="margin-top:4px;"><strong>🧠 Consecuencias:</strong> ${data.impacto_emocional}</div>` : ''}
             
             <div style="margin-top: 16px;">
               <strong>🌪️ ¿Cómo se siente AHORA?</strong>
-              <div class="box">${data.situacion_actual || 'No especificado'}</div>
+              <div class="box">${data.situacion_actual ? data.situacion_actual.replace(/\n/g, '<br>') : 'No especificado'}</div>
             </div>
 
             <div style="margin-top: 16px;">
               <strong>✨ ¿Cómo le gustaría estar?</strong>
-              <div class="box">${data.situacion_deseada || 'No especificado'}</div>
+              <div class="box">${data.situacion_deseada ? data.situacion_deseada.replace(/\n/g, '<br>') : 'No especificado'}</div>
             </div>
           </div>
 
