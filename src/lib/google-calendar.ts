@@ -192,8 +192,22 @@ export async function createCalendarEvent(data: {
     const auth = getAuthClient();
     const calendar = google.calendar({ version: 'v3', auth });
 
-    const startDate = new Date(`${data.date}T${data.time}:00`);
-    const endDate = new Date(startDate.getTime() + SESSION_DURATION_MINUTES * 60 * 1000);
+    // Force interpretation in Europe/Madrid timezone
+    // Using string manipulation to ensure the Date object takes the local time as Madrid's time
+    const [year, month, day] = data.date.split('-');
+    const [hour, minute] = data.time.split(':');
+
+    // Instead of creating a generic Date, we format it as an ISO string with the Madrid timezone offset (+01:00 or +02:00)
+    // The easiest way is formatting to local ISO without Z, and passing timeZone to Google
+    const startDateTime = `${data.date}T${data.time}:00`;
+
+    // To calculate endDate we parse it to a Date, add minutes and format back
+    const startObj = new Date(`${data.date}T${data.time}:00`);
+    const endObj = new Date(startObj.getTime() + SESSION_DURATION_MINUTES * 60 * 1000);
+
+    const endHour = endObj.getHours().toString().padStart(2, '0');
+    const endMinute = endObj.getMinutes().toString().padStart(2, '0');
+    const endDateTime = `${data.date}T${endHour}:${endMinute}:00`;
 
     const locationLabel =
         data.location === 'valencia'
@@ -222,11 +236,11 @@ export async function createCalendarEvent(data: {
                     .filter(Boolean)
                     .join('\n'),
                 start: {
-                    dateTime: startDate.toISOString(),
+                    dateTime: startDateTime,
                     timeZone: 'Europe/Madrid',
                 },
                 end: {
-                    dateTime: endDate.toISOString(),
+                    dateTime: endDateTime,
                     timeZone: 'Europe/Madrid',
                 },
                 location: locationLabel,

@@ -92,9 +92,9 @@ export const triageQuestions: TriageQuestionDef[] = [
         text: '¿Cuánto tiempo puedes dedicar a tu proceso de cambio diariamente?',
         type: 'radio',
         options: [
-            { value: 'sin_tiempo', label: '🔴 No tengo tiempo, mi día a día me come.' },
             { value: '2h_dia', label: '🟡 2 horas al día.' },
             { value: 'lo_que_haga_falta', label: '🟢 El tiempo que haga falta. Mi salud mental es ahora mismo mi prioridad absoluta.' },
+            { value: 'sin_tiempo', label: '🔴 No tengo tiempo, mi día a día me come.' },
         ],
         group: 'compromiso',
     },

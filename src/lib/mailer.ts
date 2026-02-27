@@ -28,6 +28,7 @@ interface EmailData {
   tiempo?: string;
   inversion?: string;
   ciudad?: string;
+  dedicacion?: string;
 }
 
 /**
@@ -64,39 +65,39 @@ export async function sendPatientConfirmation(data: EmailData) {
       <head>
         <meta charset="utf-8">
         <style>
-          body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #0a0a0f; color: #f0f0f5; margin: 0; padding: 20px; line-height: 1.6; }
-          .container { max-width: 600px; margin: 0 auto; background: #12121e; border-radius: 16px; padding: 40px; border: 1px solid #1f1f30; }
+          body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f9f9fb; color: #1a1a1a; margin: 0; padding: 20px; line-height: 1.6; }
+          .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 40px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #eaeaea; }
           .header { text-align: center; margin-bottom: 30px; }
-          .header h1 { font-size: 24px; font-weight: 300; margin: 0; color: #f0f0f5; }
-          .header h1 span { color: #c9a84c; }
-          .divider { height: 1px; background: #1f1f30; margin: 24px 0; }
-          .greeting { font-size: 16px; font-weight: 500; margin-bottom: 16px; color: #ffffff; }
-          .text { font-size: 15px; color: #a0a0b0; margin-bottom: 20px; }
-          .details-box { background: #0a0a0f; border-radius: 12px; padding: 24px; margin: 24px 0; border: 1px solid #1f1f30; }
-          .details-box h3 { margin-top: 0; margin-bottom: 16px; font-size: 16px; color: #c9a84c; font-weight: 500; }
-          .detail-item { margin-bottom: 16px; font-size: 15px; display: flex; align-items: flex-start; gap: 10px; }
+          .header img { max-width: 180px; margin-bottom: 16px; }
+          .header h1 { font-size: 24px; font-weight: 300; margin: 0; color: #1a1a1a; }
+          .header p { color: #888; font-size: 12px; margin-top: 8px; text-transform: uppercase; letter-spacing: 2px; }
+          .divider { height: 1px; background: #eaeaea; margin: 24px 0; }
+          .greeting { font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #1a1a1a; }
+          .text { font-size: 15px; color: #4a4a4a; margin-bottom: 20px; }
+          .details-box { background: #fdfdfd; border-radius: 8px; padding: 24px; margin: 24px 0; border: 1px solid #eaeaea; }
+          .details-box h3 { margin-top: 0; margin-bottom: 16px; font-size: 16px; color: #1a1a1a; font-weight: 600; }
+          .detail-item { margin-bottom: 16px; font-size: 15px; display: flex; align-items: flex-start; gap: 10px; color: #4a4a4a; }
           .detail-item:last-child { margin-bottom: 0; }
           .detail-icon { font-size: 16px; }
           .gifts-box { margin-bottom: 24px; }
-          .gifts-box h3 { font-size: 17px; color: #c9a84c; margin-bottom: 12px; font-weight: 500; }
-          .gifts-box p { font-size: 15px; color: #a0a0b0; }
+          .gifts-box h3 { font-size: 17px; color: #1a1a1a; margin-bottom: 12px; font-weight: 600; }
+          .gifts-box p { font-size: 15px; color: #4a4a4a; }
           .gifts-box ul { padding-left: 0; list-style: none; margin: 16px 0; }
-          .gifts-box li { margin-bottom: 12px; font-size: 15px; color: #f0f0f5; background: #0a0a0f; padding: 12px 16px; border-radius: 8px; border-left: 3px solid #c9a84c; }
-          .warning-box { background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 16px; border-radius: 0 8px 8px 0; margin-bottom: 30px; }
-          .warning-box p { margin: 0; font-size: 14px; color: #fca5a5; }
-          .signature { font-size: 16px; color: #f0f0f5; font-weight: 400; }
-          .cta-container { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #1f1f30; }
-          .cta { display: inline-block; background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.3s ease; }
-          .cta:hover { background: #c9a84c; color: #0a0a0f; }
-          .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #666680; }
-          .footer a { color: #8888a0; text-decoration: none; }
+          .gifts-box li { margin-bottom: 12px; font-size: 15px; color: #1a1a1a; background: #fdfdfd; padding: 12px 16px; border-radius: 8px; border-left: 3px solid #c9a84c; box-shadow: 0 1px 2px rgba(0,0,0,0.01); border: 1px solid #fafafa; }
+          .warning-box { background: #fff5f5; border-left: 4px solid #ef4444; padding: 16px; border-radius: 0 8px 8px 0; margin-bottom: 30px; }
+          .warning-box p { margin: 0; font-size: 14px; color: #991b1b; }
+          .signature { font-size: 16px; color: #1a1a1a; font-weight: 400; }
+          .cta-container { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #eaeaea; }
+          .cta { display: inline-block; background: #c9a84c; color: #ffffff !important; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: 600; box-shadow: 0 4px 6px rgba(201,168,76,0.2); }
+          .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #888; }
+          .footer a { color: #888; text-decoration: none; }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h1><span>Hipnosis</span> en Terapia</h1>
-            <p style="color: #8888a0; font-size: 12px; margin-top: 8px; text-transform: uppercase; letter-spacing: 2px;">Evaluación Diagnóstica Confirmada</p>
+            <img src="https://hipnosisenterapia.com/wp-content/uploads/2023/10/Logo-Hipnosis-en-Terapia.png" alt="Hipnosis en Terapia" />
+            <p>Evaluación Diagnóstica Confirmada</p>
           </div>
           
           <div class="greeting">Hola ${data.fullName},</div>
@@ -106,8 +107,8 @@ export async function sendPatientConfirmation(data: EmailData) {
 
           <div class="details-box">
             <h3>Detalles de tu Evaluación:</h3>
-            <div class="detail-item"><span class="detail-icon">📅</span> <div><strong>Fecha:</strong><br><span style="color: #a0a0b0;">${data.date}</span></div></div>
-            <div class="detail-item"><span class="detail-icon">⏰</span> <div><strong>Hora:</strong><br><span style="color: #a0a0b0;">${data.time}h</span></div></div>
+            <div class="detail-item"><span class="detail-icon">📅</span> <div><strong>Fecha:</strong><br><span style="color: #666;">${data.date}</span></div></div>
+            <div class="detail-item"><span class="detail-icon">⏰</span> <div><strong>Hora:</strong><br><span style="color: #666;">${data.time}h</span></div></div>
             <div class="detail-item"><span class="detail-icon">📍</span> <div>${finalLocationHTML}</div></div>
           </div>
 
@@ -116,7 +117,7 @@ export async function sendPatientConfirmation(data: EmailData) {
             <p>Mi objetivo es analizar la raíz de tu problema y ver si tu caso encaja en el Método Reset para arrancarlo de forma definitiva.</p>
             <p>Además, solo por asistir, te llevarás estos 3 regalos de claridad mental:</p>
             <ul>
-              <li><strong>1.</strong> Entenderás de una vez por todas qué te pasa realmente.</li>
+              <li><strong>1.</strong> Verás tu problema desde un punto de vista que ni te imaginas y que nadie te ha contado.</li>
               <li><strong>2.</strong> Verás exactamente por qué NO te ha funcionado nada de lo que has intentado hasta hoy.</li>
               <li><strong>3.</strong> Descubrirás cuál es la verdadera y única solución a tu problema.</li>
             </ul>
@@ -128,11 +129,11 @@ export async function sendPatientConfirmation(data: EmailData) {
 
           <div class="signature">
             Nos vemos muy pronto. Un abrazo,<br>
-            <strong style="color: #c9a84c;">Salva Vera</strong>
+            <strong style="color: #1a1a1a;">Salva Vera</strong>
           </div>
 
           <div class="cta-container">
-            <p style="font-size: 13px; color: #8888a0; margin-bottom: 16px;">(Si necesitas cancelar o modificar tu cita, puedes hacerlo enviándome un mensaje directo)</p>
+            <p style="font-size: 13px; color: #888; margin-bottom: 16px;">(Si necesitas cancelar o modificar tu cita, puedes hacerlo enviándome un mensaje directo)</p>
             <a href="${whatsappLink}" class="cta">Modificar / Cancelar Cita</a>
           </div>
 
@@ -166,7 +167,9 @@ export async function sendTherapistNotification(data: EmailData) {
   try {
     const isOnline = data.location.toLowerCase().includes('online');
     const badgeText = isOnline ? 'Aviso Online' : 'Aviso Director';
-    const ubicacionInfo = isOnline ? 'Sesión Online (Videollamada)' : `Sesión Presencial en ${data.location}`;
+    // Removed the word "Presencial" because data.location already says it depending on how it's formatted 
+    // Usually it passes "Picanya (Sede Presencial)", so adding it again would cause redundancy.
+    const ubicacionInfo = isOnline ? 'Sesión Online (Videollamada)' : `Sesión en ${data.location}`;
 
     const html = `
       <!DOCTYPE html>
@@ -201,9 +204,10 @@ export async function sendTherapistNotification(data: EmailData) {
             
             <div style="height: 1px; background: #1f1f30; margin: 12px 0;"></div>
             
-            <p class="label">Datos de Triaje</p>
-            <div class="detail">🧠 Motivo: ${data.motivo || '—'}</div>
-            <div class="detail">💪 Compromiso: ${data.compromiso || '—'} / 10</div>
+            <p class="label">Datos de Triaje Completos</p>
+            <div class="detail">🏢 Dedicación: ${data.dedicacion || '—'}</div>
+            <div class="detail">🧠 Motivo de consulta: ${data.motivo || '—'}</div>
+            <div class="detail">💪 Compromiso (1-10): ${data.compromiso || '—'}</div>
             <div class="detail">⏳ Tiempo disp.: ${data.tiempo || '—'}</div>
             <div class="detail">💰 Inversión disp.: ${data.inversion || '—'}</div>
           </div>

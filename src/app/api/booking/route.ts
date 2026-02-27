@@ -77,7 +77,14 @@ export async function POST(request: Request) {
         };
 
         const dedicacion = parseTriageValue(triage.dedicacion);
-        const motivo = parseTriageValue(triage.motivo_consulta || triage.motivo);
+
+        // Handling 'motivo_otro' 
+        let rawMotivo = parseTriageValue(triage.motivo_consulta || triage.motivo);
+        if (rawMotivo.includes('Otros') && triage.motivo_otro) {
+            rawMotivo = rawMotivo.replace('Otros', `Otros (${triage.motivo_otro})`);
+        }
+        const motivo = rawMotivo;
+
         const compromiso = parseTriageLabel('compromiso_escala', triage.compromiso_escala || triage.compromiso);
         const tiempo = parseTriageLabel('disponibilidad_tiempo', triage.disponibilidad_tiempo);
         const inversion = parseTriageLabel('inversion', triage.inversion);

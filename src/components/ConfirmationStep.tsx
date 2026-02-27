@@ -83,7 +83,13 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
     const getWhatsAppUrl = () => {
         const adminPhone = process.env.NEXT_PUBLIC_ADMIN_PHONE || '34656839568';
 
-        const mot = data.triageAnswers?.motivo_consulta || data.triageAnswers?.motivo || 'No especificado';
+        let mot = data.triageAnswers?.motivo_consulta || data.triageAnswers?.motivo || 'No especificado';
+        if (typeof mot === 'string' && mot.includes('Otros') && data.triageAnswers?.motivo_otro) {
+            mot = mot.replace('Otros', `Otros (${data.triageAnswers.motivo_otro})`);
+        } else if (Array.isArray(mot)) {
+            mot = mot.map(m => m === 'Otros' && data.triageAnswers?.motivo_otro ? `Otros (${data.triageAnswers.motivo_otro})` : m).join(', ');
+        }
+
         const loc = LOCATION_LABELS[data.location as Location] || 'No especificada';
         const city = data.triageAnswers?.ciudad || '---';
 
