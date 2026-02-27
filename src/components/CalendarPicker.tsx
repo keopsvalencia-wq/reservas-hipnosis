@@ -37,6 +37,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
     const [loadingBusy, setLoadingBusy] = useState(false);
     const [apiError, setApiError] = useState<string | null>(null);
     const slotsContainerRef = useRef<HTMLDivElement>(null);
+    const navRef = useRef<HTMLDivElement>(null);
 
     const today = startOfDay(new Date());
 
@@ -147,6 +148,11 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
 
     const handleTimeSelect = (time: string) => {
         setSelectedTime(time);
+        if (typeof window !== 'undefined' && window.innerWidth < 768) {
+            setTimeout(() => {
+                navRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+        }
     };
 
     const handleConfirm = () => {
@@ -282,7 +288,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
             </div>
 
             {/* Navigation */}
-            <div className="flex items-center justify-between pt-2">
+            <div ref={navRef} className="flex items-center justify-between pt-2">
                 <button
                     onClick={onBack}
                     className="flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors font-medium group"

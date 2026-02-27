@@ -94,7 +94,7 @@ export async function sendPatientConfirmation(data: EmailData) {
       <body>
         <div class="container">
           <div class="header">
-            <img src="https://reservas.hipnosisenterapia.com/images/logo.png" alt="Hipnosis en Terapia" />
+            <img src="https://raw.githubusercontent.com/keopsvalencia-wq/reservas-hipnosis/main/public/images/logo.png" alt="Hipnosis en Terapia" />
             <p>Evaluación Confirmada</p>
           </div>
           
@@ -184,7 +184,7 @@ export async function sendTherapistNotification(data: EmailData) {
       <body>
         <div class="container">
           <div style="text-align: center; margin-bottom: 24px;">
-            <img src="https://reservas.hipnosisenterapia.com/images/logo.png" alt="Hipnosis en Terapia" style="max-width: 160px;" />
+            <img src="https://raw.githubusercontent.com/keopsvalencia-wq/reservas-hipnosis/main/public/images/logo.png" alt="Hipnosis en Terapia" style="max-width: 160px;" />
           </div>
           
           <div style="text-align: center;">
