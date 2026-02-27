@@ -78,7 +78,7 @@ export async function sendPatientConfirmation(data: EmailData) {
     `;
 
     const res = await transporter.sendMail({
-      from: `"Hipnosis en Terapia" <${process.env.SMTP_USER}>`,
+      from: `"Hipnosis en Terapia" <info@hipnosisenterapia.com>`,
       to: data.email,
       subject: `✅ Cita confirmada — ${data.date} a las ${data.time}h`,
       html,
@@ -145,8 +145,8 @@ export async function sendTherapistNotification(data: EmailData) {
     `;
 
     const res = await transporter.sendMail({
-      from: `"Sistema de Reservas" <${process.env.SMTP_USER}>`,
-      to: process.env.NOTIFICATION_EMAIL,
+      from: `"Sistema de Reservas" <info@hipnosisenterapia.com>`,
+      to: 'info@hipnosisenterapia.com',
       subject: `🔔 ${badgeText}: ${data.fullName} — ${data.date} ${data.time}h`,
       html,
     });
