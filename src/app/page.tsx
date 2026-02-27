@@ -178,28 +178,28 @@ export default function Home() {
       case 1:
         return (
           <StepLayout>
-            <div className="space-y-12 py-4">
-              <div className="text-center space-y-4 max-w-2xl mx-auto">
-                <h2 className="text-4xl md:text-5xl font-black text-[var(--color-secondary)] leading-tight">
+            <div className="space-y-6 md:space-y-8 pt-2 pb-4">
+              <div className="text-center space-y-3 max-w-2xl mx-auto">
+                <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-tight">
                   Tus 3 Regalos de Claridad.
                 </h2>
-                <p className="text-lg text-[var(--color-text-muted)] font-medium">
+                <p className="text-sm md:text-lg text-[var(--color-text-muted)] font-medium leading-relaxed px-2">
                   Solo por asistir a tu evaluación, te llevarás 3 revelaciones que liberarán la presión de tu cabeza:
                 </p>
               </div>
 
-              <div className="space-y-4 max-w-4xl mx-auto">
+              <div className="space-y-3 max-w-4xl mx-auto">
                 {/* Card 01 */}
                 <motion.div
                   whileHover={{ x: 8 }}
-                  className="bg-white p-5 md:p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center md:items-start gap-5 group hover:border-[var(--color-primary)] transition-all duration-300"
+                  className="bg-white p-4 md:p-6 rounded-2xl border border-gray-100 flex flex-row items-start gap-4 group hover:border-[var(--color-primary)] transition-all duration-300"
                 >
-                  <div className="text-3xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">01</div>
-                  <div className="space-y-3">
-                    <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                  <div className="text-2xl md:text-3xl font-black text-[var(--color-primary)] opacity-30 group-hover:opacity-100 transition-opacity shrink-0 pt-0.5">01</div>
+                  <div className="space-y-1.5">
+                    <p className="text-sm md:text-base lg:text-lg text-[var(--color-secondary)] leading-snug font-bold">
                       Verás tu problema desde una perspectiva que <span className="text-[var(--color-primary)]">NADIE te había contado jamás</span>.
                     </p>
-                    <p className="text-sm text-[var(--color-text-muted)] leading-relaxed italic border-l-4 border-emerald-50 pl-3">
+                    <p className="text-[11px] md:text-sm text-[var(--color-text-muted)] leading-relaxed italic border-l-2 md:border-l-4 border-emerald-50 pl-2 md:pl-3">
                       &quot;Mis pacientes dicen que esto les da más paz en 45 min que años de terapias convencionales.&quot;
                     </p>
                   </div>
@@ -208,10 +208,10 @@ export default function Home() {
                 {/* Card 02 */}
                 <motion.div
                   whileHover={{ x: 8 }}
-                  className="bg-white p-5 md:p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center md:items-start gap-5 group hover:border-[var(--color-primary)] transition-all duration-300"
+                  className="bg-white p-4 md:p-6 rounded-2xl border border-gray-100 flex flex-row items-center md:items-start gap-4 group hover:border-[var(--color-primary)] transition-all duration-300"
                 >
-                  <div className="text-3xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">02</div>
-                  <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                  <div className="text-2xl md:text-3xl font-black text-[var(--color-primary)] opacity-30 group-hover:opacity-100 transition-opacity shrink-0">02</div>
+                  <p className="text-sm md:text-base lg:text-lg text-[var(--color-secondary)] leading-snug font-bold">
                     Entenderás exactamente por qué <span className="text-[var(--color-primary)]">NADA de lo que has intentado</span> hasta hoy ha funcionado.
                   </p>
                 </motion.div>
@@ -219,10 +219,10 @@ export default function Home() {
                 {/* Card 03 */}
                 <motion.div
                   whileHover={{ x: 8 }}
-                  className="bg-white p-5 md:p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center md:items-start gap-5 group hover:border-[var(--color-primary)] transition-all duration-300"
+                  className="bg-white p-4 md:p-6 rounded-2xl border border-gray-100 flex flex-row items-center md:items-start gap-4 group hover:border-[var(--color-primary)] transition-all duration-300"
                 >
-                  <div className="text-3xl font-black text-[var(--color-primary)] opacity-20 group-hover:opacity-100 transition-opacity shrink-0">03</div>
-                  <p className="text-base lg:text-lg text-[var(--color-secondary)] leading-relaxed font-bold">
+                  <div className="text-2xl md:text-3xl font-black text-[var(--color-primary)] opacity-30 group-hover:opacity-100 transition-opacity shrink-0">03</div>
+                  <p className="text-sm md:text-base lg:text-lg text-[var(--color-secondary)] leading-snug font-bold">
                     Descubrirás la <span className="text-[var(--color-primary)]">ÚNICA y verdadera solución definitiva</span> a tu situación.
                   </p>
                 </motion.div>
