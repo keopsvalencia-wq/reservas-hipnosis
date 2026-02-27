@@ -13,7 +13,6 @@ interface ConfirmationStepProps {
     onBack: () => void;
 }
 
-// Native SVGs for 100% reliability
 const IconCheck = () => (
     <svg className="w-12 h-12 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
@@ -57,6 +56,18 @@ const IconCity = () => (
     </svg>
 );
 
+import { triageQuestions } from '@/data/triage-questions';
+
+const getTriageLabel = (questionId: string, value: string | undefined): string => {
+    if (!value) return '---';
+    const q = triageQuestions.find(q => q.id === questionId);
+    if (q && q.options) {
+        const option = q.options.find(o => o.value === String(value));
+        return option ? option.label : String(value);
+    }
+    return String(value);
+};
+
 export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepProps) {
     const [acceptPrivacy, setAcceptPrivacy] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,12 +81,13 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
     );
 
     const getWhatsAppUrl = () => {
-        const adminPhone = process.env.NEXT_PUBLIC_ADMIN_PHONE || '34661073837';
+        const adminPhone = process.env.NEXT_PUBLIC_ADMIN_PHONE || '34656839568';
 
-        // Usamos emojis nativos raw, sin codificar individualmente, y codificamos TODO el string final de una pasada.
         const mot = data.triageAnswers?.motivo_consulta || data.triageAnswers?.motivo || 'No especificado';
         const loc = LOCATION_LABELS[data.location as Location] || 'No especificada';
-        const rawText = `🔸 NUEVA SOLICITUD DE EVALUACIÓN 🔸\n\nHola Salva, soy *${data.fullName}* de *${data.triageAnswers?.ciudad || '---'}*.\n*He agendado una sesión de evaluación contigo.*\n\n🔹 Día: ${dateFormatted}\n🔹 Hora: ${data.time}\n🔹 Ubicación: ${loc}\n🔹 Motivo: ${mot}\n\n#Sede${data.location === 'valencia' ? 'Picanya' : data.location === 'motilla' ? 'Motilla' : 'Online'}\n(Ahora pulsa enviar para confirmar)`;
+        const city = data.triageAnswers?.ciudad || '---';
+
+        const rawText = `NUEVA SOLICITUD DE EVALUACIÓN\n\nHola Salva, soy *${data.fullName}* de *${city}*.\n*He agendado una sesión de evaluación contigo.*\n\n- Día: ${dateFormatted}\n- Hora: ${data.time}\n- Ubicación: ${loc}\n- Motivo: ${mot}`;
 
         return `https://wa.me/${adminPhone}?text=${encodeURIComponent(rawText)}`;
     };

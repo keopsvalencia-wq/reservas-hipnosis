@@ -181,6 +181,7 @@ export async function createCalendarEvent(data: {
     time: string;
     location: string;
     triageInfo?: {
+        dedicacion?: string;
         motivo?: string;
         compromiso?: string;
         tiempo?: string;
@@ -205,23 +206,18 @@ export async function createCalendarEvent(data: {
         const event = await calendar.events.insert({
             calendarId,
             requestBody: {
-                summary: `Sesión Evaluación: ${data.fullName}`,
+                summary: `Evaluación: ${data.fullName}`,
                 description: [
                     `--- DATOS CLIENTE ---`,
                     `Nombre: ${data.fullName}`,
-                    `Email: ${data.email}`,
-                    `Teléfono: ${data.phone}`,
-                    `Motivo: ${data.triageInfo?.motivo || 'No especificado'}`,
                     data.triageInfo?.ciudad ? `Ciudad: ${data.triageInfo.ciudad}` : '',
+                    data.triageInfo?.dedicacion ? `Dedicación: ${data.triageInfo.dedicacion}` : '',
+                    `Motivo: ${data.triageInfo?.motivo || 'No especificado'}`,
                     ``,
-                    `--- TRIAJE DE INVERSIÓN ---`,
-                    `Compromiso: ${data.triageInfo?.compromiso || '—'}/10`,
+                    `--- TRIPLE INVERSION ---`,
+                    `Compromiso: ${data.triageInfo?.compromiso || '—'}`,
                     `Tiempo: ${data.triageInfo?.tiempo || '—'}`,
                     `Dinero: ${data.triageInfo?.inversion || '—'}`,
-                    ``,
-                    `📍 Ubicación: ${locationLabel}`,
-                    ``,
-                    `Reserva automática desde reservas.hipnosisenterapia.com`,
                 ]
                     .filter(Boolean)
                     .join('\n'),
@@ -237,8 +233,9 @@ export async function createCalendarEvent(data: {
                 reminders: {
                     useDefault: false,
                     overrides: [
-                        { method: 'email', minutes: 60 * 24 }, // 24h antes
-                        { method: 'email', minutes: 60 },      // 1h antes
+                        { method: 'popup', minutes: 30 },      // Push notification en el movil 30 min antes
+                        { method: 'email', minutes: 60 * 24 }, // 24h antes por email (al admin)
+                        { method: 'email', minutes: 60 },      // 1h antes por email (al admin)
                     ],
                 },
             },

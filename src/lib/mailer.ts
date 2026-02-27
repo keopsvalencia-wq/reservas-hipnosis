@@ -35,41 +35,109 @@ interface EmailData {
  */
 export async function sendPatientConfirmation(data: EmailData) {
   try {
+    let finalLocationHTML = '';
+    const locLower = data.location.toLowerCase();
+
+    if (locLower.includes('online')) {
+      finalLocationHTML = '<strong>Online (Videollamada)</strong><br><span style="color: #a0a0b0; font-size: 13px;">El enlace de conexión te llegará próximamente.</span>';
+    } else if (locLower.includes('picanya') || locLower.includes('valencia')) {
+      finalLocationHTML = `
+        <strong>Sede Picanya (Valencia)</strong><br>
+        <span style="color: #a0a0b0; font-size: 13px;">Carrer Torrent, 30, PUERTA 4, 46210 Picaña, Valencia.</span><br>
+        <a href="https://maps.google.com/?cid=10480257999918627497&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ" style="color: #c9a84c; font-size: 13px; text-decoration: underline;">📍 Ver en Google Maps</a>
+      `;
+    } else if (locLower.includes('motilla')) {
+      finalLocationHTML = `
+        <strong>Sede Motilla del Palancar (Cuenca)</strong><br>
+        <a href="https://maps.app.goo.gl/ZoJiw55xy2x1sJgG8" style="color: #c9a84c; font-size: 13px; text-decoration: underline;">📍 Ver en Google Maps</a>
+      `;
+    } else {
+      finalLocationHTML = `<strong>${data.location}</strong>`;
+    }
+
+    const cancelText = encodeURIComponent(`Hola Salva, necesito cancelar/modificar mi reserva del ${data.date} a las ${data.time}.`);
+    const whatsappLink = `https://wa.me/34656839568?text=${cancelText}`;
+
     const html = `
       <!DOCTYPE html>
       <html>
       <head>
+        <meta charset="utf-8">
         <style>
-          body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #0a0a0f; color: #f0f0f5; margin: 0; padding: 20px; }
-          .container { max-width: 500px; margin: 0 auto; background: #12121e; border-radius: 16px; padding: 32px; border: 1px solid #1f1f30; }
-          .header { text-align: center; margin-bottom: 24px; }
-          .header h1 { font-size: 20px; font-weight: 300; margin: 0; }
+          body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #0a0a0f; color: #f0f0f5; margin: 0; padding: 20px; line-height: 1.6; }
+          .container { max-width: 600px; margin: 0 auto; background: #12121e; border-radius: 16px; padding: 40px; border: 1px solid #1f1f30; }
+          .header { text-align: center; margin-bottom: 30px; }
+          .header h1 { font-size: 24px; font-weight: 300; margin: 0; color: #f0f0f5; }
           .header h1 span { color: #c9a84c; }
-          .divider { height: 1px; background: #1f1f30; margin: 20px 0; }
-          .detail { display: flex; align-items: center; gap: 12px; margin: 12px 0; font-size: 14px; }
-          .detail-icon { color: #c9a84c; font-size: 16px; }
-          .cta { display: block; text-align: center; background: #c9a84c; color: #0a0a0f; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 500; font-size: 14px; margin-top: 24px; }
-          .footer { text-align: center; margin-top: 24px; font-size: 11px; color: #8888a0; }
+          .divider { height: 1px; background: #1f1f30; margin: 24px 0; }
+          .greeting { font-size: 16px; font-weight: 500; margin-bottom: 16px; color: #ffffff; }
+          .text { font-size: 15px; color: #a0a0b0; margin-bottom: 20px; }
+          .details-box { background: #0a0a0f; border-radius: 12px; padding: 24px; margin: 24px 0; border: 1px solid #1f1f30; }
+          .details-box h3 { margin-top: 0; margin-bottom: 16px; font-size: 16px; color: #c9a84c; font-weight: 500; }
+          .detail-item { margin-bottom: 16px; font-size: 15px; display: flex; align-items: flex-start; gap: 10px; }
+          .detail-item:last-child { margin-bottom: 0; }
+          .detail-icon { font-size: 16px; }
+          .gifts-box { margin-bottom: 24px; }
+          .gifts-box h3 { font-size: 17px; color: #c9a84c; margin-bottom: 12px; font-weight: 500; }
+          .gifts-box p { font-size: 15px; color: #a0a0b0; }
+          .gifts-box ul { padding-left: 0; list-style: none; margin: 16px 0; }
+          .gifts-box li { margin-bottom: 12px; font-size: 15px; color: #f0f0f5; background: #0a0a0f; padding: 12px 16px; border-radius: 8px; border-left: 3px solid #c9a84c; }
+          .warning-box { background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 16px; border-radius: 0 8px 8px 0; margin-bottom: 30px; }
+          .warning-box p { margin: 0; font-size: 14px; color: #fca5a5; }
+          .signature { font-size: 16px; color: #f0f0f5; font-weight: 400; }
+          .cta-container { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #1f1f30; }
+          .cta { display: inline-block; background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.3s ease; }
+          .cta:hover { background: #c9a84c; color: #0a0a0f; }
+          .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #666680; }
+          .footer a { color: #8888a0; text-decoration: none; }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
             <h1><span>Hipnosis</span> en Terapia</h1>
-            <p style="color: #8888a0; font-size: 12px; margin-top: 8px; text-transform: uppercase; letter-spacing: 2px;">Confirmación de Cita</p>
+            <p style="color: #8888a0; font-size: 12px; margin-top: 8px; text-transform: uppercase; letter-spacing: 2px;">Evaluación Diagnóstica Confirmada</p>
           </div>
-          <div class="divider"></div>
-          <p style="font-size: 14px;">Hola <strong>${data.fullName}</strong>,</p>
-          <p style="font-size: 14px; color: #a0a0b0;">Tu sesión de valoración diagnóstica con <strong>Salva Vera</strong> ha sido confirmada:</p>
-          <div style="background: #0a0a0f; border-radius: 12px; padding: 16px; margin: 16px 0;">
-            <div class="detail">📅 <strong>${data.date}</strong></div>
-            <div class="detail">🕒 <strong>${data.time}h</strong></div>
-            <div class="detail">📍 <strong>${data.location}</strong></div>
+          
+          <div class="greeting">Hola ${data.fullName},</div>
+          
+          <p class="text">Te escribo para confirmarte que tu reserva se ha realizado con éxito.</p>
+          <p class="text">Quiero darte la enhorabuena. Dar el primer paso y pedir ayuda cuando uno está agotado requiere mucho valor. Has hecho lo correcto y quiero que sepas que a partir de ahora, no estás solo/a en esto.</p>
+
+          <div class="details-box">
+            <h3>Detalles de tu Evaluación:</h3>
+            <div class="detail-item"><span class="detail-icon">📅</span> <div><strong>Fecha:</strong><br><span style="color: #a0a0b0;">${data.date}</span></div></div>
+            <div class="detail-item"><span class="detail-icon">⏰</span> <div><strong>Hora:</strong><br><span style="color: #a0a0b0;">${data.time}h</span></div></div>
+            <div class="detail-item"><span class="detail-icon">📍</span> <div>${finalLocationHTML}</div></div>
           </div>
-          <p style="font-size: 13px; color: #a0a0b0;">Si necesitas cancelar o modificar tu cita, contacta por WhatsApp.</p>
-          <a href="https://wa.me/34600000000" class="cta">Contactar por WhatsApp</a>
+
+          <div class="gifts-box">
+            <h3>¿Qué va a pasar en esta sesión de 45 minutos?</h3>
+            <p>Mi objetivo es analizar la raíz de tu problema y ver si tu caso encaja en el Método Reset para arrancarlo de forma definitiva.</p>
+            <p>Además, solo por asistir, te llevarás estos 3 regalos de claridad mental:</p>
+            <ul>
+              <li><strong>1.</strong> Entenderás de una vez por todas qué te pasa realmente.</li>
+              <li><strong>2.</strong> Verás exactamente por qué NO te ha funcionado nada de lo que has intentado hasta hoy.</li>
+              <li><strong>3.</strong> Descubrirás cuál es la verdadera y única solución a tu problema.</li>
+            </ul>
+          </div>
+
+          <div class="warning-box">
+            <p><strong>⚠️ SOBRE MI AGENDA:</strong> Solo acepto entre 3 y 5 casos nuevos al mes. Esa plaza ahora es tuya. <strong>Si no puedes asistir, te ruego que canceles con al menos 24 horas de antelación</strong> para dar esta oportunidad a otra persona.</p>
+          </div>
+
+          <div class="signature">
+            Nos vemos muy pronto. Un abrazo,<br>
+            <strong style="color: #c9a84c;">Salva Vera</strong>
+          </div>
+
+          <div class="cta-container">
+            <p style="font-size: 13px; color: #8888a0; margin-bottom: 16px;">(Si necesitas cancelar o modificar tu cita, puedes hacerlo enviándome un mensaje directo)</p>
+            <a href="${whatsappLink}" class="cta">Modificar / Cancelar Cita</a>
+          </div>
+
           <div class="footer">
-            <p>hipnosisenterapia.com</p>
+            <p><a href="https://hipnosisenterapia.com">hipnosisenterapia.com</a></p>
             <p>Valencia · Motilla del Palancar · Online</p>
           </div>
         </div>
@@ -78,9 +146,9 @@ export async function sendPatientConfirmation(data: EmailData) {
     `;
 
     const res = await transporter.sendMail({
-      from: `"Hipnosis en Terapia" <info@hipnosisenterapia.com>`,
+      from: `"Salva Vera - Hipnosis en Terapia" <info@hipnosisenterapia.com>`,
       to: data.email,
-      subject: `✅ Cita confirmada — ${data.date} a las ${data.time}h`,
+      subject: `🟢 Confirmado: Tu Evaluación Diagnóstica con Salva Vera`,
       html,
     });
     console.log('📧 Email enviado al paciente:', res.messageId);

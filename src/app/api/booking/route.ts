@@ -5,6 +5,7 @@ import { BookingData } from '@/lib/types';
 import { LOCATION_LABELS } from '@/lib/booking-rules';
 import { checkAvailability, createCalendarEvent } from '@/lib/google-calendar';
 import { sendPatientConfirmation, sendTherapistNotification } from '@/lib/mailer';
+import { triageQuestions } from '@/data/triage-questions';
 
 export async function POST(request: Request) {
     try {
@@ -58,10 +59,28 @@ export async function POST(request: Request) {
 
         const parseTriageValue = (val: any) => Array.isArray(val) ? val.join(', ') : String(val || '');
 
+        const parseTriageLabel = (questionId: string, val: any) => {
+            const raw = parseTriageValue(val);
+            if (!raw) return '';
+            const q = triageQuestions.find(q => q.id === questionId);
+            if (!q || !q.options) return raw;
+
+            if (Array.isArray(val)) {
+                return val.map(v => {
+                    const opt = q.options?.find(o => o.value === String(v));
+                    return opt ? opt.label : String(v);
+                }).join(', ');
+            } else {
+                const opt = q.options.find(o => o.value === String(val));
+                return opt ? opt.label : raw;
+            }
+        };
+
+        const dedicacion = parseTriageValue(triage.dedicacion);
         const motivo = parseTriageValue(triage.motivo_consulta || triage.motivo);
-        const compromiso = parseTriageValue(triage.compromiso);
-        const tiempo = parseTriageValue(triage.disponibilidad_tiempo);
-        const inversion = parseTriageValue(triage.inversion);
+        const compromiso = parseTriageLabel('compromiso_escala', triage.compromiso_escala || triage.compromiso);
+        const tiempo = parseTriageLabel('disponibilidad_tiempo', triage.disponibilidad_tiempo);
+        const inversion = parseTriageLabel('inversion', triage.inversion);
         const ciudad = parseTriageValue(triage.ciudad);
 
         if (!hasGoogleCredentials) {
@@ -88,6 +107,7 @@ export async function POST(request: Request) {
                 time: data.time,
                 location: data.location,
                 triageInfo: {
+                    dedicacion,
                     motivo,
                     compromiso,
                     tiempo,
@@ -120,6 +140,7 @@ export async function POST(request: Request) {
             date: dateFormatted,
             time: data.time,
             location: locationLabel,
+            dedicacion,
             motivo,
             compromiso,
             tiempo,

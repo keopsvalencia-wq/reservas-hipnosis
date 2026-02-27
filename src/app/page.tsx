@@ -907,7 +907,7 @@ function ContactForm({
   return (
     <form id={formId} onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
       {/* Scrollable inputs */}
-      <div className="flex-1 overflow-y-auto pr-1 space-y-5" style={{ scrollbarWidth: 'thin' }}>
+      <div className="flex-1 overflow-y-auto px-1 space-y-5" style={{ scrollbarWidth: 'thin' }}>
         <div className="space-y-1.5 text-left">
           <label className="text-sm font-bold text-[var(--color-secondary)]">Nombre y Apellidos *</label>
           <div className="relative">
