@@ -808,7 +808,7 @@ function ChoiceCardScreen({
         </div>
 
         {/* Cards Grid */}
-        <div className={`grid gap-2 ${columns === 2 ? 'grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
+        <div className={`grid gap-3 ${columns === 2 ? 'grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
           {options.map((opt) => {
             const isSelected = choices.includes(opt);
             const isOther = otherLabel && opt === otherLabel;
@@ -820,7 +820,7 @@ function ChoiceCardScreen({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className={`
-                    w-full p-3 md:p-5 rounded-xl border-2 text-left transition-all duration-200 cursor-pointer
+                    w-full p-4 md:p-5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer
                     ${isSelected
                       ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
                       : 'border-[var(--color-border)] bg-white hover:border-gray-300'
