@@ -310,13 +310,13 @@ export default function Home() {
       case 6:
         return (
           <StepLayout fill>
-            <div className="space-y-6 max-w-3xl mx-auto w-full">
-              <div className="text-center space-y-3">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 5 de 7</p>
-                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu nivel de compromiso</h2>
+            <div className="space-y-4 max-w-3xl mx-auto w-full pt-1">
+              <div className="text-center space-y-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 5 de 7</p>
+                <h2 className="text-xl md:text-3xl font-black text-[var(--color-secondary)]">Tu nivel de compromiso</h2>
               </div>
-              <div className="bg-white rounded-2xl p-5 border border-gray-100 max-w-xl mx-auto">
-                <p className="text-sm text-[var(--color-text-muted)] leading-relaxed text-center">
+              <div className="bg-white rounded-xl p-3 border border-gray-100 max-w-xl mx-auto">
+                <p className="text-[11px] text-[var(--color-text-muted)] leading-tight text-center">
                   Para que el tratamiento funcione, necesitas invertir en <strong className="text-[var(--color-secondary)]">3 áreas</strong>: tu <strong className="text-[var(--color-secondary)]">Compromiso</strong> personal, tu <strong className="text-[var(--color-secondary)]">Tiempo</strong> diario y tu <strong className="text-[var(--color-secondary)]">Dinero</strong>.
                 </p>
               </div>
@@ -669,6 +669,7 @@ function ContrastScreen({
     list: string[],
     active: string[],
     toggle: (t: string) => void,
+    activeClass: string = 'border-[var(--color-primary)] bg-[var(--color-primary)]'
   ) => (
     <div className="grid grid-cols-2 gap-2">
       {list.map(tag => {
@@ -681,7 +682,7 @@ function ContrastScreen({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className={`px-3 py-1.5 rounded-lg border-2 text-[11px] font-bold transition-all text-center flex items-center justify-center leading-tight ${on
-              ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white'
+              ? activeClass + ' text-white'
               : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
               }`}
           >
@@ -707,7 +708,7 @@ function ContrastScreen({
           <h3 className="text-sm font-bold text-[var(--color-secondary)] leading-tight">
             Describe brevemente tu situación actual:
           </h3>
-          {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual)}
+          {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual, 'border-slate-600 bg-slate-600')}
           <textarea
             className="w-full p-2.5 rounded-lg border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-16 resize-none text-xs"
             placeholder="¿Qué te impide hacer tu problema?"
