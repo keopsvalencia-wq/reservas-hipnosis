@@ -116,58 +116,57 @@ export default function Home() {
         return (
           <StepLayout
             footer={
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <motion.button
                   onClick={next}
-                  className="btn-primary w-full text-lg py-5 uppercase tracking-wider font-black"
+                  className="btn-primary w-full text-lg py-4 uppercase tracking-wider font-black"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
                   RESERVAR MI PLAZA AHORA
                 </motion.button>
-                <p className="text-xs text-gray-400 text-center">Pulsa para ver disponibilidad y responder al formulario de compromiso.</p>
+                <p className="text-[10px] text-gray-400 text-center uppercase tracking-widest font-bold">Ver disponibilidad y compromiso</p>
               </div>
             }
           >
-            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 max-w-6xl mx-auto">
+            <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-12 max-w-6xl mx-auto py-2">
               {/* Left: Content */}
-              <div className="flex-1 text-center lg:text-left space-y-6 order-2 lg:order-1 max-w-2xl">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
+              <div className="flex-1 text-center lg:text-left space-y-4 order-2 lg:order-1 max-w-2xl">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
                   Solicita tu Evaluación Diagnóstica.
                 </h1>
 
-                <div className="space-y-4">
-                  <p className="text-lg md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
+                <div className="space-y-2">
+                  <p className="text-base md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
                     Solo de 3 a 5 plazas disponibles cada mes.
                   </p>
-                  <p className="text-base text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
-                    Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo de forma definitiva.
+                  <p className="text-sm text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
+                    Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
                   </p>
                 </div>
 
-                <div className="bg-white border border-gray-100 rounded-2xl p-5 w-full">
-                  <p className="text-base text-[var(--color-secondary)] font-bold leading-relaxed lg:text-justify">
-                    🛡️ Garantía: Si veo que no puedo garantizarte resultados, el coste de la sesión será 0€.
+                <div className="bg-white border border-gray-100 rounded-xl p-4 w-full">
+                  <p className="text-sm text-[var(--color-secondary)] font-bold leading-relaxed lg:text-justify">
+                    🛡️ Garantía: Si veo que no puedo garantizarte resultados, la sesión será 0€.
                   </p>
                 </div>
               </div>
 
               {/* Right: Authority Image */}
-              <div className="flex-1 relative order-1 lg:order-2 w-full max-w-md mx-auto lg:mx-0">
-                <div className="relative rounded-3xl overflow-hidden bg-white">
+              <div className="flex-1 relative order-1 lg:order-2 w-full max-w-[280px] md:max-w-md mx-auto lg:mx-0">
+                <div className="relative rounded-2xl overflow-hidden bg-white">
                   <img
                     src="/images/salva-autoridad.png"
                     alt="Salva Vera"
-                    className="w-full h-auto block rounded-3xl"
-                    style={{ display: 'block', maxHeight: '400px', objectFit: 'cover', objectPosition: 'top' }}
+                    className="w-full h-auto block rounded-2xl"
+                    style={{ display: 'block', maxHeight: '300px', objectFit: 'cover', objectPosition: 'top' }}
                   />
-                  <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
                 </div>
 
                 {/* Authority Badge — Always visible */}
-                <div className="absolute -top-3 -right-3 bg-white border border-gray-100 px-4 py-2 md:px-5 md:py-2.5 rounded-2xl z-10 shadow-sm">
-                  <p className="text-[10px] md:text-xs font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
-                  <p className="text-[8px] md:text-[10px] font-bold text-[var(--color-primary)]">Hipnoterapeuta Profesional</p>
+                <div className="absolute -top-2 -right-2 bg-white border border-gray-100 px-3 py-1.5 rounded-xl z-10 shadow-sm">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
                 </div>
               </div>
             </div>
