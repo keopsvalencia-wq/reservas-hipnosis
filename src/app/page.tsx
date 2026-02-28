@@ -256,10 +256,10 @@ export default function Home() {
       case 3:
         return (
           <StepLayout fill>
-            <div className="space-y-6 max-w-3xl mx-auto w-full">
-              <div className="text-center space-y-3">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
-                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
+            <div className="space-y-4 max-w-3xl mx-auto w-full">
+              <div className="text-center space-y-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
+                <h2 className="text-xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
               </div>
               <TriageForm
                 subset={['dedicacion', 'ciudad', 'edad']}
