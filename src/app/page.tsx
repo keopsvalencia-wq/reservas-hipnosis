@@ -696,21 +696,21 @@ function ContrastScreen({
 
   return (
     <StepLayout>
-      <form id={formId} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-4 max-w-3xl mx-auto w-full">
+      <form id={formId} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-4 md:space-y-12 max-w-5xl mx-auto w-full md:px-6">
         {/* Header */}
-        <div className="text-center space-y-1">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
-          <h2 className="text-lg md:text-2xl font-black text-[var(--color-secondary)] leading-tight">¿Hacia dónde quieres ir?</h2>
+        <div className="text-center space-y-1 md:space-y-4">
+          <p className="text-[10px] md:text-sm font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
+          <h2 className="text-xl md:text-5xl font-black text-[var(--color-secondary)] leading-tight">¿Hacia dónde quieres ir?</h2>
         </div>
 
         {/* ── SITUACIÓN ACTUAL ── */}
-        <div className="space-y-1.5">
-          <h3 className="text-sm font-bold text-[var(--color-secondary)] leading-tight">
+        <div className="space-y-2 md:space-y-6">
+          <h3 className="text-[11px] md:text-2xl font-bold text-[var(--color-secondary)] leading-tight">
             Describe brevemente tu situación actual:
           </h3>
           {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual, 'border-slate-600 bg-slate-600')}
           <textarea
-            className="w-full p-2.5 rounded-lg border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-16 resize-none text-xs"
+            className="w-full p-3 md:p-6 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-40 resize-none text-[12px] md:text-lg"
             placeholder="¿Qué te impide hacer tu problema?"
             value={actualText}
             onChange={(e) => setActualText(e.target.value)}
@@ -718,13 +718,13 @@ function ContrastScreen({
         </div>
 
         {/* ── SITUACIÓN DESEADA ── */}
-        <div className="space-y-1.5">
-          <h3 className="text-sm font-bold text-[var(--color-secondary)] leading-tight">
+        <div className="space-y-2 md:space-y-6">
+          <h3 className="text-[11px] md:text-2xl font-bold text-[var(--color-secondary)] leading-tight">
             ¿Cómo te gustaría estar <span className="text-[var(--color-primary)]">al solucionar</span> esto?
           </h3>
           {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
           <textarea
-            className="w-full p-2.5 rounded-lg border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-16 resize-none text-xs"
+            className="w-full p-3 md:p-6 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-40 resize-none text-[12px] md:text-lg"
             placeholder="¿Cómo te gustaría sentirte?"
             value={deseadaText}
             onChange={(e) => setDeseadaText(e.target.value)}
