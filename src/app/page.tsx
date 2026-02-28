@@ -136,11 +136,11 @@ export default function Home() {
                   Solicita tu Evaluación Diagnóstica.
                 </h1>
 
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <p className="text-base md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
                     Solo de 3 a 5 plazas disponibles cada mes.
                   </p>
-                  <p className="text-sm text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
+                  <p className="text-xs text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
                     Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
                   </p>
                 </div>
@@ -159,9 +159,9 @@ export default function Home() {
                     src="/images/salva-autoridad.png"
                     alt="Salva Vera"
                     className="w-full h-auto block rounded-2xl"
-                    style={{ display: 'block', maxHeight: '300px', objectFit: 'cover', objectPosition: 'top' }}
+                    style={{ display: 'block', maxHeight: '220px', objectFit: 'cover', objectPosition: 'top' }}
                   />
-                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white to-transparent" />
                 </div>
 
                 {/* Authority Badge — Always visible */}
@@ -177,17 +177,17 @@ export default function Home() {
       case 1:
         return (
           <StepLayout>
-            <div className="space-y-6 md:space-y-8 pt-2 pb-4">
-              <div className="text-center space-y-3 max-w-2xl mx-auto">
-                <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-tight">
+            <div className="space-y-4 pt-1 pb-2">
+              <div className="text-center space-y-1 max-w-2xl mx-auto">
+                <h2 className="text-xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-tight">
                   Tus 3 Regalos de Claridad.
                 </h2>
-                <p className="text-sm md:text-lg text-[var(--color-text-muted)] font-medium leading-relaxed px-2">
-                  Solo por asistir a tu evaluación, te llevarás 3 revelaciones que liberarán la presión de tu cabeza:
+                <p className="text-xs md:text-lg text-[var(--color-text-muted)] font-medium leading-relaxed px-2">
+                  Solo por asistir a tu evaluación, te llevarás:
                 </p>
               </div>
 
-              <div className="space-y-3 max-w-4xl mx-auto">
+              <div className="space-y-2 max-w-4xl mx-auto">
                 {/* Card 01 */}
                 <motion.div
                   whileHover={{ x: 8 }}
@@ -460,7 +460,7 @@ function MasterScreen({
       <div className="master-screen__container">
         {/* Progress bar — thin, seamless */}
         {showProgress && (
-          <div className="flex-shrink-0 px-6 md:px-14 lg:px-20 pt-6">
+          <div className="flex-shrink-0 px-6 md:px-14 lg:px-20 pt-2 md:pt-6">
             <div className="flex justify-between mb-1.5">
               <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--color-primary)]">
                 Progreso

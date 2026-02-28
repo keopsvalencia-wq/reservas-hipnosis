@@ -76,7 +76,7 @@ body {
 .master-screen {
   background: var(--color-page-bg);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 100%;
   min-height: 100vh;
@@ -109,6 +109,7 @@ body {
   border: 1px solid var(--color-border);
   border-radius: 20px;
   position: relative;
+  margin-top: 0;
 }
 
 /* Adjust Step Layout to be more resilient */
@@ -283,7 +284,7 @@ body {
 /* ─── Responsive: compact padding on mobile ───── */
 @media (max-width: 768px) {
   .step-layout__content {
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     box-sizing: border-box;
   }
 
@@ -292,6 +293,17 @@ body {
   }
 
   .master-screen {
-    padding: 10px;
+    padding: 0;
+  }
+
+  .master-screen__container {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    max-height: none;
+  }
+
+  .progress-bar {
+    margin-bottom: 0px;
   }
 }
