@@ -102,24 +102,18 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
             hashtag = '#SedeOnline';
         }
 
-        const inversionStr = data.triageAnswers?.inversion ? String(data.triageAnswers.inversion).split('.')[0] : '---';
-
         const rawText = `🏷️ NUEVA SOLICITUD DE EVALUACIÓN 🚨
 
-Hola Salva, soy *${data.fullName}* de *${city}*.
+Hola Salva, soy ${data.fullName} de ${city}.
 He agendado una sesión de evaluación contigo.
 
+📅 Día: ${dateFormatted}
+⏰ Hora: ${data.time}
 📍 Ubicación: ${loc}
 🧠 Motivo: ${mot}
-📅 Cita: ${dateFormatted} a las ${data.time}
-
-DATOS DE FILTRO:
-📈 Compromiso: ${data.triageAnswers?.compromiso || '---'}/10
-⏳ Tiempo: ${data.triageAnswers?.tiempo || '---'}
-💰 Inversión: ${inversionStr}
 
 ${hashtag}
-(Pulsa enviar para confirmar mi asistencia)`;
+(Ahora pulsa enviar para confirmar) 👉`;
 
         return `https://api.whatsapp.com/send?phone=${adminPhone}&text=${encodeURIComponent(rawText)}`;
     };

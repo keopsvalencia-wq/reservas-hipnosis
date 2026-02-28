@@ -169,7 +169,7 @@ export async function sendPatientConfirmation(data: EmailData) {
                     </table>
 
                     <!-- Signature -->
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-top: 30px;">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-top: 50px;">
                       <tr>
                         <td>
                           <p style="font-size: 16px; color: #4B5563; margin: 0;">Nos vemos muy pronto. Un abrazo,<br>
@@ -182,7 +182,7 @@ export async function sendPatientConfirmation(data: EmailData) {
                     <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-top: 40px; border-top: 1px dashed #E5E7EB;">
                       <tr>
                         <td align="center" style="padding-top: 30px;">
-                          <p style="font-size: 13px; color: #6B7280; margin: 0 0 16px 0;">(Si necesitas cancelar o modificar tu cita, haz clic en el botón inferior)</p>
+                          <p style="font-size: 13px; color: #6B7280; margin: 0 0 16px 0;">(Si necesitas modificar o cancelar tu cita, haz clic en el botón inferior)</p>
                           <a href="${whatsappLink}" style="display: inline-block; background-color: #0A2833; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Modificar / Cancelar Cita</a>
                         </td>
                       </tr>
