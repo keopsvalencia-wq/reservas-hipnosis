@@ -109,7 +109,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                                             key={opt.value}
                                             type="button"
                                             onClick={() => handleAnswer(q.id, opt.value)}
-                                            className={`p-3.5 rounded-xl border-2 font-bold transition-all text-sm md:text-base ${selected
+                                            className={`py-1.5 px-0.5 md:p-3.5 rounded-xl border-2 font-bold transition-all text-sm md:text-base ${selected
                                                 ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] text-[var(--color-secondary)]'
                                                 : 'border-gray-100 bg-white text-[var(--color-text-muted)] hover:border-[var(--color-primary)]'
                                                 }`}
@@ -129,15 +129,15 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                                         key={opt.value}
                                         type="button"
                                         onClick={() => handleAnswer(q.id, opt.value)}
-                                        className={`w-full flex items-center text-left gap-4 md:gap-5 p-5 rounded-xl border-2 transition-all group ${answers[q.id] === opt.value
+                                        className={`w-full flex items-center text-left gap-2 md:gap-5 p-2.5 md:p-5 rounded-xl border-2 transition-all group ${answers[q.id] === opt.value
                                             ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
                                             : 'border-gray-50 hover:border-[var(--color-primary)] bg-white shadow-sm'
                                             }`}
                                     >
-                                        <div className={`h-5 w-5 md:h-6 md:w-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${answers[q.id] === opt.value ? 'border-[var(--color-primary)] bg-white' : 'border-gray-300'}`}>
-                                            {answers[q.id] === opt.value && <div className="h-2.5 w-2.5 md:h-3.5 md:w-3.5 rounded-full bg-[var(--color-primary)]" />}
+                                        <div className={`h-4 w-4 md:h-6 md:w-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${answers[q.id] === opt.value ? 'border-[var(--color-primary)] bg-white' : 'border-gray-300'}`}>
+                                            {answers[q.id] === opt.value && <div className="h-2 w-2 md:h-3.5 md:w-3.5 rounded-full bg-[var(--color-primary)]" />}
                                         </div>
-                                        <span className={`text-[13px] md:text-lg font-semibold transition-colors leading-tight ${answers[q.id] === opt.value ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)] group-hover:text-[var(--color-text)]'}`}>
+                                        <span className={`text-[12px] md:text-lg font-semibold transition-colors leading-tight ${answers[q.id] === opt.value ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)] group-hover:text-[var(--color-text)]'}`}>
                                             {opt.label}
                                         </span>
                                     </button>
