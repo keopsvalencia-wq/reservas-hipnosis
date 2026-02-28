@@ -109,7 +109,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                                             key={opt.value}
                                             type="button"
                                             onClick={() => handleAnswer(q.id, opt.value)}
-                                            className={`p-2.5 rounded-xl border-2 font-bold transition-all text-xs md:text-base ${selected
+                                            className={`p-3.5 rounded-xl border-2 font-bold transition-all text-sm md:text-base ${selected
                                                 ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] text-[var(--color-secondary)]'
                                                 : 'border-gray-100 bg-white text-[var(--color-text-muted)] hover:border-[var(--color-primary)]'
                                                 }`}
@@ -129,7 +129,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                                         key={opt.value}
                                         type="button"
                                         onClick={() => handleAnswer(q.id, opt.value)}
-                                        className={`w-full flex items-center text-left gap-3 md:gap-5 p-4 md:p-5 rounded-xl border-2 transition-all group ${answers[q.id] === opt.value
+                                        className={`w-full flex items-center text-left gap-4 md:gap-5 p-5 rounded-xl border-2 transition-all group ${answers[q.id] === opt.value
                                             ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
                                             : 'border-gray-50 hover:border-[var(--color-primary)] bg-white shadow-sm'
                                             }`}
