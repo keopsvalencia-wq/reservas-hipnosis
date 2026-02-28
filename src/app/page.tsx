@@ -671,7 +671,7 @@ function ContrastScreen({
     toggle: (t: string) => void,
     activeClass: string = 'border-[var(--color-primary)] bg-[var(--color-primary)]'
   ) => (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-2 gap-2 md:gap-5">
       {list.map(tag => {
         const on = active.includes(tag);
         return (
@@ -681,7 +681,7 @@ function ContrastScreen({
             onClick={() => toggle(tag)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className={`px-3 py-1.5 rounded-lg border-2 text-[11px] font-bold transition-all text-center flex items-center justify-center leading-tight ${on
+            className={`px-3 py-2 md:px-8 md:py-5 rounded-xl border-2 text-[11px] md:text-xl font-bold transition-all text-center flex items-center justify-center leading-tight ${on
               ? activeClass + ' text-white'
               : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
               }`}
@@ -821,20 +821,20 @@ function ChoiceCardScreen({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className={`
-                    w-full p-2.5 md:p-5 rounded-xl border-2 text-left transition-all duration-200 cursor-pointer
+                    w-full p-3 md:p-8 rounded-xl border-2 text-left transition-all duration-200 cursor-pointer
                     ${isSelected
                       ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
-                      : 'border-[var(--color-border)] bg-white hover:border-gray-300'
+                      : 'border-gray-50 bg-white hover:border-gray-300'
                     }
                   `}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3 md:gap-5">
                     {multi && (
-                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)]' : 'border-gray-300'}`}>
-                        {isSelected && <span className="text-white text-xs font-bold">✓</span>}
+                      <div className={`w-5 h-5 md:w-7 md:h-7 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white' : 'border-gray-300'}`}>
+                        {isSelected && <span className="text-white text-xs md:text-lg font-bold">✓</span>}
                       </div>
                     )}
-                    <span className={`text-sm md:text-base font-semibold leading-snug ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
+                    <span className={`text-[13px] md:text-2xl font-bold leading-tight ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
                       {opt}
                     </span>
                   </div>
