@@ -104,13 +104,12 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
 
         const rawText = `🏷️ NUEVA SOLICITUD DE EVALUACIÓN 🚨
 
-Hola Salva, soy ${data.fullName} de ${city}.
+Hola Salva, soy *${data.fullName}* de *${city}*.
 He agendado una sesión de evaluación contigo.
 
-📅 Día: ${dateFormatted}
-⏰ Hora: ${data.time}
-📍 Ubicación: ${loc}
-🧠 Motivo: ${mot}
+📅 *${dateFormatted}* a las *${data.time}*
+📍 *${loc}*
+🧠 *${mot}*
 
 ${hashtag}
 (Ahora pulsa enviar para confirmar) 👉`;

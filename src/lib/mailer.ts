@@ -275,12 +275,32 @@ export async function sendTherapistNotification(data: EmailData) {
                       </tr>
                       <tr>
                         <td style="padding-top: 12px; font-size: 14px; color: #374151; line-height: 1.6;">
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📆 Fecha:</strong> ${data.date} a las ${data.time}h</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📍 Sede:</strong> ${ubicacionInfo}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">👤 Nombre:</strong> ${data.fullName}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📱 Teléfono:</strong> ${data.phone}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">✉️ Email:</strong> ${data.email}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">🏙️ Ciudad:</strong> ${data.ciudad || '—'}</div>
+                          <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14px; color: #374151;">
+                            <tr>
+                              <td width="110" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">📆 Fecha:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.date} a las ${data.time}h</td>
+                            </tr>
+                            <tr>
+                              <td width="110" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">📍 Sede:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${ubicacionInfo}</td>
+                            </tr>
+                            <tr>
+                              <td width="110" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">👤 Nombre:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.fullName}</td>
+                            </tr>
+                            <tr>
+                              <td width="110" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">📱 Teléfono:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.phone}</td>
+                            </tr>
+                            <tr>
+                              <td width="110" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">✉️ Email:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.email}</td>
+                            </tr>
+                            <tr>
+                              <td width="110" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">🏙️ Ciudad:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.ciudad || '—'}</td>
+                            </tr>
+                          </table>
                         </td>
                       </tr>
                     </table>
@@ -294,10 +314,25 @@ export async function sendTherapistNotification(data: EmailData) {
                       </tr>
                       <tr>
                         <td style="padding-top: 12px; font-size: 14px; color: #374151; line-height: 1.6;">
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">⏳ Edad:</strong> ${data.edad || '—'}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">💼 Ocupación:</strong> ${data.dedicacion || '—'}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">🎯 Motivo (Ppal):</strong> ${data.motivo || '—'}</div>
-                          ${data.impacto_emocional ? `<div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">🧠 Consecuencias:</strong> ${data.impacto_emocional}</div>` : ''}
+                          <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14px; color: #374151;">
+                            <tr>
+                              <td width="140" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">⏳ Edad:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.edad || '—'}</td>
+                            </tr>
+                            <tr>
+                              <td width="140" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">💼 Ocupación:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.dedicacion || '—'}</td>
+                            </tr>
+                            <tr>
+                              <td width="140" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">🎯 Motivo (Ppal):</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.motivo || '—'}</td>
+                            </tr>
+                            ${data.impacto_emocional ? `
+                            <tr>
+                              <td width="140" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">🧠 Consecuencias:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.impacto_emocional}</td>
+                            </tr>` : ''}
+                          </table>
                         </td>
                       </tr>
                       <tr>
@@ -327,9 +362,20 @@ export async function sendTherapistNotification(data: EmailData) {
                       </tr>
                       <tr>
                         <td style="padding-top: 12px; font-size: 14px; color: #374151; line-height: 1.6;">
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">🔥 Compromiso:</strong> ${data.compromiso || '—'}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">⏳ Tiempo:</strong> ${data.tiempo || '—'}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">💰 Dinero:</strong> <span style="background-color: #FEF3C7; color: #92400E; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block;">${data.inversion ? data.inversion.split('.')[0] : '—'}</span></div>
+                          <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14px; color: #374151;">
+                            <tr>
+                              <td width="130" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">🔥 Compromiso:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.compromiso || '—'}</td>
+                            </tr>
+                            <tr>
+                              <td width="130" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">⏳ Tiempo:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;">${data.tiempo || '—'}</td>
+                            </tr>
+                            <tr>
+                              <td width="130" valign="top" style="padding-bottom: 8px;"><strong style="color: #0A2833;">💰 Dinero:</strong></td>
+                              <td valign="top" style="padding-bottom: 8px;"><span style="background-color: #FEF3C7; color: #92400E; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block;">${data.inversion || '—'}</span></td>
+                            </tr>
+                          </table>
                         </td>
                       </tr>
                     </table>
