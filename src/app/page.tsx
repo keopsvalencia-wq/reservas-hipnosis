@@ -19,11 +19,12 @@ const MOTIVO_OPTIONS = [
   'Ansiedad',
   'Estrés',
   'Depresión',
-  'Bloqueos Emocionales',
-  'Adicciones (Tabaco, Alcohol, etc.)',
-  'Fobias y Miedos específicos',
-  'Tristeza, Duelo y Pérdida',
-  'Trastornos del Sueño',
+  'Bloqueos',
+  'Adicciones',
+  'Fobias',
+  'Tristeza',
+  'Insomnio',
+  'Problemas sexuales',
   'Otros',
 ];
 
@@ -807,26 +808,26 @@ function ChoiceCardScreen({
         </div>
 
         {/* Cards Grid */}
-        <div className={`grid gap-3 ${columns === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
+        <div className={`grid gap-2 ${columns === 2 ? 'grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
           {options.map((opt) => {
             const isSelected = choices.includes(opt);
             const isOther = otherLabel && opt === otherLabel;
             return (
-              <div key={opt} className={isOther && columns === 2 ? 'md:col-span-2' : ''}>
+              <div key={opt} className={isOther && columns === 2 ? 'col-span-2' : ''}>
                 <motion.button
                   type="button"
                   onClick={() => toggle(opt)}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className={`
-                    w-full p-4 md:p-5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer
+                    w-full p-3 md:p-5 rounded-xl border-2 text-left transition-all duration-200 cursor-pointer
                     ${isSelected
                       ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
                       : 'border-[var(--color-border)] bg-white hover:border-gray-300'
                     }
                   `}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     {multi && (
                       <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)]' : 'border-gray-300'}`}>
                         {isSelected && <span className="text-white text-xs font-bold">✓</span>}
