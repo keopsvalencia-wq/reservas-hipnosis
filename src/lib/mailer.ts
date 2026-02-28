@@ -98,7 +98,7 @@ export async function sendPatientConfirmation(data: EmailData) {
                     <table width="100%" border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td>
-                          <h1 style="font-size: 20px; font-weight: bold; margin: 0 0 16px 0; color: #0A2833;">Hola \${data.fullName},</h1>
+                          <h1 style="font-size: 20px; font-weight: bold; margin: 0 0 16px 0; color: #0A2833;">Hola ${data.fullName},</h1>
                           <p style="font-size: 15px; color: #4B5563; margin: 0 0 20px 0; line-height: 1.6;">Te escribo para confirmarte que tu reserva se ha realizado con éxito.</p>
                           <p style="font-size: 15px; color: #4B5563; margin: 0 0 20px 0; line-height: 1.6;">Quiero darte la enhorabuena. Dar el primer paso y pedir ayuda cuando uno está agotado requiere mucho valor. Has hecho lo correcto y quiero que sepas que a partir de ahora, no estás solo/a en esto.</p>
                         </td>
@@ -113,15 +113,15 @@ export async function sendPatientConfirmation(data: EmailData) {
                           <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 15px; color: #4B5563;">
                             <tr>
                               <td width="30" valign="top" style="padding-bottom: 16px; font-size: 18px;">📅</td>
-                              <td valign="top" style="padding-bottom: 16px; line-height: 1.5;"><strong>Fecha:</strong><br><span style="color: #6B7280;">\${data.date}</span></td>
+                              <td valign="top" style="padding-bottom: 16px; line-height: 1.5;"><strong>Fecha:</strong><br><span style="color: #6B7280;">${data.date}</span></td>
                             </tr>
                             <tr>
                               <td width="30" valign="top" style="padding-bottom: 16px; font-size: 18px;">⏰</td>
-                              <td valign="top" style="padding-bottom: 16px; line-height: 1.5;"><strong>Hora:</strong><br><span style="color: #6B7280;">\${data.time}h</span></td>
+                              <td valign="top" style="padding-bottom: 16px; line-height: 1.5;"><strong>Hora:</strong><br><span style="color: #6B7280;">${data.time}h</span></td>
                             </tr>
                             <tr>
                               <td width="30" valign="top" style="font-size: 18px;">📍</td>
-                              <td valign="top" style="line-height: 1.5;">\${finalLocationHTML}</td>
+                              <td valign="top" style="line-height: 1.5;">${finalLocationHTML}</td>
                             </tr>
                           </table>
                         </td>
@@ -183,7 +183,7 @@ export async function sendPatientConfirmation(data: EmailData) {
                       <tr>
                         <td align="center" style="padding-top: 30px;">
                           <p style="font-size: 13px; color: #6B7280; margin: 0 0 16px 0;">(Si necesitas cancelar o modificar tu cita, haz clic en el botón inferior)</p>
-                          <a href="\${whatsappLink}" style="display: inline-block; background-color: #0A2833; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Modificar / Cancelar Cita</a>
+                          <a href="${whatsappLink}" style="display: inline-block; background-color: #0A2833; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Modificar / Cancelar Cita</a>
                         </td>
                       </tr>
                       <tr>
@@ -260,7 +260,7 @@ export async function sendTherapistNotification(data: EmailData) {
                     <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 30px;">
                       <tr>
                         <td align="center">
-                          <span style="display: inline-block; background-color: \${isOnline ? '#39DCA8' : '#c9a84c'}; color: \${isOnline ? '#0A2833' : '#ffffff'}; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">\${badgeText}</span>
+                          <span style="display: inline-block; background-color: ${isOnline ? '#39DCA8' : '#c9a84c'}; color: ${isOnline ? '#0A2833' : '#ffffff'}; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">${badgeText}</span>
                           <h2 style="font-size: 18px; color: #0A2833; margin: 0;">NUEVA RESERVA RECIBIDA</h2>
                         </td>
                       </tr>
@@ -275,12 +275,12 @@ export async function sendTherapistNotification(data: EmailData) {
                       </tr>
                       <tr>
                         <td style="padding-top: 12px; font-size: 14px; color: #374151; line-height: 1.6;">
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📆 Fecha:</strong> \${data.date} a las \${data.time}h</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📍 Sede:</strong> \${ubicacionInfo}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">👤 Nombre:</strong> \${data.fullName}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📱 Teléfono:</strong> \${data.phone}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">✉️ Email:</strong> \${data.email}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">🏙️ Ciudad:</strong> \${data.ciudad || '—'}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📆 Fecha:</strong> ${data.date} a las ${data.time}h</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📍 Sede:</strong> ${ubicacionInfo}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">👤 Nombre:</strong> ${data.fullName}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📱 Teléfono:</strong> ${data.phone}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">✉️ Email:</strong> ${data.email}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">🏙️ Ciudad:</strong> ${data.ciudad || '—'}</div>
                         </td>
                       </tr>
                     </table>
@@ -294,17 +294,17 @@ export async function sendTherapistNotification(data: EmailData) {
                       </tr>
                       <tr>
                         <td style="padding-top: 12px; font-size: 14px; color: #374151; line-height: 1.6;">
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">⏳ Edad:</strong> \${data.edad || '—'}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">💼 Ocupación:</strong> \${data.dedicacion || '—'}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">🎯 Motivo (Ppal):</strong> \${data.motivo || '—'}</div>
-                          \${data.impacto_emocional ? \`<div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">🧠 Consecuencias:</strong> \${data.impacto_emocional}</div>\` : ''}
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">⏳ Edad:</strong> ${data.edad || '—'}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">💼 Ocupación:</strong> ${data.dedicacion || '—'}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">🎯 Motivo (Ppal):</strong> ${data.motivo || '—'}</div>
+                          ${data.impacto_emocional ? `<div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">🧠 Consecuencias:</strong> ${data.impacto_emocional}</div>` : ''}
                         </td>
                       </tr>
                       <tr>
                         <td style="padding-top: 16px;">
                           <strong style="color: #0A2833; font-size: 14px;">🌪️ ¿Cómo se siente AHORA?</strong>
                           <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 4px; margin-top: 8px;">
-                            <tr><td style="padding: 16px; font-size: 14px; color: #374151; line-height: 1.6;">\${data.situacion_actual ? data.situacion_actual.replace(/\\n/g, '<br>') : 'No especificado'}</td></tr>
+                            <tr><td style="padding: 16px; font-size: 14px; color: #374151; line-height: 1.6;">${data.situacion_actual ? data.situacion_actual.replace(/\\n/g, '<br>') : 'No especificado'}</td></tr>
                           </table>
                         </td>
                       </tr>
@@ -312,7 +312,7 @@ export async function sendTherapistNotification(data: EmailData) {
                         <td style="padding-top: 16px;">
                           <strong style="color: #0A2833; font-size: 14px;">✨ ¿Cómo le gustaría estar?</strong>
                           <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 4px; margin-top: 8px;">
-                            <tr><td style="padding: 16px; font-size: 14px; color: #374151; line-height: 1.6;">\${data.situacion_deseada ? data.situacion_deseada.replace(/\\n/g, '<br>') : 'No especificado'}</td></tr>
+                            <tr><td style="padding: 16px; font-size: 14px; color: #374151; line-height: 1.6;">${data.situacion_deseada ? data.situacion_deseada.replace(/\\n/g, '<br>') : 'No especificado'}</td></tr>
                           </table>
                         </td>
                       </tr>
@@ -327,9 +327,9 @@ export async function sendTherapistNotification(data: EmailData) {
                       </tr>
                       <tr>
                         <td style="padding-top: 12px; font-size: 14px; color: #374151; line-height: 1.6;">
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">🔥 Compromiso:</strong> \${data.compromiso || '—'}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">⏳ Tiempo:</strong> \${data.tiempo || '—'}</div>
-                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">💰 Dinero:</strong> <span style="background-color: #FEF3C7; color: #92400E; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block;">\${data.inversion ? data.inversion.split('.')[0] : '—'}</span></div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">🔥 Compromiso:</strong> ${data.compromiso || '—'}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">⏳ Tiempo:</strong> ${data.tiempo || '—'}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">💰 Dinero:</strong> <span style="background-color: #FEF3C7; color: #92400E; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block;">${data.inversion ? data.inversion.split('.')[0] : '—'}</span></div>
                         </td>
                       </tr>
                     </table>
@@ -357,3 +357,4 @@ export async function sendTherapistNotification(data: EmailData) {
     throw err;
   }
 }
+
