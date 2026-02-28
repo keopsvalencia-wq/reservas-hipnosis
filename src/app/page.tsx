@@ -256,10 +256,10 @@ export default function Home() {
       case 3:
         return (
           <StepLayout fill>
-            <div className="space-y-4 max-w-3xl mx-auto w-full pt-1">
-              <div className="text-center space-y-1">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
-                <h2 className="text-xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
+            <div className="space-y-6 md:space-y-12 max-w-3xl mx-auto w-full pt-3">
+              <div className="text-center space-y-2">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
+                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
               </div>
               <TriageForm
                 subset={['dedicacion', 'ciudad', 'edad']}
@@ -670,7 +670,7 @@ function ContrastScreen({
     active: string[],
     toggle: (t: string) => void,
   ) => (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid grid-cols-2 gap-2">
       {list.map(tag => {
         const on = active.includes(tag);
         return (
@@ -678,14 +678,14 @@ function ContrastScreen({
             key={tag}
             type="button"
             onClick={() => toggle(tag)}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className={`px-3.5 py-2 rounded-xl border-2 text-sm font-semibold transition-all ${on
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className={`px-3 py-1.5 rounded-lg border-2 text-[11px] font-bold transition-all text-center flex items-center justify-center leading-tight ${on
               ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white'
               : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
               }`}
           >
-            {on && <span className="mr-1.5">✓</span>}
+            {on && <span className="mr-1">✓</span>}
             {tag}
           </motion.button>
         );
@@ -695,21 +695,21 @@ function ContrastScreen({
 
   return (
     <StepLayout>
-      <form id={formId} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-5 max-w-3xl mx-auto w-full">
+      <form id={formId} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-4 max-w-3xl mx-auto w-full">
         {/* Header */}
-        <div className="text-center space-y-2">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
-          <h2 className="text-xl md:text-2xl font-black text-[var(--color-secondary)] leading-tight">¿Dónde estás y a dónde quieres llegar?</h2>
+        <div className="text-center space-y-1">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
+          <h2 className="text-lg md:text-2xl font-black text-[var(--color-secondary)] leading-tight">¿Hacia dónde quieres ir?</h2>
         </div>
 
         {/* ── SITUACIÓN ACTUAL ── */}
-        <div className="space-y-2">
-          <h3 className="text-base font-bold text-[var(--color-secondary)]">
-            Describe brevemente cómo estás ahora.
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-bold text-[var(--color-secondary)] leading-tight">
+            Describe brevemente tu situación actual:
           </h3>
           {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual)}
           <textarea
-            className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-16 resize-none text-sm"
+            className="w-full p-2.5 rounded-lg border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-16 resize-none text-xs"
             placeholder="¿Qué te impide hacer tu problema?"
             value={actualText}
             onChange={(e) => setActualText(e.target.value)}
@@ -717,13 +717,13 @@ function ContrastScreen({
         </div>
 
         {/* ── SITUACIÓN DESEADA ── */}
-        <div className="space-y-2">
-          <h3 className="text-base font-bold text-[var(--color-secondary)]">
-            ¿Cómo te gustaría estar en un mes <span className="text-[var(--color-primary)]">al solucionar</span> esto?
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-bold text-[var(--color-secondary)] leading-tight">
+            ¿Cómo te gustaría estar <span className="text-[var(--color-primary)]">al solucionar</span> esto?
           </h3>
           {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
           <textarea
-            className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-16 resize-none text-sm"
+            className="w-full p-2.5 rounded-lg border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-16 resize-none text-xs"
             placeholder="¿Cómo te gustaría sentirte?"
             value={deseadaText}
             onChange={(e) => setDeseadaText(e.target.value)}
