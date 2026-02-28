@@ -24,7 +24,7 @@ const MOTIVO_OPTIONS = [
   'Fobias',
   'Tristeza',
   'Insomnio',
-  'Problemas sexuales',
+  'P. sexuales',
   'Otros',
 ];
 
@@ -137,16 +137,16 @@ export default function Home() {
                   Solicita tu Evaluación Diagnóstica.
                 </h1>
 
-                <div className="space-y-1">
-                  <p className="text-sm md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
+                <div className="space-y-2">
+                  <p className="text-base md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
                     Solo de 3 a 5 plazas disponibles cada mes.
                   </p>
-                  <p className="text-[10px] text-[var(--color-text-muted)] leading-tight font-medium lg:text-justify max-w-[280px] mx-auto">
+                  <p className="text-[11px] text-[var(--color-text-muted)] leading-tight font-medium lg:text-justify max-w-[320px] mx-auto">
                     Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
                   </p>
                 </div>
 
-                <div className="bg-white border border-gray-100 rounded-xl p-3 w-full max-w-[300px] mx-auto">
+                <div className="bg-white border border-gray-100 rounded-xl p-4 w-full max-w-[320px] mx-auto">
                   <p className="text-xs text-[var(--color-secondary)] font-bold leading-tight">
                     🛡️ Garantía: Si no puedo garantizarte resultados,<br className="hidden md:block" /> la sesión será 0€.
                   </p>
@@ -178,12 +178,12 @@ export default function Home() {
       case 1:
         return (
           <StepLayout>
-            <div className="space-y-4 pt-1 pb-2">
-              <div className="text-center space-y-1 max-w-2xl mx-auto">
-                <h2 className="text-xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-tight">
+            <div className="space-y-6 pt-2 pb-4">
+              <div className="text-center space-y-2 max-w-2xl mx-auto">
+                <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-tight">
                   Tus 3 Regalos de Claridad.
                 </h2>
-                <p className="text-xs md:text-lg text-[var(--color-text-muted)] font-medium leading-relaxed px-2">
+                <p className="text-sm md:text-lg text-[var(--color-text-muted)] font-medium leading-relaxed px-2">
                   Solo por asistir a tu evaluación, te llevarás:
                 </p>
               </div>
