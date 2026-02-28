@@ -137,36 +137,36 @@ export default function Home() {
                 </h1>
 
                 <div className="space-y-1">
-                  <p className="text-base md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
+                  <p className="text-sm md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
                     Solo de 3 a 5 plazas disponibles cada mes.
                   </p>
-                  <p className="text-xs text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify">
+                  <p className="text-[10px] text-[var(--color-text-muted)] leading-tight font-medium lg:text-justify max-w-[280px] mx-auto">
                     Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
                   </p>
                 </div>
 
-                <div className="bg-white border border-gray-100 rounded-xl p-4 w-full">
-                  <p className="text-sm text-[var(--color-secondary)] font-bold leading-relaxed lg:text-justify">
-                    🛡️ Garantía: Si veo que no puedo garantizarte resultados, la sesión será 0€.
+                <div className="bg-white border border-gray-100 rounded-xl p-3 w-full max-w-[300px] mx-auto">
+                  <p className="text-xs text-[var(--color-secondary)] font-bold leading-tight">
+                    🛡️ Garantía: Si no puedo garantizarte resultados,<br className="hidden md:block" /> la sesión será 0€.
                   </p>
                 </div>
               </div>
 
               {/* Right: Authority Image */}
-              <div className="flex-1 relative order-1 lg:order-2 w-full max-w-[280px] md:max-w-md mx-auto lg:mx-0">
-                <div className="relative rounded-2xl overflow-hidden bg-white">
+              <div className="flex-1 relative order-1 lg:order-2 w-full max-w-[200px] md:max-w-md mx-auto lg:mx-0">
+                <div className="relative rounded-xl overflow-hidden bg-white">
                   <img
                     src="/images/salva-autoridad.png"
                     alt="Salva Vera"
-                    className="w-full h-auto block rounded-2xl"
-                    style={{ display: 'block', maxHeight: '220px', objectFit: 'cover', objectPosition: 'top' }}
+                    className="w-full h-auto block rounded-xl"
+                    style={{ display: 'block', maxHeight: '180px', objectFit: 'cover', objectPosition: 'top' }}
                   />
-                  <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white to-transparent" />
                 </div>
 
                 {/* Authority Badge — Always visible */}
-                <div className="absolute -top-2 -right-2 bg-white border border-gray-100 px-3 py-1.5 rounded-xl z-10 shadow-sm">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
+                <div className="absolute -top-1 -right-1 bg-white border border-gray-100 px-2 py-1 rounded-lg z-10 shadow-sm">
+                  <p className="text-[8px] font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
                 </div>
               </div>
             </div>
