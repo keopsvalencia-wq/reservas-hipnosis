@@ -102,9 +102,9 @@ export function ConfirmationStep({ data, onSubmit, onBack }: ConfirmationStepPro
             hashtag = '#SedeOnline';
         }
 
-        const rawText = `NUEVA SOLICITUD DE EVALUACIÓN\n\nHola Salva, soy *${data.fullName}* de *${city}*.\n*He agendado una sesión de evaluación contigo.*\n\n- Día: ${dateFormatted}\n- Hora: ${data.time}\n- Ubicación: ${loc}\n- Motivo: ${mot}\n\n${hashtag}\n(Ahora pulsa enviar para confirmar) ->`;
+        const rawText = `NUEVA SOLICITUD DE EVALUACIÓN\n\nHola Salva, soy *${data.fullName}* de *${city}*.\n*He agendado una sesión de evaluación contigo.*\n\n- Día: ${dateFormatted}\n- Hora: ${data.time}\n- Ubicación: ${loc}\n- Motivo: ${mot}\n\n${hashtag}\n(Ahora pulsa enviar para confirmar) 👉`;
 
-        return `https://wa.me/${adminPhone}?text=${encodeURIComponent(rawText)}`;
+        return `https://api.whatsapp.com/send?phone=${adminPhone}&text=${encodeURIComponent(rawText)}`;
     };
 
     const handleSubmit = async () => {
