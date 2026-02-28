@@ -63,8 +63,8 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
             {/* Scrollable questions area */}
             <div className="flex-1 overflow-y-auto space-y-4 md:space-y-8 px-1 md:px-2" style={{ scrollbarWidth: 'thin' }}>
                 {filteredQuestions.map((q) => (
-                    <div key={q.id} className="space-y-0.25 md:space-y-3">
-                        <label className="block text-[10px] md:text-2xl font-black text-[var(--color-secondary)] uppercase tracking-tight">
+                    <div key={q.id} className="space-y-1.5 md:space-y-3">
+                        <label className="block text-[13px] md:text-lg font-black text-[var(--color-secondary)] uppercase tracking-tight">
                             {q.text}
                         </label>
 
@@ -123,21 +123,21 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
 
                         {/* RADIO (Big Buttons) */}
                         {q.type === 'radio' && (
-                            <div className="flex flex-col gap-2 md:gap-4">
+                            <div className="flex flex-col gap-3 md:gap-4">
                                 {q.options?.map(opt => (
                                     <button
                                         key={opt.value}
                                         type="button"
                                         onClick={() => handleAnswer(q.id, opt.value)}
-                                        className={`w-full flex items-center text-left gap-2.5 md:gap-5 p-3 md:p-5 rounded-xl border-2 transition-all group ${answers[q.id] === opt.value
+                                        className={`w-full flex items-center text-left gap-3 md:gap-5 p-4 md:p-5 rounded-xl border-2 transition-all group ${answers[q.id] === opt.value
                                             ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
                                             : 'border-gray-50 hover:border-[var(--color-primary)] bg-white shadow-sm'
                                             }`}
                                     >
-                                        <div className={`h-4.5 w-4.5 md:h-6 md:w-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${answers[q.id] === opt.value ? 'border-[var(--color-primary)] bg-white' : 'border-gray-300'}`}>
+                                        <div className={`h-5 w-5 md:h-6 md:w-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${answers[q.id] === opt.value ? 'border-[var(--color-primary)] bg-white' : 'border-gray-300'}`}>
                                             {answers[q.id] === opt.value && <div className="h-2.5 w-2.5 md:h-3.5 md:w-3.5 rounded-full bg-[var(--color-primary)]" />}
                                         </div>
-                                        <span className={`text-[11px] md:text-xl font-bold transition-colors leading-tight ${answers[q.id] === opt.value ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)] group-hover:text-[var(--color-text)]'}`}>
+                                        <span className={`text-[13px] md:text-lg font-semibold transition-colors leading-tight ${answers[q.id] === opt.value ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)] group-hover:text-[var(--color-text)]'}`}>
                                             {opt.label}
                                         </span>
                                     </button>

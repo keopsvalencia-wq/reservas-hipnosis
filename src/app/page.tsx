@@ -671,7 +671,7 @@ function ContrastScreen({
     toggle: (t: string) => void,
     activeClass: string = 'border-[var(--color-primary)] bg-[var(--color-primary)]'
   ) => (
-    <div className="grid grid-cols-2 gap-2 md:gap-5">
+    <div className="grid grid-cols-2 gap-2 md:gap-3">
       {list.map(tag => {
         const on = active.includes(tag);
         return (
@@ -681,7 +681,7 @@ function ContrastScreen({
             onClick={() => toggle(tag)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className={`px-3 py-2 md:px-8 md:py-5 rounded-xl border-2 text-[11px] md:text-xl font-bold transition-all text-center flex items-center justify-center leading-tight ${on
+            className={`px-3 py-2 md:px-4 md:py-2.5 rounded-xl border-2 text-[11px] md:text-sm font-bold transition-all text-center flex items-center justify-center leading-tight ${on
               ? activeClass + ' text-white'
               : 'border-[var(--color-border)] bg-white text-[var(--color-text-muted)] hover:border-gray-400'
               }`}
@@ -696,21 +696,21 @@ function ContrastScreen({
 
   return (
     <StepLayout>
-      <form id={formId} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-4 md:space-y-12 max-w-5xl mx-auto w-full md:px-6">
+      <form id={formId} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-4 md:space-y-8 max-w-3xl mx-auto w-full md:px-0">
         {/* Header */}
-        <div className="text-center space-y-1 md:space-y-4">
-          <p className="text-[10px] md:text-sm font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
-          <h2 className="text-xl md:text-5xl font-black text-[var(--color-secondary)] leading-tight">¿Hacia dónde quieres ir?</h2>
+        <div className="text-center space-y-1 md:space-y-2">
+          <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
+          <h2 className="text-xl md:text-3xl font-black text-[var(--color-secondary)] leading-tight">¿Hacia dónde quieres ir?</h2>
         </div>
 
         {/* ── SITUACIÓN ACTUAL ── */}
-        <div className="space-y-2 md:space-y-6">
-          <h3 className="text-[11px] md:text-2xl font-bold text-[var(--color-secondary)] leading-tight">
+        <div className="space-y-2 md:space-y-4">
+          <h3 className="text-[11px] md:text-lg font-bold text-[var(--color-secondary)] leading-tight">
             Describe brevemente tu situación actual:
           </h3>
           {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual, 'border-slate-600 bg-slate-600')}
           <textarea
-            className="w-full p-3 md:p-6 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-40 resize-none text-[12px] md:text-lg"
+            className="w-full p-3 md:p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-16 md:h-24 resize-none text-[12px] md:text-sm"
             placeholder="¿Qué te impide hacer tu problema?"
             value={actualText}
             onChange={(e) => setActualText(e.target.value)}
@@ -718,13 +718,13 @@ function ContrastScreen({
         </div>
 
         {/* ── SITUACIÓN DESEADA ── */}
-        <div className="space-y-2 md:space-y-6">
-          <h3 className="text-[11px] md:text-2xl font-bold text-[var(--color-secondary)] leading-tight">
+        <div className="space-y-2 md:space-y-4">
+          <h3 className="text-[11px] md:text-lg font-bold text-[var(--color-secondary)] leading-tight">
             ¿Cómo te gustaría estar <span className="text-[var(--color-primary)]">al solucionar</span> esto?
           </h3>
           {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
           <textarea
-            className="w-full p-3 md:p-6 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-40 resize-none text-[12px] md:text-lg"
+            className="w-full p-3 md:p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-16 md:h-24 resize-none text-[12px] md:text-sm"
             placeholder="¿Cómo te gustaría sentirte?"
             value={deseadaText}
             onChange={(e) => setDeseadaText(e.target.value)}
@@ -821,20 +821,20 @@ function ChoiceCardScreen({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className={`
-                    w-full p-3 md:p-8 rounded-xl border-2 text-left transition-all duration-200 cursor-pointer
+                    w-full p-3 md:p-5 rounded-xl border-2 text-left transition-all duration-200 cursor-pointer
                     ${isSelected
                       ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
                       : 'border-gray-50 bg-white hover:border-gray-300'
                     }
                   `}
                 >
-                  <div className="flex items-center gap-3 md:gap-5">
+                  <div className="flex items-center gap-3">
                     {multi && (
-                      <div className={`w-5 h-5 md:w-7 md:h-7 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white' : 'border-gray-300'}`}>
-                        {isSelected && <span className="text-white text-xs md:text-lg font-bold">✓</span>}
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white' : 'border-gray-300'}`}>
+                        {isSelected && <span className="text-white text-xs md:text-sm font-bold">✓</span>}
                       </div>
                     )}
-                    <span className={`text-[13px] md:text-2xl font-bold leading-tight ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
+                    <span className={`text-[13px] md:text-base font-semibold leading-tight ${isSelected ? 'text-[var(--color-secondary)]' : 'text-[var(--color-text-muted)]'}`}>
                       {opt}
                     </span>
                   </div>
