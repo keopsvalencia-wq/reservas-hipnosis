@@ -256,10 +256,10 @@ export default function Home() {
       case 3:
         return (
           <StepLayout fill>
-            <div className="space-y-6 md:space-y-12 max-w-3xl mx-auto w-full pt-2">
-              <div className="text-center space-y-2">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
-                <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
+            <div className="space-y-4 max-w-3xl mx-auto w-full pt-1">
+              <div className="text-center space-y-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 2 de 7</p>
+                <h2 className="text-xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
               </div>
               <TriageForm
                 subset={['dedicacion', 'ciudad', 'edad']}
@@ -801,14 +801,14 @@ function ChoiceCardScreen({
     <StepLayout>
       <form id={formId} onSubmit={(e) => { e.preventDefault(); handleNext(); }} className="space-y-6 max-w-3xl mx-auto w-full">
         {/* Header */}
-        <div className="text-center space-y-2">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">{step}</p>
-          <h2 className="text-xl md:text-2xl font-black text-[var(--color-secondary)] leading-tight">{title}</h2>
-          {multi && <p className="text-sm text-[var(--color-text-muted)]">Puedes seleccionar varias opciones</p>}
+        <div className="text-center space-y-1">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">{step}</p>
+          <h2 className="text-lg md:text-2xl font-black text-[var(--color-secondary)] leading-tight px-1">{title}</h2>
+          {multi && <p className="text-[11px] text-[var(--color-text-muted)] font-medium">Puedes seleccionar varias opciones</p>}
         </div>
 
         {/* Cards Grid */}
-        <div className={`grid gap-3 ${columns === 2 ? 'grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
+        <div className={`grid gap-2 ${columns === 2 ? 'grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto'}`}>
           {options.map((opt) => {
             const isSelected = choices.includes(opt);
             const isOther = otherLabel && opt === otherLabel;
@@ -820,7 +820,7 @@ function ChoiceCardScreen({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className={`
-                    w-full p-4 md:p-5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer
+                    w-full p-2.5 md:p-5 rounded-xl border-2 text-left transition-all duration-200 cursor-pointer
                     ${isSelected
                       ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)]'
                       : 'border-[var(--color-border)] bg-white hover:border-gray-300'
