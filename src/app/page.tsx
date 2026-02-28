@@ -119,13 +119,13 @@ export default function Home() {
               <div className="space-y-2">
                 <motion.button
                   onClick={next}
-                  className="btn-primary w-full text-lg py-4 uppercase tracking-wider font-black"
+                  className="btn-primary w-full text-base py-3.5 uppercase tracking-wider font-black whitespace-nowrap"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
                   RESERVAR MI PLAZA AHORA
                 </motion.button>
-                <p className="text-[10px] text-gray-400 text-center uppercase tracking-widest font-bold">Ver disponibilidad y compromiso</p>
+                <p className="text-[9px] text-gray-400 text-center uppercase tracking-widest font-bold">Ver disponibilidad y compromiso</p>
               </div>
             }
           >
