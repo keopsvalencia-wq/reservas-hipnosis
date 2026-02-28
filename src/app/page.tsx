@@ -696,9 +696,9 @@ function ContrastScreen({
 
   return (
     <StepLayout>
-      <form id={formId} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-4 md:space-y-8 max-w-3xl mx-auto w-full md:px-0">
+      <form id={formId} onSubmit={(e) => { e.preventDefault(); if (isValid) handleSubmit(); }} className="space-y-2 md:space-y-8 max-w-3xl mx-auto w-full md:px-0">
         {/* Header */}
-        <div className="text-center space-y-1 md:space-y-2">
+        <div className="text-center space-y-0.5 md:space-y-2">
           <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
           <h2 className="text-xl md:text-3xl font-black text-[var(--color-secondary)] leading-tight">¿Hacia dónde quieres ir?</h2>
         </div>
@@ -710,7 +710,7 @@ function ContrastScreen({
           </h3>
           {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual, 'border-slate-600 bg-slate-600')}
           <textarea
-            className="w-full p-3 md:p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-16 md:h-24 resize-none text-[12px] md:text-sm"
+            className="w-full p-2.5 md:p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-24 resize-none text-[12px] md:text-sm"
             placeholder="¿Qué te impide hacer tu problema?"
             value={actualText}
             onChange={(e) => setActualText(e.target.value)}
@@ -724,7 +724,7 @@ function ContrastScreen({
           </h3>
           {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
           <textarea
-            className="w-full p-3 md:p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-16 md:h-24 resize-none text-[12px] md:text-sm"
+            className="w-full p-2.5 md:p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-24 resize-none text-[12px] md:text-sm"
             placeholder="¿Cómo te gustaría sentirte?"
             value={deseadaText}
             onChange={(e) => setDeseadaText(e.target.value)}
