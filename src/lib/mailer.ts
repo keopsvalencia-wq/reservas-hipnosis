@@ -65,81 +65,142 @@ export async function sendPatientConfirmation(data: EmailData) {
 
     const html = `
       <!DOCTYPE html>
-      <html>
+      <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Evaluación Confirmada</title>
         <style>
-          body { font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; background: #F9FAFB; color: #1F2937; margin: 0; padding: 20px; line-height: 1.6; }
-          .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 40px; border: 1px solid #E1E8ED; }
-          .header { text-align: center; margin-bottom: 30px; }
-          .header img { max-width: 200px; margin-bottom: 16px; }
-          .header p { color: #39DCA8; font-size: 13px; font-weight: 700; margin-top: 8px; text-transform: uppercase; letter-spacing: 2px; }
-          .greeting { font-size: 20px; font-weight: 700; margin-bottom: 16px; color: #0A2833; }
-          .text { font-size: 15px; color: #4B5563; margin-bottom: 20px; }
-          .details-box { background: #ffffff; border-radius: 12px; padding: 24px; margin: 24px 0; border: 1px solid #E5E7EB; border-left: 4px solid #39DCA8; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-          .details-box h3 { margin-top: 0; margin-bottom: 20px; font-size: 16px; color: #0A2833; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-          .detail-item { margin-bottom: 16px; font-size: 15px; display: flex; align-items: flex-start; gap: 12px; color: #4B5563; }
-          .detail-item:last-child { margin-bottom: 0; }
-          .gifts-box { margin-bottom: 24px; }
-          .gifts-box h3 { font-size: 18px; color: #0A2833; margin-bottom: 12px; font-weight: 700; }
-          .gifts-box ul { padding-left: 0; list-style: none; margin: 20px 0; }
-          .gifts-box li { margin-bottom: 12px; font-size: 14px; color: #1F2937; background: #F9FAFB; padding: 16px; border-radius: 10px; border-left: 4px solid #c9a84c; border-top: 1px solid #F3F4F6; border-right: 1px solid #F3F4F6; border-bottom: 1px solid #F3F4F6; }
-          .warning-box { background: #FEF2F2; border-left: 4px solid #EF4444; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
-          .warning-box p { margin: 0; font-size: 14px; color: #991B1B; line-height: 1.5; }
-          .cta { display: inline-block; background: #0A2833; color: #ffffff !important; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-          .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #9CA3AF; }
-          .footer a { color: #39DCA8; text-decoration: none; font-weight: 600; }
+          body { font-family: 'Arial', sans-serif; background-color: #F9FAFB; margin: 0; padding: 0; }
+          a { text-decoration: none; }
+          table, td, p, h1, h2, h3, a { font-family: 'Arial', sans-serif; }
         </style>
       </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <img src="https://raw.githubusercontent.com/keopsvalencia-wq/reservas-hipnosis/main/public/images/logo.png" alt="Hipnosis en Terapia" />
-            <p>Evaluación Confirmada</p>
-          </div>
-          
-          <div class="greeting">Hola ${data.fullName},</div>
-          
-          <p class="text">Te escribo para confirmarte que tu reserva se ha realizado con éxito.</p>
-          <p class="text">Quiero darte la enhorabuena. Dar el primer paso y pedir ayuda cuando uno está agotado requiere mucho valor. Has hecho lo correcto y quiero que sepas que a partir de ahora, no estás solo/a en esto.</p>
+      <body style="margin: 0; padding: 0; background-color: #F9FAFB;">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #F9FAFB; padding: 20px;">
+          <tr>
+            <td align="center">
+              <!-- Main Container 600px -->
+              <table width="600" border="0" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #E1E8ED; border-radius: 12px; width: 600px; max-width: 600px;">
+                <tr>
+                  <td style="padding: 40px;">
+                    <!-- Header -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="padding-bottom: 30px;">
+                          <img src="https://raw.githubusercontent.com/keopsvalencia-wq/reservas-hipnosis/main/public/images/logo.png" alt="Hipnosis en Terapia" width="200" style="display: block; width: 200px; max-width: 200px; border: 0;" />
+                          <p style="color: #39DCA8; font-size: 13px; font-weight: bold; margin: 15px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Evaluación Confirmada</p>
+                        </td>
+                      </tr>
+                    </table>
 
-          <div class="details-box">
-            <h3>Detalles de tu Evaluación:</h3>
-            <div class="detail-item"><span>📅</span> <div><strong>Fecha:</strong><br><span style="color: #6B7280;">${data.date}</span></div></div>
-            <div class="detail-item"><span>⏰</span> <div><strong>Hora:</strong><br><span style="color: #6B7280;">${data.time}h</span></div></div>
-            <div class="detail-item"><span>📍</span> <div>${finalLocationHTML}</div></div>
-          </div>
+                    <!-- Greeting & Intro -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td>
+                          <h1 style="font-size: 20px; font-weight: bold; margin: 0 0 16px 0; color: #0A2833;">Hola \${data.fullName},</h1>
+                          <p style="font-size: 15px; color: #4B5563; margin: 0 0 20px 0; line-height: 1.6;">Te escribo para confirmarte que tu reserva se ha realizado con éxito.</p>
+                          <p style="font-size: 15px; color: #4B5563; margin: 0 0 20px 0; line-height: 1.6;">Quiero darte la enhorabuena. Dar el primer paso y pedir ayuda cuando uno está agotado requiere mucho valor. Has hecho lo correcto y quiero que sepas que a partir de ahora, no estás solo/a en esto.</p>
+                        </td>
+                      </tr>
+                    </table>
 
-          <div class="gifts-box">
-            <h3>¿Qué va a pasar en esta sesión de 45 minutos?</h3>
-            <p class="text">Mi objetivo es analizar la raíz de tu problema y ver si tu caso encaja en el Método Reset para arrancarlo de forma definitiva.</p>
-            <p class="text">Además, solo por asistir, te llevarás estos 3 regalos de claridad mental:</p>
-            <ul>
-              <li><strong>1.</strong> Verás tu problema desde un punto de vista que ni te imaginas y que nadie te ha contado.</li>
-              <li><strong>2.</strong> Verás exactamente por qué NO te ha funcionado nada de lo que has intentado hasta hoy.</li>
-              <li><strong>3.</strong> Descubrirás cuál es la verdadera y única solución a tu problema.</li>
-            </ul>
-          </div>
+                    <!-- Details Box -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #E5E7EB; border-left: 4px solid #39DCA8; margin: 5px 0 25px 0; border-radius: 4px;">
+                      <tr>
+                        <td style="padding: 24px;">
+                          <h3 style="margin: 0 0 20px 0; font-size: 16px; color: #0A2833; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Detalles de tu Evaluación:</h3>
+                          <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 15px; color: #4B5563;">
+                            <tr>
+                              <td width="30" valign="top" style="padding-bottom: 16px; font-size: 18px;">📅</td>
+                              <td valign="top" style="padding-bottom: 16px; line-height: 1.5;"><strong>Fecha:</strong><br><span style="color: #6B7280;">\${data.date}</span></td>
+                            </tr>
+                            <tr>
+                              <td width="30" valign="top" style="padding-bottom: 16px; font-size: 18px;">⏰</td>
+                              <td valign="top" style="padding-bottom: 16px; line-height: 1.5;"><strong>Hora:</strong><br><span style="color: #6B7280;">\${data.time}h</span></td>
+                            </tr>
+                            <tr>
+                              <td width="30" valign="top" style="font-size: 18px;">📍</td>
+                              <td valign="top" style="line-height: 1.5;">\${finalLocationHTML}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
 
-          <div class="warning-box">
-            <p><strong>⚠️ SOBRE MI AGENDA:</strong> Solo acepto entre 3 y 5 casos nuevos al mes. Esa plaza ahora es tuya. <strong>Si no puedes asistir, te ruego que canceles con al menos 24 horas de antelación</strong> para dar esta oportunidad a otra persona.</p>
-          </div>
+                    <!-- Gifts Box -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 25px;">
+                      <tr>
+                        <td>
+                          <h3 style="margin: 0 0 12px 0; font-size: 18px; color: #0A2833; font-weight: bold;">¿Qué va a pasar en esta sesión de 45 minutos?</h3>
+                          <p style="font-size: 15px; color: #4B5563; margin: 0 0 20px 0; line-height: 1.6;">Mi objetivo es analizar la raíz de tu problema y ver si tu caso encaja en el Método Reset para arrancarlo de forma definitiva.</p>
+                          <p style="font-size: 15px; color: #4B5563; margin: 0 0 20px 0; line-height: 1.6;">Además, solo por asistir, te llevarás estos 3 regalos de claridad mental:</p>
+                          
+                          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="background-color: #F9FAFB; padding: 16px; border-left: 4px solid #c9a84c; border: 1px solid #F3F4F6; font-size: 14px; color: #1F2937; margin-bottom: 12px; display: block; border-radius: 4px;">
+                                <strong>1.</strong> Verás tu problema desde un punto de vista que ni te imaginas y que nadie te ha contado.
+                              </td>
+                            </tr>
+                            <tr><td height="12"></td></tr>
+                            <tr>
+                              <td style="background-color: #F9FAFB; padding: 16px; border-left: 4px solid #c9a84c; border: 1px solid #F3F4F6; font-size: 14px; color: #1F2937; margin-bottom: 12px; display: block; border-radius: 4px;">
+                                <strong>2.</strong> Verás exactamente por qué NO te ha funcionado nada de lo que has intentado hasta hoy.
+                              </td>
+                            </tr>
+                            <tr><td height="12"></td></tr>
+                            <tr>
+                              <td style="background-color: #F9FAFB; padding: 16px; border-left: 4px solid #c9a84c; border: 1px solid #F3F4F6; font-size: 14px; color: #1F2937; display: block; border-radius: 4px;">
+                                <strong>3.</strong> Descubrirás cuál es la verdadera y única solución a tu problema.
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
 
-          <div style="font-size: 16px; color: #4B5563; margin-top: 30px;">
-            Nos vemos muy pronto. Un abrazo,<br>
-            <strong style="color: #0A2833; font-size: 18px; display: inline-block; margin-top: 8px;">Salva Vera</strong>
-          </div>
+                    <!-- Warning Box -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #FEF2F2; border-left: 4px solid #EF4444; margin-bottom: 30px; border-radius: 4px;">
+                      <tr>
+                        <td style="padding: 20px;">
+                          <p style="margin: 0; font-size: 14px; color: #991B1B; line-height: 1.5;"><strong>⚠️ SOBRE MI AGENDA:</strong> Solo acepto entre 3 y 5 casos nuevos al mes. Esa plaza ahora es tuya. <strong>Si no puedes asistir, te ruego que canceles con al menos 24 horas de antelación</strong> para dar esta oportunidad a otra persona.</p>
+                        </td>
+                      </tr>
+                    </table>
 
-          <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px dashed #E5E7EB;">
-            <p style="font-size: 13px; color: #6B7280; margin-bottom: 16px;">(Si necesitas cancelar o modificar tu cita, puedes hacerlo enviándome un mensaje directo)</p>
-            <a href="${whatsappLink}" class="cta">Modificar / Cancelar Cita</a>
-          </div>
+                    <!-- Signature -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-top: 30px;">
+                      <tr>
+                        <td>
+                          <p style="font-size: 16px; color: #4B5563; margin: 0;">Nos vemos muy pronto. Un abrazo,<br>
+                          <strong style="color: #0A2833; font-size: 18px; display: inline-block; margin-top: 8px;">Salva Vera</strong></p>
+                        </td>
+                      </tr>
+                    </table>
 
-          <div class="footer">
-            <p><a href="https://hipnosisenterapia.com">hipnosisenterapia.com</a></p>
-            <p>Valencia · Motilla del Palancar · Online</p>
-          </div>
-        </div>
+                    <!-- Footer / Cancellation -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-top: 40px; border-top: 1px dashed #E5E7EB;">
+                      <tr>
+                        <td align="center" style="padding-top: 30px;">
+                          <p style="font-size: 13px; color: #6B7280; margin: 0 0 16px 0;">(Si necesitas cancelar o modificar tu cita, haz clic en el botón inferior)</p>
+                          <a href="\${whatsappLink}" style="display: inline-block; background-color: #0A2833; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Modificar / Cancelar Cita</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" style="padding-top: 40px;">
+                          <p style="font-size: 12px; color: #9CA3AF; margin: 0 0 8px 0;"><a href="https://hipnosisenterapia.com" style="color: #39DCA8; text-decoration: none; font-weight: bold;">hipnosisenterapia.com</a></p>
+                          <p style="font-size: 12px; color: #9CA3AF; margin: 0;">Valencia · Motilla del Palancar · Online</p>
+                        </td>
+                      </tr>
+                    </table>
+
+                  </td>
+                </tr>
+              </table>
+              <!-- End Main Container -->
+            </td>
+          </tr>
+        </table>
       </body>
       </html>
     `;
@@ -168,65 +229,118 @@ export async function sendTherapistNotification(data: EmailData) {
 
     const html = `
       <!DOCTYPE html>
-      <html>
+      <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Nueva Reserva</title>
         <style>
-          body { font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; background: #F3F4F6; color: #1F2937; margin: 0; padding: 20px; line-height: 1.6; }
-          .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 40px; border: 1px solid #E5E7EB; }
-          .badge { display: inline-block; background: ${isOnline ? '#39DCA8' : '#c9a84c'}; color: ${isOnline ? '#0A2833' : '#ffffff'}; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
-          .section { margin-bottom: 32px; }
-          .label { color: #6B7280; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px; display: block; border-bottom: 2px solid #F3F4F6; padding-bottom: 8px; }
-          .detail { margin: 8px 0; font-size: 14px; color: #374151; }
-          .detail strong { color: #0A2833; font-weight: 600; min-width: 120px; display: inline-block; }
-          .box { background: #F9FAFB; padding: 16px; border-radius: 8px; border: 1px solid #E5E7EB; margin-top: 8px; }
+          body { font-family: 'Arial', sans-serif; background-color: #F3F4F6; margin: 0; padding: 0; }
+          table, td, p, h1, h2, h3, a, span { font-family: 'Arial', sans-serif; }
         </style>
       </head>
-      <body>
-        <div class="container">
-          <div style="text-align: center; margin-bottom: 24px;">
-            <img src="https://raw.githubusercontent.com/keopsvalencia-wq/reservas-hipnosis/main/public/images/logo.png" alt="Hipnosis en Terapia" style="max-width: 160px;" />
-          </div>
-          
-          <div style="text-align: center;">
-            <span class="badge">${badgeText}</span>
-            <h2 style="font-size: 18px; color: #0A2833; margin-top: 0;">NUEVA RESERVA RECIBIDA</h2>
-          </div>
-          
-          <div class="section">
-            <span class="label">Cita y Contacto</span>
-            <div class="detail"><strong>📆 Fecha:</strong> ${data.date} a las ${data.time}h</div>
-            <div class="detail"><strong>📍 Sede:</strong> ${ubicacionInfo}</div>
-            <div class="detail"><strong>👤 Nombre:</strong> ${data.fullName}</div>
-            <div class="detail"><strong>📱 Teléfono:</strong> ${data.phone}</div>
-            <div class="detail"><strong>✉️ Email:</strong> ${data.email}</div>
-            <div class="detail"><strong>🏙️ Ciudad:</strong> ${data.ciudad || '—'}</div>
-          </div>
+      <body style="margin: 0; padding: 0; background-color: #F3F4F6;">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #F3F4F6; padding: 20px;">
+          <tr>
+            <td align="center">
+              <!-- Main Container 600px -->
+              <table width="600" border="0" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #E5E7EB; border-radius: 12px; width: 600px; max-width: 600px;">
+                <tr>
+                  <td style="padding: 40px;">
 
-          <div class="section">
-            <span class="label">TRIAJE: Contexto Clínico</span>
-            <div class="detail"><strong>⏳ Edad:</strong> ${data.edad || '—'}</div>
-            <div class="detail"><strong>💼 Ocupación:</strong> ${data.dedicacion || '—'}</div>
-            <div class="detail"><strong>🎯 Motivo (Ppal):</strong> ${data.motivo || '—'}</div>
-            ${data.impacto_emocional ? `<div class="detail" style="margin-top:4px;"><strong>🧠 Consecuencias:</strong> ${data.impacto_emocional}</div>` : ''}
-            
-            <div style="margin-top: 16px;">
-              <strong>🌪️ ¿Cómo se siente AHORA?</strong>
-              <div class="box">${data.situacion_actual ? data.situacion_actual.replace(/\n/g, '<br>') : 'No especificado'}</div>
-            </div>
+                    <!-- Header -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
+                      <tr>
+                        <td align="center">
+                          <img src="https://raw.githubusercontent.com/keopsvalencia-wq/reservas-hipnosis/main/public/images/logo.png" alt="Hipnosis en Terapia" width="160" style="display: block; width: 160px; max-width: 160px; border: 0;" />
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 30px;">
+                      <tr>
+                        <td align="center">
+                          <span style="display: inline-block; background-color: \${isOnline ? '#39DCA8' : '#c9a84c'}; color: \${isOnline ? '#0A2833' : '#ffffff'}; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">\${badgeText}</span>
+                          <h2 style="font-size: 18px; color: #0A2833; margin: 0;">NUEVA RESERVA RECIBIDA</h2>
+                        </td>
+                      </tr>
+                    </table>
 
-            <div style="margin-top: 16px;">
-              <strong>✨ ¿Cómo le gustaría estar?</strong>
-              <div class="box">${data.situacion_deseada ? data.situacion_deseada.replace(/\n/g, '<br>') : 'No especificado'}</div>
-            </div>
-          </div>
+                    <!-- Section: Cita y Contacto -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 32px;">
+                      <tr>
+                        <td style="border-bottom: 2px solid #F3F4F6; padding-bottom: 8px; margin-bottom: 12px;">
+                          <span style="color: #6B7280; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Cita y Contacto</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 12px; font-size: 14px; color: #374151; line-height: 1.6;">
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📆 Fecha:</strong> \${data.date} a las \${data.time}h</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📍 Sede:</strong> \${ubicacionInfo}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">👤 Nombre:</strong> \${data.fullName}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">📱 Teléfono:</strong> \${data.phone}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">✉️ Email:</strong> \${data.email}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 100px;">🏙️ Ciudad:</strong> \${data.ciudad || '—'}</div>
+                        </td>
+                      </tr>
+                    </table>
 
-          <div class="section">
-            <span class="label">TRIAJE: Compromiso e Inversión</span>
-            <div class="detail"><strong>🔥 Compromiso:</strong> ${data.compromiso || '—'}</div>
-            <div class="detail"><strong>⏳ Tiempo:</strong> ${data.tiempo || '—'}</div>
-            <div class="detail"><strong>💰 Dinero:</strong> <span style="background: #FEF3C7; color: #92400E; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${data.inversion ? data.inversion.split('.')[0] : '—'}</span></div>
-          </div>
-        </div>
+                    <!-- Section: Contexto Clínico -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 32px;">
+                      <tr>
+                        <td style="border-bottom: 2px solid #F3F4F6; padding-bottom: 8px; margin-bottom: 12px;">
+                          <span style="color: #6B7280; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">TRIAJE: Contexto Clínico</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 12px; font-size: 14px; color: #374151; line-height: 1.6;">
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">⏳ Edad:</strong> \${data.edad || '—'}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">💼 Ocupación:</strong> \${data.dedicacion || '—'}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">🎯 Motivo (Ppal):</strong> \${data.motivo || '—'}</div>
+                          \${data.impacto_emocional ? \`<div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 130px;">🧠 Consecuencias:</strong> \${data.impacto_emocional}</div>\` : ''}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 16px;">
+                          <strong style="color: #0A2833; font-size: 14px;">🌪️ ¿Cómo se siente AHORA?</strong>
+                          <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 4px; margin-top: 8px;">
+                            <tr><td style="padding: 16px; font-size: 14px; color: #374151; line-height: 1.6;">\${data.situacion_actual ? data.situacion_actual.replace(/\\n/g, '<br>') : 'No especificado'}</td></tr>
+                          </table>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 16px;">
+                          <strong style="color: #0A2833; font-size: 14px;">✨ ¿Cómo le gustaría estar?</strong>
+                          <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 4px; margin-top: 8px;">
+                            <tr><td style="padding: 16px; font-size: 14px; color: #374151; line-height: 1.6;">\${data.situacion_deseada ? data.situacion_deseada.replace(/\\n/g, '<br>') : 'No especificado'}</td></tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Section: Compromiso -->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="border-bottom: 2px solid #F3F4F6; padding-bottom: 8px; margin-bottom: 12px;">
+                          <span style="color: #6B7280; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">TRIAJE: Compromiso e Inversión</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 12px; font-size: 14px; color: #374151; line-height: 1.6;">
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">🔥 Compromiso:</strong> \${data.compromiso || '—'}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">⏳ Tiempo:</strong> \${data.tiempo || '—'}</div>
+                          <div style="margin-bottom: 8px;"><strong style="color: #0A2833; display: inline-block; width: 110px;">💰 Dinero:</strong> <span style="background-color: #FEF3C7; color: #92400E; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block;">\${data.inversion ? data.inversion.split('.')[0] : '—'}</span></div>
+                        </td>
+                      </tr>
+                    </table>
+
+                  </td>
+                </tr>
+              </table>
+              <!-- End Main Container -->
+            </td>
+          </tr>
+        </table>
       </body>
       </html>
     `;
