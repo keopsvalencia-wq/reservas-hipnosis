@@ -61,10 +61,10 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
     return (
         <form id={formId} onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 relative">
             {/* Scrollable questions area */}
-            <div className="flex-1 overflow-y-auto space-y-4 md:space-y-8 px-1 md:px-2" style={{ scrollbarWidth: 'thin' }}>
+            <div className="flex-1 overflow-y-auto space-y-6 md:space-y-10 px-1 md:px-2" style={{ scrollbarWidth: 'thin' }}>
                 {filteredQuestions.map((q) => (
-                    <div key={q.id} className="space-y-1.5">
-                        <label className="block text-sm md:text-lg font-bold text-[var(--color-secondary)] uppercase tracking-tight">
+                    <div key={q.id} className="space-y-2.5">
+                        <label className="block text-base md:text-lg font-bold text-[var(--color-secondary)] uppercase tracking-tight">
                             {q.text}
                         </label>
 
@@ -109,7 +109,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                                             key={opt.value}
                                             type="button"
                                             onClick={() => handleAnswer(q.id, opt.value)}
-                                            className={`p-2.5 rounded-lg border-2 font-bold transition-all text-xs md:text-base ${selected
+                                            className={`p-3.5 rounded-xl border-2 font-bold transition-all text-sm md:text-base ${selected
                                                 ? 'border-[var(--color-primary)] bg-[var(--color-primary-soft)] text-[var(--color-secondary)]'
                                                 : 'border-gray-100 bg-white text-[var(--color-text-muted)] hover:border-[var(--color-primary)]'
                                                 }`}
@@ -149,7 +149,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                         {q.type === 'text' && (
                             <input
                                 type="text"
-                                className="w-full py-2.5 px-4 rounded-lg border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all box-border text-sm"
+                                className="w-full py-4 px-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all box-border text-base"
                                 placeholder={q.placeholder}
                                 onChange={(e) => handleAnswer(q.id, e.target.value)}
                                 value={(answers[q.id] as string) || ''}
