@@ -130,7 +130,7 @@ export const GATE_QUESTION_ID = 'inversion';
 export const GATE_BLOCKED_VALUE = 'sin_recursos';
 
 export const GATE_INTRO_TEXT =
-    'La inversión económica de mi método completo oscila entre 700€ y 1.000€ (pago dividido: señal en esta evaluación y el resto en la primera sesión).\n\nSi no te puedo garantizar resultados, el coste de la visita será 0€. Sin riesgo para ti.';
+    'La inversión económica de mi método completo oscila entre 700€ y 1.000€<strong>, dependiendo de la complejidad de tu caso</strong> (pago dividido: señal en esta evaluación y el resto en la primera sesión). Si no te puedo garantizar resultados, el coste de la visita será 0€. Sin riesgo para ti.';
 
 export const GATE_BLOCKED_NOTE =
     'Si es tu caso, por favor no reserves la sesión para no quitarle la plaza a otra persona. Vuelve cuando sea tu momento.';
