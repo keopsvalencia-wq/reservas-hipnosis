@@ -174,8 +174,8 @@ export default function Home() {
               </div>
 
               {/* Right: Authority Image */}
-              <div className="flex-1 flex flex-col items-center order-1 lg:order-2 w-full max-w-[200px] md:max-w-md mx-auto lg:mx-0 mt-2">
-                <div className="relative rounded-2xl overflow-hidden bg-white ring-2 ring-white shadow-xl w-full max-w-[180px] md:max-w-[240px]">
+              <div className="flex-1 flex flex-col items-center justify-center order-1 lg:order-2 w-full max-w-[200px] md:max-w-md lg:max-w-lg mx-auto lg:mx-0 mt-2">
+                <div className="relative rounded-2xl overflow-hidden bg-white ring-2 ring-white shadow-xl w-full max-w-[180px] md:max-w-[240px] lg:max-w-[340px]">
                   <img
                     src="/images/salva-autoridad.png"
                     alt="Salva Vera"
