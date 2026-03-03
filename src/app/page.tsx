@@ -591,7 +591,11 @@ function StepNav({
           )}
         </motion.button>
       </div>
-      {subtitle && <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{subtitle}</p>}
+      {subtitle ? (
+        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{subtitle}</p>
+      ) : (
+        <p className="text-[10px] text-gray-500 text-center font-medium mt-1">Pulsa para completar tu perfil de compromiso</p>
+      )}
     </div>
   );
 }
