@@ -150,46 +150,43 @@ export default function Home() {
               </div>
             }
           >
-            <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-12 max-w-6xl mx-auto py-2">
-              {/* Left: Content */}
-              <div className="flex-1 text-center lg:text-left space-y-4 order-2 lg:order-1 max-w-2xl">
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
-                  Solicita tu Evaluación Diagnóstica.
-                </h1>
-
-                <div className="space-y-2">
-                  <p className="text-base md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
-                    Solo de 3 a 5 plazas disponibles cada mes.
-                  </p>
-                  <p className="text-[11px] text-[var(--color-text-muted)] leading-tight font-medium lg:text-justify max-w-[320px] mx-auto lg:mx-0">
-                    Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
-                  </p>
-                </div>
-
-                <div className="bg-white border border-gray-100 rounded-xl p-4 w-full max-w-[320px] mx-auto lg:mx-0">
-                  <p className="text-xs text-[var(--color-secondary)] font-bold leading-tight">
-                    🛡️ Garantía: Si no puedo garantizarte resultados,<br className="hidden md:block" /> la sesión será 0€.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right: Authority Image */}
-              <div className="flex-1 flex flex-col items-center order-1 lg:order-2 w-full max-w-[200px] md:max-w-md mx-auto lg:mx-0">
-                <div className="relative rounded-xl overflow-hidden bg-white w-full max-w-[200px]">
+            <div className="flex flex-col items-center justify-center gap-6 max-w-3xl mx-auto pt-4 md:pt-6 pb-2 px-2">
+              {/* Image & Badge Center Stacked */}
+              <div className="flex flex-col items-center relative z-10 w-full mt-2">
+                <div className="relative rounded-2xl overflow-hidden shadow-xl ring-2 ring-white w-[180px] md:w-[240px]">
                   <img
                     src="/images/salva-autoridad.png"
                     alt="Salva Vera"
-                    className="w-full h-auto block rounded-xl"
-                    style={{ display: 'block', maxHeight: '180px', objectFit: 'cover', objectPosition: 'top' }}
+                    className="w-full h-auto block object-cover object-top"
                   />
-                  <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#f8fcfb] to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-gray-50 to-transparent" />
                 </div>
+                {/* Authority Badge */}
+                <div className="relative -mt-5 bg-white px-5 py-2.5 rounded-full shadow-md border border-gray-100 flex flex-col items-center">
+                  <p className="text-xs md:text-sm font-black uppercase tracking-widest text-[var(--color-secondary)] leading-none">Salva Vera</p>
+                  <p className="text-[8px] md:text-[9px] text-[var(--color-primary)] font-bold uppercase tracking-widest mt-1">Hipnoterapeuta Profesional</p>
+                </div>
+              </div>
 
-                {/* Authority Badge — Centered below image */}
-                <div className="relative -mt-4 bg-white border border-gray-100 px-4 py-2 rounded-xl z-10 shadow-md flex flex-col items-center">
-                  <p className="text-[10px] md:text-md font-black uppercase tracking-widest text-[var(--color-secondary)] leading-none">Salva Vera</p>
-                  <p className="text-[7px] md:text-[8px] text-[var(--color-primary)] font-bold uppercase tracking-wider mt-1 whitespace-nowrap">Hipnoterapeuta Profesional</p>
-                </div>
+              {/* Text Content Center Stacked */}
+              <div className="text-center space-y-3 md:space-y-4 max-w-2xl mx-auto px-2">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.15] tracking-tight">
+                  Solicita tu Evaluación Diagnóstica.
+                </h1>
+                <p className="text-base md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
+                  Solo de 3 a 5 plazas disponibles cada mes.
+                </p>
+                <p className="text-xs md:text-sm lg:text-base text-[var(--color-text-muted)] leading-relaxed font-medium">
+                  Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
+                </p>
+              </div>
+
+              {/* Guarantee */}
+              <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 md:p-4 inline-flex items-center gap-3 shadow-sm mx-auto w-auto max-w-md">
+                <span className="text-lg md:text-xl">🛡️</span>
+                <p className="text-xs md:text-sm text-[var(--color-secondary)] font-bold leading-snug text-left">
+                  Garantía: Si no puedo garantizarte resultados,<br className="hidden md:block" /> la sesión será 0€.
+                </p>
               </div>
             </div>
           </StepLayout>
@@ -726,7 +723,7 @@ function ContrastScreen({
 
   return (
     <StepLayout>
-      <form id={formId} onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="space-y-2 md:space-y-8 max-w-3xl mx-auto w-full md:px-0">
+      <form id={formId} onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="space-y-2 md:space-y-4 max-w-3xl mx-auto w-full md:px-0">
         {/* Header */}
         <div className="text-center space-y-0.5 md:space-y-2">
           <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary)]">Paso 4 de 7</p>
@@ -734,13 +731,13 @@ function ContrastScreen({
         </div>
 
         {/* ── SITUACIÓN ACTUAL ── */}
-        <div className="space-y-2 md:space-y-4">
+        <div className="space-y-2 md:space-y-3">
           <h3 className="text-[11px] md:text-lg font-bold text-[var(--color-secondary)] leading-tight">
             Describe brevemente tu situación actual:
           </h3>
           {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual, 'border-slate-600 bg-slate-600')}
           <textarea
-            className={`w-full p-2.5 md:p-4 rounded-xl border outline-none transition-all h-16 md:h-20 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && actualText.trim().length === 0
+            className={`w-full p-2.5 md:p-3 rounded-xl border outline-none transition-all h-20 md:h-16 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && actualText.trim().length === 0
               ? 'border-red-300 bg-red-50 focus:ring-2 focus:ring-red-400'
               : 'border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] bg-white'
               }`}
@@ -751,13 +748,13 @@ function ContrastScreen({
         </div>
 
         {/* ── SITUACIÓN DESEADA ── */}
-        <div className="space-y-2 md:space-y-4">
+        <div className="space-y-2 md:space-y-3">
           <h3 className="text-[11px] md:text-lg font-bold text-[var(--color-secondary)] leading-tight">
             ¿Cómo te gustaría estar <span className="text-[var(--color-primary)]">al solucionar</span> esto?
           </h3>
           {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
           <textarea
-            className={`w-full p-2.5 md:p-4 rounded-xl border outline-none transition-all h-16 md:h-20 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && deseadaText.trim().length === 0
+            className={`w-full p-2.5 md:p-3 rounded-xl border outline-none transition-all h-20 md:h-16 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && deseadaText.trim().length === 0
               ? 'border-red-300 bg-red-50 focus:ring-2 focus:ring-red-400'
               : 'border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] bg-white'
               }`}
