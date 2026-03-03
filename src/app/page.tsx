@@ -126,7 +126,7 @@ export default function Home() {
                 >
                   RESERVAR MI PLAZA AHORA
                 </motion.button>
-                <p className="text-[9px] text-gray-400 text-center uppercase tracking-widest font-bold">Ver disponibilidad y compromiso</p>
+                <p className="text-[10px] text-gray-500 text-center font-medium mt-1">Pulsa para ver disponibilidad y responder al formulario de compromiso</p>
               </div>
             }
           >
@@ -142,7 +142,7 @@ export default function Home() {
                     Solo de 3 a 5 plazas disponibles cada mes.
                   </p>
                   <p className="text-[11px] text-[var(--color-text-muted)] leading-tight font-medium lg:text-justify max-w-[320px] mx-auto">
-                    Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
+                    Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
                   </p>
                 </div>
 
