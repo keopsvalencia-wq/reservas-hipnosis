@@ -64,7 +64,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
             <div className="flex-1 overflow-y-auto space-y-4 md:space-y-8 px-1 md:px-2" style={{ scrollbarWidth: 'thin' }}>
                 {filteredQuestions.map((q) => (
                     <div key={q.id} className="space-y-1.5 md:space-y-3">
-                        <label className="block text-[13px] md:text-lg font-black text-[var(--color-secondary)] uppercase tracking-tight">
+                        <label className="block text-[13px] md:text-lg font-black text-[var(--color-secondary)] tracking-tight">
                             {q.text}
                         </label>
 
