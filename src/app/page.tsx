@@ -166,8 +166,9 @@ export default function Home() {
                 </div>
 
                 {/* Authority Badge — Always visible */}
-                <div className="absolute -top-1 -right-1 bg-white border border-gray-100 px-2 py-1 rounded-lg z-10 shadow-sm">
-                  <p className="text-[8px] font-black uppercase tracking-widest text-[var(--color-secondary)]">Salva Vera</p>
+                <div className="absolute -top-1 -right-2 md:-right-4 bg-white border border-gray-100 px-2 py-1.5 rounded-lg z-10 shadow-sm flex flex-col items-center">
+                  <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[var(--color-secondary)] leading-none">Salva Vera</p>
+                  <p className="text-[6px] md:text-[7px] text-[var(--color-primary)] font-bold uppercase tracking-wider mt-0.5 whitespace-nowrap">Hipnoterapeuta Profesional</p>
                 </div>
               </div>
             </div>
