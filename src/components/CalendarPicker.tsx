@@ -164,7 +164,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
     const weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 max-w-4xl mx-auto">
             <div className="text-center space-y-2">
                 <h3 className="text-xl md:text-2xl font-bold text-[var(--color-secondary)]">
                     Elige fecha y hora
@@ -287,8 +287,8 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
                 </div>
             </div>
 
-            {/* Navigation */}
-            <div ref={navRef} className="flex items-center justify-between pt-2">
+            {/* Navigation (Flow natural) */}
+            <div ref={navRef} className="flex items-center justify-between pt-6 border-t border-gray-100 mt-2">
                 <button
                     onClick={onBack}
                     className="flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors font-medium group"

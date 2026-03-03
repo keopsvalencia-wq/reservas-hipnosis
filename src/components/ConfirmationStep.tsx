@@ -338,53 +338,56 @@ ${hashtag}
                                 )}
                             </div>
                         </div>
-                    </div>
+                    </div> {/* End of Tus Datos card */}
 
-                    <div className="flex flex-col-reverse sm:flex-row justify-between items-center gap-4 pt-4">
-                        <button
-                            onClick={onBack}
-                            disabled={isSubmitting}
-                            className="flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] font-bold transition-colors disabled:opacity-30 p-2"
-                        >
-                            <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                            Volver atrás
-                        </button>
-                        <button
-                            onClick={handleSubmit}
-                            disabled={!data.fullName || !data.email || !data.phone || !data.triageAnswers?.ciudad || !acceptPrivacy || isSubmitting}
-                            className={`w-full sm:w-auto text-sm uppercase tracking-wider font-black py-4 px-8 rounded-full flex items-center justify-center gap-2 transition-all shadow-xl
+                    {/* ─── Botones Finales (Sticky al Bottom) ─── */}
+                    <div className="mt-4 pt-4 border-t border-gray-100 bg-white sticky bottom-[-1.5rem] pb-4 z-20 shadow-[0_-10px_20px_rgba(255,255,255,0.9)]">
+                        <div className="flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
+                            <button
+                                onClick={onBack}
+                                disabled={isSubmitting}
+                                className="flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] font-bold transition-colors disabled:opacity-30 p-2 group"
+                            >
+                                <svg className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                                Volver atrás
+                            </button>
+                            <button
+                                onClick={handleSubmit}
+                                disabled={!data.fullName || !data.email || !data.phone || !data.triageAnswers?.ciudad || !acceptPrivacy || isSubmitting}
+                                className={`w-full sm:w-auto text-sm uppercase tracking-wider font-black py-4 px-8 rounded-full flex items-center justify-center gap-2 transition-all shadow-xl
                                 ${data.fullName && data.email && data.phone && data.triageAnswers?.ciudad && acceptPrivacy && !isSubmitting
-                                    ? 'bg-[var(--color-primary)] hover:bg-[#2bc493] hover:scale-105 hover:shadow-primary/30 text-[var(--color-secondary)] border-none'
-                                    : 'bg-gray-200 text-gray-400 shadow-none cursor-not-allowed border-none'}`}
-                        >
-                            {isSubmitting ? (
-                                <>
-                                    <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-[var(--color-secondary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                    Procesando...
-                                </>
-                            ) : (
-                                'Confirmar Reserva'
-                            )}
-                        </button>
-                    </div>
+                                        ? 'bg-[var(--color-primary)] hover:bg-[#2bc493] hover:scale-105 hover:shadow-primary/30 text-[var(--color-secondary)] border-none'
+                                        : 'bg-gray-200 text-gray-400 shadow-none cursor-not-allowed border-none'}`}
+                            >
+                                {isSubmitting ? (
+                                    <>
+                                        <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-[var(--color-secondary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                        Procesando...
+                                    </>
+                                ) : (
+                                    'Confirmar Reserva'
+                                )}
+                            </button>
+                        </div>
 
-                    {/* Trust Badges */}
-                    <div className="mt-8 grid grid-cols-3 gap-2 opacity-60">
-                        <div className="flex flex-col items-center gap-1 text-center">
-                            <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                            <span className="text-[9px] uppercase font-bold text-gray-400">Datos Seguros 100%</span>
-                        </div>
-                        <div className="flex flex-col items-center gap-1 text-center border-l border-r border-gray-200">
-                            <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                            <span className="text-[9px] uppercase font-bold text-gray-400">Verificado</span>
-                        </div>
-                        <div className="flex flex-col items-center gap-1 text-center">
-                            <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" /></svg>
-                            <span className="text-[9px] uppercase font-bold text-gray-400">Garantía total</span>
+                        {/* Trust Badges */}
+                        <div className="mt-8 grid grid-cols-3 gap-2 opacity-60">
+                            <div className="flex flex-col items-center gap-1 text-center">
+                                <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                <span className="text-[9px] uppercase font-bold text-gray-400">Datos Seguros 100%</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-1 text-center border-l border-r border-gray-200">
+                                <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                                <span className="text-[9px] uppercase font-bold text-gray-400">Verificado</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-1 text-center">
+                                <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" /></svg>
+                                <span className="text-[9px] uppercase font-bold text-gray-400">Garantía total</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div> {/* End of lg:col-span-2 space-y-6 */}
+            </div> {/* End of grid lg:col-span-3 */}
+        </div> /* End of outer flex container */
     );
 }

@@ -85,7 +85,6 @@ body {
   padding: 16px;
   overflow-x: hidden;
   overflow-y: visible;
-  /* Let the flex structure handle stretching to the bottom */
 }
 
 @media (min-width: 768px) {
@@ -98,20 +97,17 @@ body {
 
 .master-screen__container {
   max-width: 100%;
-  /* Permit full width for a broader form layout */
   width: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: visible;
-  /* El usuario quiere la UI directa sobre su propio marco en WP, no dibujar nosotros otro */
   background: transparent;
   box-shadow: none;
   border: none;
   border-radius: 0;
   position: relative;
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 0;
 }
 
 /* Adjust Step Layout to be more resilient */
@@ -128,9 +124,7 @@ body {
   flex-direction: column;
   justify-content: center;
   overflow-y: visible;
-  /* Let content expand bounds natively so iframe catches it */
   padding: 1.5rem 20px 1.5rem 20px;
-  /* Standardized for iframe */
   scrollbar-width: thin;
 }
 
