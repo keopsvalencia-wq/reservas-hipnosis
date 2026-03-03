@@ -104,8 +104,8 @@ export const triageQuestions: TriageQuestionDef[] = [
         text: '¿Cuánto estás dispuesto a invertir económicamente en tu salud mental si yo te doy la solución?',
         type: 'radio',
         options: [
-            { value: 'con_recursos', label: '🟢 De 700€ a 1.000€. Estoy list@ para invertir en mi tranquilidad y reservar mi plaza.' },
-            { value: 'dispuesto', label: '🟢 Estoy dispuest@ a invertir lo necesario. Invertiré lo que haga falta para resolver mi problema definitivamente.' },
+            { value: 'con_recursos', label: '🟢 De 700€ a 1.000€. Tengo la determinación de invertir en mi tranquilidad y reservar mi plaza.' },
+            { value: 'dispuesto', label: '🟢 Invertiré lo que sea necesario. Mi prioridad es resolver este problema definitivamente y estoy en disposición de hacerlo.' },
             { value: 'sin_recursos', label: '🔴 No tengo recursos ni intención de invertir dinero en mi salud mental.' },
         ],
         group: 'inversion',

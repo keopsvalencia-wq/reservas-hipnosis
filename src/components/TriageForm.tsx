@@ -70,7 +70,7 @@ export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBa
                         </label>
 
                         {q.id === GATE_QUESTION_ID && (
-                            <p className="text-sm text-[var(--color-text-muted)] bg-white p-4 rounded-xl border border-gray-100 italic">
+                            <p className="text-sm text-[var(--color-text-muted)] bg-white p-4 rounded-xl border border-gray-100">
                                 {GATE_INTRO_TEXT}
                             </p>
                         )}
