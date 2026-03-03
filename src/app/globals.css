@@ -214,7 +214,7 @@ body {
 .btn-primary:hover {
   background-color: var(--color-primary-hover);
   transform: scale(1.03);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:disabled {
@@ -308,6 +308,7 @@ body {
 
   .master-screen {
     padding: 0;
+    min-height: auto;
   }
 
   .master-screen__container {
@@ -315,6 +316,7 @@ body {
     border: none;
     box-shadow: none;
     max-height: none;
+    height: auto;
   }
 
   .progress-bar {

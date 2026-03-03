@@ -432,6 +432,7 @@ export default function Home() {
           nextDisabled={!isStepValid}
           type={isInformative ? "button" : "submit"}
           formId={isInformative ? undefined : `step-form-${screen}`}
+          subtitle={screen === 2 ? "Pulsa para completar tu perfil de compromiso" : undefined}
         />
       );
     }
@@ -574,15 +575,15 @@ function StepNav({
 }) {
   return (
     <div className="w-full flex flex-col items-center gap-2">
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
         {onBack ? (
-          <button type="button" onClick={onBack} className="btn-back group">
+          <button type="button" onClick={onBack} className="btn-back w-full sm:w-auto group">
             <svg className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
             Atrás
           </button>
-        ) : <div />}
+        ) : <div className="hidden sm:block" />}
 
-        <div className="flex flex-col items-center md:items-end">
+        <div className="flex flex-col items-center sm:items-end w-full sm:w-auto flex-1">
           <motion.button
             type={type}
             form={formId}
@@ -596,7 +597,7 @@ function StepNav({
               }
             }}
             disabled={nextDisabled || nextLoading}
-            className={`btn-primary uppercase tracking-wider transition-all ${nextDisabled
+            className={`btn-primary w-full sm:w-auto justify-center uppercase tracking-wider transition-all ${nextDisabled
               ? '!bg-gray-200 !text-gray-400 !shadow-none cursor-not-allowed'
               : ''
               }`}
@@ -613,10 +614,8 @@ function StepNav({
             )}
           </motion.button>
 
-          {subtitle ? (
-            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1.5">{subtitle}</p>
-          ) : (
-            <p className="text-[10px] text-gray-500 text-center font-medium mt-1.5">Pulsa para completar tu perfil de compromiso</p>
+          {subtitle && (
+            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1.5 w-full text-center sm:text-right">{subtitle}</p>
           )}
         </div>
       </div>
@@ -736,15 +735,15 @@ function ContrastScreen({
         {/* ── SITUACIÓN ACTUAL ── */}
         <div className="space-y-2 md:space-y-4">
           <h3 className="text-[11px] md:text-lg font-bold text-[var(--color-secondary)] leading-tight">
-            Describe brevemente tu situación actual <span className="text-xs text-red-500 font-bold">(Obligatorio)</span>:
+            Describe brevemente tu situación actual:
           </h3>
           {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual, 'border-slate-600 bg-slate-600')}
           <textarea
-            className={`w-full p-2.5 md:p-4 rounded-xl border outline-none transition-all h-12 md:h-24 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && actualText.trim().length === 0
+            className={`w-full p-2.5 md:p-4 rounded-xl border outline-none transition-all h-20 md:h-24 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && actualText.trim().length === 0
               ? 'border-red-300 bg-red-50 focus:ring-2 focus:ring-red-400'
               : 'border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)]'
               }`}
-            placeholder="¿Qué te impide hacer tu problema? *"
+            placeholder="¿Qué te impide hacer tu problema? (Obligatorio)"
             value={actualText}
             onChange={(e) => setActualText(e.target.value)}
           />
@@ -753,15 +752,15 @@ function ContrastScreen({
         {/* ── SITUACIÓN DESEADA ── */}
         <div className="space-y-2 md:space-y-4">
           <h3 className="text-[11px] md:text-lg font-bold text-[var(--color-secondary)] leading-tight">
-            ¿Cómo te gustaría estar <span className="text-[var(--color-primary)]">al solucionar</span> esto? <span className="text-xs text-red-500 font-bold">(Obligatorio)</span>
+            ¿Cómo te gustaría estar <span className="text-[var(--color-primary)]">al solucionar</span> esto?
           </h3>
           {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
           <textarea
-            className={`w-full p-2.5 md:p-4 rounded-xl border outline-none transition-all h-12 md:h-24 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && deseadaText.trim().length === 0
+            className={`w-full p-2.5 md:p-4 rounded-xl border outline-none transition-all h-20 md:h-24 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && deseadaText.trim().length === 0
               ? 'border-red-300 bg-red-50 focus:ring-2 focus:ring-red-400'
               : 'border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)]'
               }`}
-            placeholder="¿Cómo te gustaría sentirte? *"
+            placeholder="¿Cómo te gustaría sentirte al solucionarlo? (Obligatorio)"
             value={deseadaText}
             onChange={(e) => setDeseadaText(e.target.value)}
           />
