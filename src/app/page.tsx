@@ -433,6 +433,7 @@ export default function Home() {
           nextDisabled={!isStepValid}
           type={isInformative ? "button" : "submit"}
           formId={isInformative ? undefined : `step-form-${screen}`}
+          nextLabel={screen === 8 ? "VER CALENDARIO" : undefined}
           subtitle={screen === 1 ? "Pulsa para completar tu perfil de compromiso" : undefined}
         />
       );
