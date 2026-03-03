@@ -11,10 +11,11 @@ interface TriageFormProps {
     onBack?: () => void;
     formId?: string;
     onValidationChange?: (isValid: boolean) => void;
+    initialAnswers?: TriageAnswers;
 }
 
-export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBack, formId, onValidationChange }: TriageFormProps) {
-    const [answers, setAnswers] = useState<TriageAnswers>({});
+export function TriageForm({ onComplete, subset, buttonLabel = 'Siguiente', onBack, formId, onValidationChange, initialAnswers }: TriageFormProps) {
+    const [answers, setAnswers] = useState<TriageAnswers>(initialAnswers || {});
 
     const filteredQuestions = subset
         ? triageQuestions.filter(q => subset.includes(q.id))

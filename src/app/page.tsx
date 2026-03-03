@@ -138,7 +138,7 @@ export default function Home() {
         return (
           <StepLayout
             footer={
-              <div className="flex justify-center w-full pb-2">
+              <div className="flex justify-center w-full pb-0">
                 <motion.button
                   onClick={next}
                   className="btn-primary uppercase tracking-wider whitespace-nowrap"
@@ -280,6 +280,7 @@ export default function Home() {
                 <h2 className="text-2xl md:text-3xl font-black text-[var(--color-secondary)]">Tu perfil</h2>
               </div>
               <TriageForm
+                initialAnswers={triageData}
                 subset={['dedicacion', 'ciudad', 'edad']}
                 onComplete={handleTriageStep}
                 onBack={back}
@@ -339,6 +340,7 @@ export default function Home() {
                 </p>
               </div>
               <TriageForm
+                initialAnswers={triageData}
                 subset={['compromiso_escala', 'disponibilidad_tiempo']}
                 onComplete={handleTriageStep}
                 onBack={back}
@@ -360,6 +362,7 @@ export default function Home() {
                 <h2 className="text-xl md:text-3xl font-black text-[var(--color-secondary)]">La inversión</h2>
               </div>
               <TriageForm
+                initialAnswers={triageData}
                 subset={['inversion']}
                 onComplete={handleTriageStep}
                 onBack={back}
@@ -737,7 +740,7 @@ function ContrastScreen({
           </h3>
           {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual, 'border-slate-600 bg-slate-600')}
           <textarea
-            className={`w-full p-2.5 md:p-3 rounded-xl border outline-none transition-all h-20 md:h-16 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && actualText.trim().length === 0
+            className={`w-full p-2 rounded-xl border outline-none transition-all h-14 md:h-14 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && actualText.trim().length === 0
               ? 'border-red-300 bg-red-50 focus:ring-2 focus:ring-red-400'
               : 'border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] bg-white'
               }`}
@@ -754,7 +757,7 @@ function ContrastScreen({
           </h3>
           {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
           <textarea
-            className={`w-full p-2.5 md:p-3 rounded-xl border outline-none transition-all h-20 md:h-16 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && deseadaText.trim().length === 0
+            className={`w-full p-2 rounded-xl border outline-none transition-all h-14 md:h-14 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && deseadaText.trim().length === 0
               ? 'border-red-300 bg-red-50 focus:ring-2 focus:ring-red-400'
               : 'border-[var(--color-border)] bg-gray-50 focus:ring-2 focus:ring-[var(--color-primary)] bg-white'
               }`}
