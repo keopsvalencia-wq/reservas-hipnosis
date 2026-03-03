@@ -59,6 +59,27 @@ export default function Home() {
       .catch(err => console.error('Availability Prefetch error:', err));
   }, []);
 
+  // Tell parent window the current height for iframe resizing seamlessly
+  useEffect(() => {
+    const reportHeight = () => {
+      // Delay allows animations to finish or React to flush to DOM
+      setTimeout(() => {
+        const h = document.documentElement.scrollHeight;
+        window.parent.postMessage({ type: 'calendly-resize', height: h }, '*');
+      }, 50);
+    };
+
+    reportHeight();
+    const observer = new MutationObserver(reportHeight);
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+    window.addEventListener('resize', reportHeight);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', reportHeight);
+    };
+  }, [screen]);
+
   // Reset validation on screen change — default to true (informative)
   // Forms will override this to false upon mount if invalid
   useEffect(() => {
@@ -120,7 +141,7 @@ export default function Home() {
               <div className="space-y-2">
                 <motion.button
                   onClick={next}
-                  className="btn-primary w-full text-base py-3.5 uppercase tracking-wider font-black whitespace-nowrap"
+                  className="btn-primary w-full uppercase tracking-wider whitespace-nowrap"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
@@ -575,7 +596,7 @@ function StepNav({
               }
             }}
             disabled={nextDisabled || nextLoading}
-            className={`btn-primary py-4 px-10 text-base uppercase tracking-wider font-black transition-all ${nextDisabled
+            className={`btn-primary uppercase tracking-wider transition-all ${nextDisabled
               ? '!bg-gray-200 !text-gray-400 !shadow-none cursor-not-allowed'
               : ''
               }`}
