@@ -154,21 +154,21 @@ export default function Home() {
               </div>
 
               {/* Right: Authority Image */}
-              <div className="flex-1 relative order-1 lg:order-2 w-full max-w-[200px] md:max-w-md mx-auto lg:mx-0">
-                <div className="relative rounded-xl overflow-hidden bg-white">
+              <div className="flex-1 flex flex-col items-center order-1 lg:order-2 w-full max-w-[200px] md:max-w-md mx-auto lg:mx-0">
+                <div className="relative rounded-xl overflow-hidden bg-white w-full max-w-[200px]">
                   <img
                     src="/images/salva-autoridad.png"
                     alt="Salva Vera"
                     className="w-full h-auto block rounded-xl"
                     style={{ display: 'block', maxHeight: '180px', objectFit: 'cover', objectPosition: 'top' }}
                   />
-                  <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#f8fcfb] to-transparent" />
                 </div>
 
-                {/* Authority Badge — Always visible */}
-                <div className="absolute -top-1 -right-2 md:-right-4 bg-white border border-gray-100 px-2 py-1.5 rounded-lg z-10 shadow-sm flex flex-col items-center">
-                  <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[var(--color-secondary)] leading-none">Salva Vera</p>
-                  <p className="text-[6px] md:text-[7px] text-[var(--color-primary)] font-bold uppercase tracking-wider mt-0.5 whitespace-nowrap">Hipnoterapeuta Profesional</p>
+                {/* Authority Badge — Centered below image */}
+                <div className="relative -mt-4 bg-white border border-gray-100 px-4 py-2 rounded-xl z-10 shadow-md flex flex-col items-center">
+                  <p className="text-[10px] md:text-md font-black uppercase tracking-widest text-[var(--color-secondary)] leading-none">Salva Vera</p>
+                  <p className="text-[7px] md:text-[8px] text-[var(--color-primary)] font-bold uppercase tracking-wider mt-1 whitespace-nowrap">Hipnoterapeuta Profesional</p>
                 </div>
               </div>
             </div>
