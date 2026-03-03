@@ -138,16 +138,15 @@ export default function Home() {
         return (
           <StepLayout
             footer={
-              <div className="space-y-2">
+              <div className="flex justify-center w-full pb-2">
                 <motion.button
                   onClick={next}
-                  className="btn-primary w-full uppercase tracking-wider whitespace-nowrap"
+                  className="btn-primary uppercase tracking-wider whitespace-nowrap"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
                   RESERVAR MI PLAZA AHORA
                 </motion.button>
-                <p className="text-[10px] text-gray-500 text-center font-medium mt-1">Pulsa para ver disponibilidad y responder al formulario de compromiso</p>
               </div>
             }
           >
@@ -432,7 +431,7 @@ export default function Home() {
           nextDisabled={!isStepValid}
           type={isInformative ? "button" : "submit"}
           formId={isInformative ? undefined : `step-form-${screen}`}
-          subtitle={screen === 2 ? "Pulsa para completar tu perfil de compromiso" : undefined}
+          subtitle={screen === 1 ? "Pulsa para completar tu perfil de compromiso" : undefined}
         />
       );
     }
@@ -574,16 +573,16 @@ function StepNav({
   formId?: string;
 }) {
   return (
-    <div className="w-full flex flex-col items-center gap-2">
-      <div className="w-full flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
+    <div className="w-full flex flex-col gap-2">
+      <div className="w-full flex items-center justify-between">
         {onBack ? (
-          <button type="button" onClick={onBack} className="btn-back w-full sm:w-auto group">
+          <button type="button" onClick={onBack} className="btn-back group">
             <svg className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
             Atrás
           </button>
-        ) : <div className="hidden sm:block" />}
+        ) : <div />}
 
-        <div className="flex flex-col items-center sm:items-end w-full sm:w-auto flex-1">
+        <div className="flex flex-col items-end">
           <motion.button
             type={type}
             form={formId}
@@ -597,7 +596,7 @@ function StepNav({
               }
             }}
             disabled={nextDisabled || nextLoading}
-            className={`btn-primary w-full sm:w-auto justify-center uppercase tracking-wider transition-all ${nextDisabled
+            className={`btn-primary uppercase tracking-wider transition-all ${nextDisabled
               ? '!bg-gray-200 !text-gray-400 !shadow-none cursor-not-allowed'
               : ''
               }`}
@@ -613,12 +612,14 @@ function StepNav({
               nextLabel
             )}
           </motion.button>
-
-          {subtitle && (
-            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1.5 w-full text-center sm:text-right">{subtitle}</p>
-          )}
         </div>
       </div>
+
+      {subtitle && (
+        <div className="w-full flex justify-end">
+          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1 pr-4">{subtitle}</p>
+        </div>
+      )}
     </div>
   );
 }
