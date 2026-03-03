@@ -71,7 +71,7 @@ export const triageQuestions: TriageQuestionDef[] = [
     // ─── P5: Compromiso ───────────────────────────────
     {
         id: 'compromiso_escala',
-        text: 'En una escala del 1 al 10, ¿cuánto estás comprometid@ para resolver esto HOY?',
+        text: 'En una escala del 1 al 10, ¿cuál es tu nivel de compromiso para resolver esto HOY?',
         type: 'select',
         options: [
             { value: '1', label: '1 — Muy poco' },
@@ -92,8 +92,8 @@ export const triageQuestions: TriageQuestionDef[] = [
         text: '¿Cuánto tiempo puedes dedicar a tu proceso de cambio diariamente?',
         type: 'radio',
         options: [
-            { value: '2h_dia', label: '🟡 2 horas al día.' },
             { value: 'lo_que_haga_falta', label: '🟢 El tiempo que haga falta. Mi salud mental es ahora mismo mi prioridad absoluta.' },
+            { value: '2h_dia', label: '🟡 2 horas al día.' },
             { value: 'sin_tiempo', label: '🔴 No tengo tiempo, mi día a día me come.' },
         ],
         group: 'compromiso',
