@@ -288,14 +288,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
             </div>
 
             {/* Navigation (Flow natural) */}
-            <div ref={navRef} className="flex items-center justify-between pt-6 border-t border-gray-100 mt-2">
-                <button
-                    onClick={onBack}
-                    className="flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors font-medium group"
-                >
-                    <svg className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                    Anterior
-                </button>
+            <div ref={navRef} className="flex items-center justify-end pt-6 border-t border-gray-100 mt-2">
                 <button
                     onClick={handleConfirm}
                     disabled={!selectedDate || !selectedTime}

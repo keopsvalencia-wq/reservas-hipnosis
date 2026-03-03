@@ -342,15 +342,7 @@ ${hashtag}
 
                     {/* ─── Botones Finales (Sticky al Bottom) ─── */}
                     <div className="mt-4 pt-4 border-t border-gray-100 bg-white sticky bottom-[-1.5rem] pb-4 z-20 shadow-[0_-10px_20px_rgba(255,255,255,0.9)]">
-                        <div className="flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
-                            <button
-                                onClick={onBack}
-                                disabled={isSubmitting}
-                                className="flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] font-bold transition-colors disabled:opacity-30 p-2 group"
-                            >
-                                <svg className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                                Volver atrás
-                            </button>
+                        <div className="flex justify-center items-center">
                             <button
                                 onClick={handleSubmit}
                                 disabled={!data.fullName || !data.email || !data.phone || !data.triageAnswers?.ciudad || !acceptPrivacy || isSubmitting}
