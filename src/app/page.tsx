@@ -150,46 +150,43 @@ export default function Home() {
               </div>
             }
           >
-            <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-12 max-w-6xl mx-auto py-2">
-              {/* Left: Content */}
-              <div className="flex-1 text-center lg:text-left space-y-4 order-2 lg:order-1 max-w-2xl">
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.1] tracking-tight">
-                  Solicita tu Evaluación Diagnóstica.
-                </h1>
-
-                <div className="space-y-2">
-                  <p className="text-base md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
-                    Solo de 3 a 5 plazas disponibles cada mes.
-                  </p>
-                  <p className="text-[11px] text-[var(--color-text-muted)] leading-tight font-medium lg:text-justify max-w-[320px] mx-auto">
-                    Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
-                  </p>
-                </div>
-
-                <div className="bg-white border border-gray-100 rounded-xl p-4 w-full max-w-[320px] mx-auto">
-                  <p className="text-xs text-[var(--color-secondary)] font-bold leading-tight">
-                    🛡️ Garantía: Si no puedo garantizarte resultados,<br className="hidden md:block" /> la sesión será 0€.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right: Authority Image */}
-              <div className="flex-1 flex flex-col items-center order-1 lg:order-2 w-full max-w-[200px] md:max-w-md mx-auto lg:mx-0">
-                <div className="relative rounded-xl overflow-hidden bg-white w-full max-w-[200px]">
+            <div className="flex flex-col items-center gap-6 max-w-3xl mx-auto pt-4 md:pt-10 pb-4">
+              {/* Photo & Badge */}
+              <div className="flex flex-col items-center relative z-10">
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white w-[200px] md:w-[280px]">
                   <img
                     src="/images/salva-autoridad.png"
                     alt="Salva Vera"
-                    className="w-full h-auto block rounded-xl"
-                    style={{ display: 'block', maxHeight: '180px', objectFit: 'cover', objectPosition: 'top' }}
+                    className="w-full h-auto block object-cover object-top"
                   />
-                  <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#f8fcfb] to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
+                {/* Authority Badge */}
+                <div className="relative -mt-6 bg-white px-6 py-3 rounded-full shadow-lg border border-gray-100 flex flex-col items-center min-w-[220px]">
+                  <p className="text-sm md:text-base font-black uppercase tracking-widest text-[var(--color-secondary)] leading-none">Salva Vera</p>
+                  <p className="text-[9px] md:text-[10px] text-[var(--color-primary)] font-bold uppercase tracking-widest mt-1">Hipnoterapeuta Profesional</p>
+                </div>
+              </div>
 
-                {/* Authority Badge — Centered below image */}
-                <div className="relative -mt-4 bg-white border border-gray-100 px-4 py-2 rounded-xl z-10 shadow-md flex flex-col items-center">
-                  <p className="text-[10px] md:text-md font-black uppercase tracking-widest text-[var(--color-secondary)] leading-none">Salva Vera</p>
-                  <p className="text-[7px] md:text-[8px] text-[var(--color-primary)] font-bold uppercase tracking-wider mt-1 whitespace-nowrap">Hipnoterapeuta Profesional</p>
-                </div>
+              {/* Text Content */}
+              <div className="text-center space-y-4 md:space-y-6 mt-2 md:mt-4 px-2">
+                <h1 className="text-3xl md:text-5xl lg:text-7xl font-black text-[var(--color-secondary)] leading-tight tracking-tight">
+                  Solicita tu Evaluación Diagnóstica.
+                </h1>
+                <p className="text-lg md:text-2xl lg:text-3xl text-[var(--color-primary)] font-bold tracking-tight">
+                  Solo de 3 a 5 plazas disponibles cada mes.
+                </p>
+                <p className="text-sm md:text-lg text-[var(--color-text-muted)] leading-relaxed font-medium max-w-2xl mx-auto">
+                  Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
+                </p>
+              </div>
+
+              {/* Guarantee */}
+              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 md:p-6 inline-flex items-center gap-3 mt-4 md:mt-8 shadow-sm">
+                <span className="text-xl md:text-2xl">🛡️</span>
+                <p className="text-sm md:text-base text-[var(--color-secondary)] font-bold leading-snug text-left">
+                  Garantía: Si no puedo garantizarte resultados,<br className="hidden md:block" /> la sesión será 0€.
+                </p>
               </div>
             </div>
           </StepLayout>
@@ -574,15 +571,15 @@ function StepNav({
 }) {
   return (
     <div className="w-full flex flex-col gap-2">
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex items-start justify-between gap-4">
         {onBack ? (
-          <button type="button" onClick={onBack} className="btn-back group">
+          <button type="button" onClick={onBack} className="btn-back group shrink-0">
             <svg className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
             Atrás
           </button>
         ) : <div />}
 
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-center shrink-0 w-auto">
           <motion.button
             type={type}
             form={formId}
@@ -596,7 +593,7 @@ function StepNav({
               }
             }}
             disabled={nextDisabled || nextLoading}
-            className={`btn-primary uppercase tracking-wider transition-all ${nextDisabled
+            className={`btn-primary uppercase tracking-wider transition-all whitespace-nowrap ${nextDisabled
               ? '!bg-gray-200 !text-gray-400 !shadow-none cursor-not-allowed'
               : ''
               }`}
@@ -612,14 +609,14 @@ function StepNav({
               nextLabel
             )}
           </motion.button>
+
+          {subtitle && (
+            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-2 text-center max-w-[170px] leading-tight">
+              {subtitle}
+            </p>
+          )}
         </div>
       </div>
-
-      {subtitle && (
-        <div className="w-full flex justify-end">
-          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1 pr-4">{subtitle}</p>
-        </div>
-      )}
     </div>
   );
 }
