@@ -15,6 +15,7 @@
   --color-text-muted: #64748B;
   --color-error: #EF4444;
   --color-page-bg: #FFFFFF;
+  /* Pure white to blend with WP */
   --master-screen-height: 800px;
 }
 
