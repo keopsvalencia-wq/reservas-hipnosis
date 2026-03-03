@@ -36,10 +36,13 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: #FFFFFF !important;
+  min-height: 100vh;
 }
 
 body {
-  background-color: var(--color-page-bg);
+  background-color: #FFFFFF !important;
+  min-height: 100vh;
   color: var(--color-text);
   font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
   margin: 0;
