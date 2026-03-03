@@ -128,8 +128,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow-y: hidden;
-  /* Prevent internal scrollbars */
+  overflow-y: auto;
+  /* Allow internal scrolling ONLY when content exceeds the max space, e.g. Calendar */
   padding: 1.5rem 20px 1.5rem 20px;
   /* Standardized for iframe */
   scrollbar-width: thin;
