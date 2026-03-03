@@ -645,13 +645,13 @@ function ContrastScreen({
   );
   const [deseadaText, setDeseadaText] = useState((triageData.situacion_deseada as string) || '');
 
-  const isValid =
-    (tagsActual.length > 0 || actualText.trim().length > 0) &&
-    (tagsDeseada.length > 0 || deseadaText.trim().length > 0);
+  const isValid = actualText.trim().length > 0 && deseadaText.trim().length > 0;
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
   useEffect(() => {
-    onValidationChange?.(isValid);
-  }, [isValid, onValidationChange]);
+    // Report true upward so the Next button is active, allowing intercept on submit
+    onValidationChange?.(true);
+  }, [onValidationChange]);
 
   const toggleActual = (tag: string) => {
     setTagsActual(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
@@ -661,6 +661,7 @@ function ContrastScreen({
   };
 
   const handleSubmit = () => {
+    setHasAttemptedSubmit(true);
     if (!isValid) return;
     onComplete({
       situacion_tags: tagsActual,
@@ -716,8 +717,11 @@ function ContrastScreen({
           </h3>
           {renderTags(QUICK_TAGS_ACTUAL, tagsActual, toggleActual, 'border-slate-600 bg-slate-600')}
           <textarea
-            className="w-full p-2.5 md:p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-24 resize-none text-[12px] md:text-sm"
-            placeholder="¿Qué te impide hacer tu problema?"
+            className={`w-full p-2.5 md:p-4 rounded-xl border outline-none transition-all h-12 md:h-24 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && actualText.trim().length === 0
+                ? 'border-red-300 bg-red-50 focus:ring-2 focus:ring-red-400'
+                : 'border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)]'
+              }`}
+            placeholder="¿Qué te impide hacer tu problema? *"
             value={actualText}
             onChange={(e) => setActualText(e.target.value)}
           />
@@ -730,8 +734,11 @@ function ContrastScreen({
           </h3>
           {renderTags(QUICK_TAGS_DESEADA, tagsDeseada, toggleDeseada)}
           <textarea
-            className="w-full p-2.5 md:p-4 rounded-xl border border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)] outline-none transition-all h-12 md:h-24 resize-none text-[12px] md:text-sm"
-            placeholder="¿Cómo te gustaría sentirte?"
+            className={`w-full p-2.5 md:p-4 rounded-xl border outline-none transition-all h-12 md:h-24 resize-none text-[12px] md:text-sm ${hasAttemptedSubmit && deseadaText.trim().length === 0
+                ? 'border-red-300 bg-red-50 focus:ring-2 focus:ring-red-400'
+                : 'border-[var(--color-border)] bg-white focus:ring-2 focus:ring-[var(--color-primary)]'
+              }`}
+            placeholder="¿Cómo te gustaría sentirte? *"
             value={deseadaText}
             onChange={(e) => setDeseadaText(e.target.value)}
           />
