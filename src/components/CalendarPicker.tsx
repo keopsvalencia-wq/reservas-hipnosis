@@ -256,7 +256,7 @@ export function CalendarPicker({ location, onSelectSlot, onBack, initialBusySlot
                                 <p className="text-sm font-bold text-[var(--color-secondary)] uppercase tracking-wider">
                                     {format(selectedDate, "EEEE d 'de' MMMM", { locale: es })}
                                 </p>
-                                <div className="h-[220px] md:h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                <div className="max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                                     {loadingBusy ? (
                                         <div className="h-full flex flex-col items-center justify-center space-y-3">
                                             <div className="w-8 h-8 border-4 border-[var(--color-primary-soft)] border-t-[var(--color-primary)] rounded-full animate-spin" />
