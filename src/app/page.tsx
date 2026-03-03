@@ -561,41 +561,44 @@ function StepNav({
           </button>
         ) : <div />}
 
-        <motion.button
-          type={type}
-          form={formId}
-          onClick={(e) => {
-            if (onNext) {
-              onNext();
-            } else if (type === 'submit' && formId) {
-              // Manual trigger as backup for robustness
-              const f = document.getElementById(formId) as HTMLFormElement;
-              if (f) f.requestSubmit();
-            }
-          }}
-          disabled={nextDisabled || nextLoading}
-          className={`btn-primary py-4 px-10 text-base uppercase tracking-wider font-black transition-all ${nextDisabled
-            ? '!bg-gray-200 !text-gray-400 !shadow-none cursor-not-allowed'
-            : ''
-            }`}
-          whileHover={!nextDisabled ? { scale: 1.03 } : {}}
-          whileTap={!nextDisabled ? { scale: 0.97 } : {}}
-        >
-          {nextLoading ? (
-            <>
-              <svg className="w-5 h-5 animate-spin mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-              Procesando...
-            </>
+        <div className="flex flex-col items-center md:items-end">
+          <motion.button
+            type={type}
+            form={formId}
+            onClick={(e) => {
+              if (onNext) {
+                onNext();
+              } else if (type === 'submit' && formId) {
+                // Manual trigger as backup for robustness
+                const f = document.getElementById(formId) as HTMLFormElement;
+                if (f) f.requestSubmit();
+              }
+            }}
+            disabled={nextDisabled || nextLoading}
+            className={`btn-primary py-4 px-10 text-base uppercase tracking-wider font-black transition-all ${nextDisabled
+              ? '!bg-gray-200 !text-gray-400 !shadow-none cursor-not-allowed'
+              : ''
+              }`}
+            whileHover={!nextDisabled ? { scale: 1.03 } : {}}
+            whileTap={!nextDisabled ? { scale: 0.97 } : {}}
+          >
+            {nextLoading ? (
+              <>
+                <svg className="w-5 h-5 animate-spin mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                Procesando...
+              </>
+            ) : (
+              nextLabel
+            )}
+          </motion.button>
+
+          {subtitle ? (
+            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1.5">{subtitle}</p>
           ) : (
-            nextLabel
+            <p className="text-[10px] text-gray-500 text-center font-medium mt-1.5">Pulsa para completar tu perfil de compromiso</p>
           )}
-        </motion.button>
+        </div>
       </div>
-      {subtitle ? (
-        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{subtitle}</p>
-      ) : (
-        <p className="text-[10px] text-gray-500 text-center font-medium mt-1">Pulsa para completar tu perfil de compromiso</p>
-      )}
     </div>
   );
 }
