@@ -150,43 +150,45 @@ export default function Home() {
               </div>
             }
           >
-            <div className="flex flex-col items-center justify-center gap-6 max-w-3xl mx-auto pt-4 md:pt-6 pb-2 px-2">
-              {/* Image & Badge Center Stacked */}
-              <div className="flex flex-col items-center relative z-10 w-full mt-2">
-                <div className="relative rounded-2xl overflow-hidden shadow-xl ring-2 ring-white w-[180px] md:w-[240px]">
+            <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-12 max-w-6xl mx-auto py-2 px-2">
+              {/* Left: Content */}
+              <div className="flex-1 text-center lg:text-left space-y-4 order-2 lg:order-1 max-w-2xl">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.15] tracking-tight">
+                  Solicita tu Evaluación Diagnóstica.
+                </h1>
+
+                <div className="space-y-3 md:space-y-4">
+                  <p className="text-base md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
+                    Solo de 3 a 5 plazas disponibles cada mes.
+                  </p>
+                  <p className="text-[12px] md:text-sm text-[var(--color-text-muted)] leading-relaxed font-medium lg:text-justify max-w-[360px] mx-auto lg:mx-0">
+                    Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 w-full max-w-[360px] mx-auto lg:mx-0 shadow-sm">
+                  <p className="text-xs md:text-sm text-[var(--color-secondary)] font-bold leading-snug">
+                    🛡️ Garantía: Si no puedo garantizarte resultados,<br className="hidden md:block" /> la sesión será 0€.
+                  </p>
+                </div>
+              </div>
+
+              {/* Right: Authority Image */}
+              <div className="flex-1 flex flex-col items-center order-1 lg:order-2 w-full max-w-[200px] md:max-w-md mx-auto lg:mx-0 mt-2">
+                <div className="relative rounded-2xl overflow-hidden bg-white ring-2 ring-white shadow-xl w-full max-w-[180px] md:max-w-[240px]">
                   <img
                     src="/images/salva-autoridad.png"
                     alt="Salva Vera"
                     className="w-full h-auto block object-cover object-top"
                   />
-                  <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-gray-50 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-gray-50 to-transparent" />
                 </div>
-                {/* Authority Badge */}
-                <div className="relative -mt-5 bg-white px-5 py-2.5 rounded-full shadow-md border border-gray-100 flex flex-col items-center">
+
+                {/* Authority Badge — Centered below image */}
+                <div className="relative -mt-5 bg-white px-5 py-2.5 rounded-full z-10 shadow-md border border-gray-100 flex flex-col items-center">
                   <p className="text-xs md:text-sm font-black uppercase tracking-widest text-[var(--color-secondary)] leading-none">Salva Vera</p>
                   <p className="text-[8px] md:text-[9px] text-[var(--color-primary)] font-bold uppercase tracking-widest mt-1">Hipnoterapeuta Profesional</p>
                 </div>
-              </div>
-
-              {/* Text Content Center Stacked */}
-              <div className="text-center space-y-3 md:space-y-4 max-w-2xl mx-auto px-2">
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-[var(--color-secondary)] leading-[1.15] tracking-tight">
-                  Solicita tu Evaluación Diagnóstica.
-                </h1>
-                <p className="text-base md:text-xl text-[var(--color-primary)] font-bold tracking-tight">
-                  Solo de 3 a 5 plazas disponibles cada mes.
-                </p>
-                <p className="text-xs md:text-sm lg:text-base text-[var(--color-text-muted)] leading-relaxed font-medium">
-                  Reserva tu plaza para una sesión estratégica de 45 minutos. Analizaremos la raíz de tu problema y trazaremos el plan exacto para arrancarlo definitivamente.
-                </p>
-              </div>
-
-              {/* Guarantee */}
-              <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 md:p-4 inline-flex items-center gap-3 shadow-sm mx-auto w-auto max-w-md">
-                <span className="text-lg md:text-xl">🛡️</span>
-                <p className="text-xs md:text-sm text-[var(--color-secondary)] font-bold leading-snug text-left">
-                  Garantía: Si no puedo garantizarte resultados,<br className="hidden md:block" /> la sesión será 0€.
-                </p>
               </div>
             </div>
           </StepLayout>

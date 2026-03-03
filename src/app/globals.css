@@ -72,41 +72,37 @@ body {
   box-sizing: border-box;
 }
 
-/* ─── Master Screen — Full visibility for iframes ───── */
+/* ─── Master Screen — Transparent to blend with WP ───── */
 .master-screen {
-  background: var(--color-page-bg);
+  background: transparent;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  min-height: 100vh;
-  /* Ensure it takes full height but doesn't overflow hidden if not needed */
   padding: 16px;
-  /* Slightly tighter on mobile to maximize content */
   overflow-x: hidden;
-  overflow-y: auto;
-  /* Allow scrolling if iframe is very small */
+  overflow-y: visible;
+  /* Let the iframe handle any massive overflows naturally */
 }
 
 @media (min-width: 768px) {
   .master-screen {
     padding: 24px;
-    height: 100vh;
-    overflow: hidden;
+    align-items: center;
+    /* Center the card inside the iframe on PC */
   }
 }
 
 .master-screen__container {
   max-width: 700px;
   width: 100%;
-  height: 100%;
-  max-height: 800px;
+  height: max-content;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background: var(--color-bg);
-  box-shadow: none;
-  border: none;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--color-border);
   border-radius: 20px;
   position: relative;
   margin-top: 0;
