@@ -102,14 +102,15 @@ body {
   height: max-content;
   display: flex;
   flex-direction: column;
-  overflow: visible;
-  /* Let container expand normally without clipping shadows or content */
+  overflow: hidden;
+  /* Restore hidden so border-radius clips the content and shadow doesn't get weird */
   background: var(--color-bg);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   border: 1px solid var(--color-border);
   border-radius: 20px;
   position: relative;
   margin-top: 0;
+  margin-bottom: 32px;
 }
 
 /* Adjust Step Layout to be more resilient */
@@ -125,8 +126,8 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: visible;
-  /* No inner scrollbars, let the iframe handle the scroll */
+  overflow-y: hidden;
+  /* Prevent internal scrollbars */
   padding: 1.5rem 20px 1.5rem 20px;
   /* Standardized for iframe */
   scrollbar-width: thin;
