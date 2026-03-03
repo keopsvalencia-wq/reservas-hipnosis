@@ -105,8 +105,8 @@ body {
   flex-direction: column;
   overflow: hidden;
   background: var(--color-bg);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  border: 1px solid var(--color-border);
+  box-shadow: none;
+  border: none;
   border-radius: 20px;
   position: relative;
   margin-top: 0;
@@ -199,8 +199,8 @@ body {
   color: #FFFFFF;
   font-family: inherit;
   font-weight: 700;
-  font-size: 16px;
-  padding: 15px 25px;
+  font-size: 14px;
+  padding: 12px 18px;
   border-radius: 12px;
   border: none;
   cursor: pointer;
@@ -234,9 +234,9 @@ body {
   color: var(--color-secondary);
   background-color: #F3F4F6;
   border-radius: 12px;
-  padding: 15px 25px;
+  padding: 12px 18px;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
   font-family: inherit;
   border: none;
   cursor: pointer;
@@ -310,20 +310,15 @@ body {
 
   .master-screen {
     padding: 0;
-    height: 100vh;
-    height: 100dvh;
-    overflow: hidden;
+    min-height: auto;
   }
 
   .master-screen__container {
     border-radius: 0;
     border: none;
     box-shadow: none;
-    height: 100%;
-    max-height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    max-height: none;
+    height: auto;
   }
 
   .progress-bar {
