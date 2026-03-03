@@ -119,7 +119,6 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-height: 0;
   width: 100%;
 }
 
@@ -128,8 +127,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow-y: auto;
-  /* Allow internal scrolling ONLY when content exceeds the max space, e.g. Calendar */
+  overflow-y: visible;
+  /* Let content expand bounds natively so iframe catches it */
   padding: 1.5rem 20px 1.5rem 20px;
   /* Standardized for iframe */
   scrollbar-width: thin;

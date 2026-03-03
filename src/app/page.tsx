@@ -447,7 +447,7 @@ export default function Home() {
       showProgress={screen > 0 && screen < 9}
       footer={renderFooter()}
     >
-      <div className="flex-1 flex flex-col min-h-0 relative">
+      <div className="flex-1 flex flex-col w-full relative">
         <AnimatePresence mode="wait">
           <motion.div
             key={screen + (isBlocked ? '_blocked' : '')}
@@ -455,7 +455,7 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="flex-1 flex flex-col min-h-0"
+            className="flex-1 flex flex-col w-full"
           >
             {renderScreen()}
           </motion.div>
@@ -506,7 +506,7 @@ function MasterScreen({
         )}
 
         {/* Dynamic content area — flex-grow, centered */}
-        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+        <div className="flex-1 flex flex-col w-full">
           {children}
         </div>
 
